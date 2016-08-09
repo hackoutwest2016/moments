@@ -1,14 +1,15 @@
 //
-//  ViewController.swift
+//  MapViewController.swift
 //  moments
 //
 //  Created by Pak on 09/08/16.
 //  Copyright © 2016 paksnicefriends. All rights reserved.
 //
+// Discover new songs on a map view
 
 import UIKit
 
-class ViewController: UIViewController {
+class DiscoverViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
