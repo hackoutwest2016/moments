@@ -18,7 +18,7 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
     
     var mapView = MGLMapView()
     
-    var momentTags: [PFObject]?
+    var momentTags: [PFObject] = []
     
     @IBAction func addButtonTapped(sender: UIButton) {
         performSegueWithIdentifier("moveToSearch", sender: sender)
@@ -38,16 +38,45 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         // Set the map view‘s delegate property.
         mapView.delegate = self
         
+        
+        
+        // Initialize and add the point annotation.
+        /*let pisa = MGLPointAnnotation()
+        pisa.coordinate = CLLocationCoordinate2DMake(57.7039599,11.9657933)
+        pisa.title = "Spotify"
+        mapView.addAnnotation(pisa)
+       */
+        view.sendSubviewToBack(mapView)
+        
+        var timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(pollForTags), userInfo: nil, repeats: true)
+    }
+    
+    func pollForTags() {
         //Find all tags in database
-        let query = PFQuery(className: "MomentTag")
+        //Exclude already found tags
+        var predicate: NSPredicate? = nil
+        if momentTags.count > 0 {
+            var objectIds: [String] = []
+            for momentTag in momentTags {
+                objectIds.append(momentTag.objectId!)
+                
+                //print("not equal to \(momentTag.objectId!)")
+            }
+            predicate = NSPredicate(format: "NOT (objectId IN %@)", objectIds)
+        }
+        
+        let query = PFQuery(className: "MomentTag", predicate: predicate)
+        
         query.findObjectsInBackgroundWithBlock {
-            (objects: [PFObject]?, error: NSError?) -> Void in
-            
-            if error == nil {
-                print("Found \(objects!.count) tags.")
-                self.momentTags = objects
-                if let momentTags = self.momentTags {
-                    for momentTag in momentTags {
+            (newMomentTags: [PFObject]?, error: NSError?) -> Void in
+            if error != nil {
+                print("Error: \(error!) \(error!.userInfo)")
+            } else if var newMomentTags = newMomentTags {
+                if newMomentTags.count > 0 {
+                    print("Found \(newMomentTags.count) new tags.")
+                    self.momentTags += newMomentTags
+                    
+                    for momentTag in newMomentTags {
                         if let position = momentTag["position"] as? PFGeoPoint {
                             let annotation = MGLPointAnnotation()
                             annotation.coordinate = CLLocationCoordinate2DMake(position.latitude, position.longitude)
@@ -57,21 +86,8 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
                         }
                     }
                 }
-            } else {
-                // Log details of the failure
-                print("Error: \(error!) \(error!.userInfo)")
             }
         }
-        
-        // Initialize and add the point annotation.
-        /*let pisa = MGLPointAnnotation()
-        pisa.coordinate = CLLocationCoordinate2DMake(57.7039599,11.9657933)
-        pisa.title = "Spotify"
-        mapView.addAnnotation(pisa)
-       */
-        view.sendSubviewToBack(mapView)
-       
-      
     }
     
     
@@ -113,31 +129,30 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
             fallbackImage = MGLAnnotationImage(image: image, reuseIdentifier: "fallback")
         }
         
-        if let momentTags = momentTags {
-            let objectId = annotation.title!
+        let objectId = annotation.title!
+        
+        //Find corresponding moment tag
+        if let momentTagIndex = momentTags.indexOf({$0.objectId == objectId}) {
+            let momentTag = momentTags[momentTagIndex]
             
-            //Find corresponding moment tag
-            if let momentTagIndex = momentTags.indexOf({$0.objectId == objectId}) {
-                let momentTag = momentTags[momentTagIndex]
-                
-                var annotationImage = mapView.dequeueReusableAnnotationImageWithIdentifier(objectId!)
-                
-                if annotationImage == nil {
-                    if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
-                        if thumbnailFile.dataAvailable {
-                            if let data = try? thumbnailFile.getData() {
-                                let image = UIImage(data:data, scale: 2.0)
-                                annotationImage = MGLAnnotationImage(image: image!, reuseIdentifier: objectId!)
-                                return annotationImage
-                            }
-                        } else {
-                            thumbnailFile.getDataInBackgroundWithBlock {
-                                (imageData: NSData?, error: NSError?) -> Void in
-                                print("DOwnloaded thumbnail, should reset thumbnails")
-                                mapView.reloadStyle(self)
-                            }
-                            return fallbackImage
+            var annotationImage = mapView.dequeueReusableAnnotationImageWithIdentifier(objectId!)
+            
+            if annotationImage == nil {
+                if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
+                    if thumbnailFile.dataAvailable {
+                        if let data = try? thumbnailFile.getData() {
+                            let image = UIImage(data:data, scale: 2.0)
+                            annotationImage = MGLAnnotationImage(image: image!, reuseIdentifier: objectId!)
+                            return annotationImage
                         }
+                    } else {
+                        thumbnailFile.getDataInBackgroundWithBlock {
+                            (imageData: NSData?, error: NSError?) -> Void in
+                            print("DOwnloaded thumbnail, should reset thumbnails")
+                            mapView.removeAnnotation(annotation)
+                            mapView.addAnnotation(annotation)
+                        }
+                        return fallbackImage
                     }
                 }
             }
