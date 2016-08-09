@@ -10,6 +10,7 @@ import UIKit
 
 class RecordViewController: UIViewController {
 
+    //get this from SearchView
     var selectedSong:Song?
     
     override func viewDidLoad() {
