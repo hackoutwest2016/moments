@@ -23,9 +23,12 @@ class DiscoverViewController: UIViewController {
         mapView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         
         // Set the map’s center coordinate and zoom level.
-        mapView.setCenterCoordinate(CLLocationCoordinate2D(latitude: 45.52954,
-            longitude: -122.72317),
+       
+        mapView.setCenterCoordinate(CLLocationCoordinate2D(latitude:  7.7039557,
+            longitude: 1.9637917),
                                     zoomLevel: 14, animated: false)
+        
+        mapView.userTrackingMode = MGLUserTrackingMode.Follow
         view.addSubview(mapView)
     }
 }
