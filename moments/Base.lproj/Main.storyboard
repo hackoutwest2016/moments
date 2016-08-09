@@ -5,6 +5,24 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
+        <!--Discover View Controller-->
+        <scene sceneID="MUG-2D-hIM">
+            <objects>
+                <viewController id="MKg-n0-nGv" customClass="DiscoverViewController" customModule="moments" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="G4z-d8-0mZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="gtR-r2-YSV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8aw-R9-6tz">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="khZ-aR-GUR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1557" y="-396"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -18,10 +36,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <segue destination="MKg-n0-nGv" kind="show" identifier="moveToDiscover" id="1tp-HT-8XY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-511" y="-507"/>
+            <point key="canvasLocation" x="-2303" y="-387"/>
         </scene>
     </scenes>
 </document>

@@ -7,7 +7,7 @@
 //
 
 
-class LoginViewController: UIViewController, SPTAuthViewDelegate, SPTAudioStreamingDelegate {
+class LoginViewController: UIViewController, SPTAuthViewDelegate {
     var player:SPTAudioStreamingController?
     
     override func viewDidLoad() {
@@ -51,55 +51,23 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate, SPTAudioStream
         print("Cancel login")
     }
     
-    
-    
-    
+
     func loginUsingSession(session:SPTSession){
-        // Get the player instance
-        self.player = SPTAudioStreamingController.sharedInstance()
-        self.player!.delegate = self;
-        // Start the player (will start a thread)
-        do {
-            try self.player?.startWithClientId("e68a7d2684a1480a92c76af243bf0a30")
-            print("try player")
-        }
-        catch _{
-            print("catch error in loginUS")
-        }
         
-        // self.player startWithClientId:@"e68a7d2684a1480a92c76af243bf0a30" error:nil];
-        // Login SDK before we can start playback
-        self.player?.loginWithAccessToken(session.accessToken)
+        performSegueWithIdentifier("moveToDiscover", sender: nil)
+
         
+    }
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "moveToDiscover"
+        {
+            if let destinationVC = segue.destinationViewController as? LoginViewController {
+//                destinationVC.numberToDisplay = counter
+            }
+        }
     }
     
-    func audioStreamingDidLogin(audioStreaming: SPTAudioStreamingController!) {
-        
-        let option = SPTPlayOptions()
-        option.startTime = 50
-        
-        let trackUri:NSURL! = NSURL.init(string: "spotify:track:5WBxAaS9nNnWTH469p0Ht0")
-        // self.player!.playURIs([trackUri], fromIndex: 0,  callback: nil)
-        
-        
-        
-        self.player!.playURIs([trackUri], withOptions: option, callback: nil)
-        
-        
-        //        let option = SPTPlayOptions()
-        //        option.startTime = 0.4
-        //
-        //
-        //        let firstSong = NSURL.init(string: "spotify:track:5WBxAaS9nNnWTH469p0Ht0")
-        //        var trackUris = [NSURL]()
-        //        trackUris.append(firstSong!)
-        //
-        //
-        //        self.player!.playURIs(trackUris, withOptions: option) { (err) in
-        //            print(err!)
-        //        }
-        //        
-        
-    }
+
     
 }
