@@ -14,20 +14,20 @@ import Mapbox
 
 class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
     
+    @IBOutlet weak var addButton: UIButton!
     var mapView = MGLMapView()
     
+    override func viewDidLayoutSubviews() {
+        
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       
         setStyle()
         trackUser()
-        
-        
-        
-
         view.addSubview(mapView)
-        
-      
         
         // Set the map view‘s delegate property.
         mapView.delegate = self
@@ -37,8 +37,18 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         pisa.coordinate = CLLocationCoordinate2DMake(57.7039599,11.9657933)
         pisa.title = "Spotify"
         mapView.addAnnotation(pisa)
+       
+        view.sendSubviewToBack(mapView)
+       
+      
     }
     
+    func setUpButton() {
+        //addButton.clipsToBounds = true
+        //addButton.layer.backgroundColor = UIColor.darkGrayColor().CGColor
+        //addButton.layer.cornerRadius = 0.5 * addButton.bounds.size.width
+        
+    }
     
     func getUserLocation() -> CLLocationCoordinate2D {
         let location = MGLUserLocation()
