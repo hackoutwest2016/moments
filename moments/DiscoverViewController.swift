@@ -58,7 +58,7 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         mapView.setZoomLevel(16, animated: false)
         
         // Fill in the next line with your style URL from Mapbox Studio.
-        let styleURL = NSURL(string: "mapbox://styles/heddao/cirnd85rm000fgzni87petcp9")
+        let styleURL = NSURL(string: MomentsConfig.mapbox.styleUrl)
         mapView = MGLMapView(frame: view.bounds,
                              styleURL: styleURL)
         mapView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
