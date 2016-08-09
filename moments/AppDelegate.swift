@@ -31,9 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Uncomment and fill in with your Parse credentials:
         //Parse.setApplicationId("1234", clientKey: "1234")
         let configuration = ParseClientConfiguration {
-            $0.applicationId = "1234"
-            $0.clientKey = ""
-            $0.server = "http://localhost:1337/parse"
+            $0.applicationId = MomentsConfig.parse.applicationId
+            $0.clientKey = MomentsConfig.parse.clientKey
+            $0.server = MomentsConfig.parse.server
         }
         Parse.initializeWithConfiguration(configuration)
         //

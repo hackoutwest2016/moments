@@ -20,9 +20,10 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
     }
     
     override func viewDidAppear(animated: Bool) {
+        
         let auth = SPTAuth.defaultInstance()
-        auth.clientID        = "f51e1e2a1bad4bbfaa3350f7472696d7"
-        auth.redirectURL     = NSURL.init(string:"moments-login://callback")
+        auth.clientID        = MomentsConfig.spotify.clientID
+        auth.redirectURL     = NSURL.init(string:MomentsConfig.spotify.redirectURL)
         auth.requestedScopes = [SPTAuthStreamingScope]
         
         let authvc = SPTAuthViewController.authenticationViewController()
@@ -57,7 +58,7 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
         if let spotifyPlayer = SPTAudioStreamingController.sharedInstance() {
             
             // Start the player (will start a thread)
-            if (try? spotifyPlayer.startWithClientId("e68a7d2684a1480a92c76af243bf0a30")) == nil {
+            if (try? spotifyPlayer.startWithClientId(MomentsConfig.spotify.clientID)) == nil {
                 print("Login error")
             }
             
@@ -68,7 +69,7 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
         }
         
         performSegueWithIdentifier("moveToDiscover", sender: nil)
-
+        //performSegueWithIdentifier("debug_moveToSong", sender: nil)
         
     }
 

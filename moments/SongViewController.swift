@@ -20,7 +20,7 @@ class SongViewController: UIViewController {
     
     var videosToDownload = 2
     var downloadedVideos = 0
-    //var remoteVideoUrls = [NSURL(string: "http://localhost:8080/video1.mp4")!,NSURL(string: "http://localhost:8080/video1.mp4")!]
+    /*var remoteVideoUrls = [NSURL(string: "http://localhost:8080/video1.mp4")!]//,NSURL(string: "http://localhost:8080/video1.mp4")!]*/
     var localVideoUrls = [NSURL]()
     
     override func viewDidLoad() {
@@ -28,7 +28,7 @@ class SongViewController: UIViewController {
         
         
         //Download video files with Parse
-        
+       
         let predicate = NSPredicate(format: "videoName BEGINSWITH 'Video'")
         var query = PFQuery(className:"UserVideo", predicate: predicate)
         //query.whereKey("videoFile", equalTo:"video")
@@ -79,9 +79,11 @@ class SongViewController: UIViewController {
         localVideoUrls = [NSURL]()
         
         //Download videos
-        /*for remoteVideoUrl in remoteVideoUrls {
+        /*
+        for remoteVideoUrl in remoteVideoUrls {
             HttpDownloader.loadFileAsync(remoteVideoUrl, completion:videoDownloaded)
-        }*/
+        }
+ */
     }
     
     func videoDownloaded(url: NSURL, error: NSError!) {
@@ -91,7 +93,8 @@ class SongViewController: UIViewController {
         downloadedVideos += 1
         
         //Upload
-        /*let videoData = NSData(contentsOfURL: url)
+        /*
+        let videoData = NSData(contentsOfURL: url)
         let videoFile = PFFile(name:"video2.mp4", data:videoData!)
         
         var userVideo = PFObject(className:"UserVideo")

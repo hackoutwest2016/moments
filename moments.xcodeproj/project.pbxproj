@@ -21,6 +21,7 @@
 		DDE72562AD0D59D0FAFA7127 /* libPods-moments.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBD5AA454CFD93C4EE91B9B6 /* libPods-moments.a */; };
 		F42D7AD31D59F708007867E2 /* StitchedVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42D7AD21D59F708007867E2 /* StitchedVideo.swift */; };
 		F42D7AD81D5A02B4007867E2 /* HttpDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42D7AD71D5A02B4007867E2 /* HttpDownloader.swift */; };
+		F42D7ADA1D5A4C0E007867E2 /* MomentsConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42D7AD91D5A4C0E007867E2 /* MomentsConfig.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		F2E01C6DD48B8E8A2489CA08 /* Pods-moments.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-moments.release.xcconfig"; path = "Pods/Target Support Files/Pods-moments/Pods-moments.release.xcconfig"; sourceTree = "<group>"; };
 		F42D7AD21D59F708007867E2 /* StitchedVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StitchedVideo.swift; sourceTree = "<group>"; };
 		F42D7AD71D5A02B4007867E2 /* HttpDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpDownloader.swift; sourceTree = "<group>"; };
+		F42D7AD91D5A4C0E007867E2 /* MomentsConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MomentsConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 				27313B161D59CAEE0059B5DF /* Info.plist */,
 				27313B0E1D59CAEE0059B5DF /* moments.xcdatamodeld */,
 				2734ABD11D59D5D20041B0F4 /* Moments-Bridging-Header.h */,
+				F42D7AD91D5A4C0E007867E2 /* MomentsConfig.swift */,
 			);
 			path = moments;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 				27313B081D59CAEE0059B5DF /* AppDelegate.swift in Sources */,
 				F42D7AD81D5A02B4007867E2 /* HttpDownloader.swift in Sources */,
 				F42D7AD31D59F708007867E2 /* StitchedVideo.swift in Sources */,
+				F42D7ADA1D5A4C0E007867E2 /* MomentsConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
