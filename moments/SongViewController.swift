@@ -11,6 +11,45 @@ import UIKit
 import AVFoundation
 
 class SongViewController: UIViewController {
+    
+    var momentTag: PFObject? {
+        didSet {
+            //Fetch video files from parse and save to a file
+            if let videos = momentTag!["videos"] as? [PFObject] {
+                
+                downloadedVideos = 0
+                videosToDownload = videos.count
+                localVideoUrls = [NSURL]()
+                
+                for video in videos {
+                    video.fetchIfNeededInBackgroundWithBlock {
+                        (video: PFObject?, error: NSError?) -> Void in
+                        if let video = video {
+                            if let userVideoFile = video["videoFile"] as? PFFile {
+                                userVideoFile.getDataInBackgroundWithBlock {
+                                    (videoData: NSData?, error: NSError?) -> Void in
+                                    if error == nil {
+                                        if let videoData = videoData {
+                                            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
+                                            let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
+                                            
+                                            if videoData.writeToURL(destinationUrl, atomically: true) {
+                                                print("file saved [\(destinationUrl.path!)]")
+                                                self.videoDownloaded(destinationUrl, error: nil) //success
+                                            } else {
+                                                print("error saving file")
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //print(videos?["videoFile"])
+        }
+    }
 
     @IBOutlet weak var slider: UISlider!
     
@@ -20,70 +59,18 @@ class SongViewController: UIViewController {
     
     var videosToDownload = 2
     var downloadedVideos = 0
-    /*var remoteVideoUrls = [NSURL(string: "http://localhost:8080/video1.mp4")!]//,NSURL(string: "http://localhost:8080/video1.mp4")!]*/
     var localVideoUrls = [NSURL]()
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad()        // Do any additional setup after loading the view.
         
-        
-        //Download video files with Parse
-       
-        let predicate = NSPredicate(format: "videoName BEGINSWITH 'Video'")
-        var query = PFQuery(className:"UserVideo", predicate: predicate)
-        //query.whereKey("videoFile", equalTo:"video")
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [PFObject]?, error: NSError?) -> Void in
-            
-            if error == nil {
-                // The find succeeded.
-                print("Successfully retrieved \(objects!.count) scores.")
-                // Do something with the found objects
-                if let objects = objects {
-                    for object in objects {
-                        print(object.objectId)
-                        
-                        if let userVideoFile = object["videoFile"] as? PFFile {
-                            userVideoFile.getDataInBackgroundWithBlock {
-                                (videoData: NSData?, error: NSError?) -> Void in
-                                if error == nil {
-                                    if let videoData = videoData {
-                                        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
-                                        let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
-                                        if videoData.writeToURL(destinationUrl, atomically: true) {
-                                            print("file saved [\(destinationUrl.path!)]")
-                                            self.videoDownloaded(destinationUrl, error: nil)
-                                            //completion(url: destinationUrl, error:nil)
-                                        } else {
-                                            print("error saving file")
-                                            //let error = NSError(domain:"Error saving file", code:1001, userInfo:nil)
-                                            //completion(url: destinationUrl, error:error)
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            print("It isn't a file")
-                        }
-                    }
-                }
-            } else {
-                // Log details of the failure
-                print("Error: \(error!) \(error!.userInfo)")
-            }
-        }
-        
-        // Do any additional setup after loading the view.
-        videosToDownload = 2
-        downloadedVideos = 0
-        localVideoUrls = [NSURL]()
         
         //Download videos
         /*
         for remoteVideoUrl in remoteVideoUrls {
             HttpDownloader.loadFileAsync(remoteVideoUrl, completion:videoDownloaded)
         }
- */
+         */
     }
     
     func videoDownloaded(url: NSURL, error: NSError!) {
@@ -92,7 +79,7 @@ class SongViewController: UIViewController {
         localVideoUrls.append(url)
         downloadedVideos += 1
         
-        //Upload
+        //Upload test
         /*
         let videoData = NSData(contentsOfURL: url)
         let videoFile = PFFile(name:"video2.mp4", data:videoData!)

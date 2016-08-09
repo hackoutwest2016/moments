@@ -18,6 +18,8 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
     
     var mapView = MGLMapView()
     
+    var momentTags: [PFObject]?
+    
     @IBAction func addButtonTapped(sender: UIButton) {
         performSegueWithIdentifier("moveToSearch", sender: sender)
     }
@@ -36,12 +38,37 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         // Set the map view‘s delegate property.
         mapView.delegate = self
         
+        //Find all tags in database
+        let query = PFQuery(className: "MomentTag")
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [PFObject]?, error: NSError?) -> Void in
+            
+            if error == nil {
+                print("Found \(objects!.count) tags.")
+                self.momentTags = objects
+                if let momentTags = self.momentTags {
+                    for momentTag in momentTags {
+                        if let position = momentTag["position"] as? PFGeoPoint {
+                            let annotation = MGLPointAnnotation()
+                            annotation.coordinate = CLLocationCoordinate2DMake(position.latitude, position.longitude)
+                            annotation.title = momentTag.objectId!
+                            
+                            self.mapView.addAnnotation(annotation)
+                        }
+                    }
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+            }
+        }
+        
         // Initialize and add the point annotation.
-        let pisa = MGLPointAnnotation()
+        /*let pisa = MGLPointAnnotation()
         pisa.coordinate = CLLocationCoordinate2DMake(57.7039599,11.9657933)
         pisa.title = "Spotify"
         mapView.addAnnotation(pisa)
-       
+       */
         view.sendSubviewToBack(mapView)
        
       
@@ -76,32 +103,47 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
 
     
     func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-        // Try to reuse the existing ‘pisa’ annotation image, if it exists.
-        var annotationImage = mapView.dequeueReusableAnnotationImageWithIdentifier("pisa")
         
-        if annotationImage == nil {
-            // Leaning Tower of Pisa by Stefan Spieler from the Noun Project.
-            var image = UIImage(named: "hat")!
-            image = resizeImage(image)
-            
-           
-            
-            // The anchor point of an annotation is currently always the center. To
-            // shift the anchor point to the bottom of the annotation, the image
-            // asset includes transparent bottom padding equal to the original image
-            // height.
-            //
-            // To make this padding non-interactive, we create another image object
-            // with a custom alignment rect that excludes the padding.
-            image = image.imageWithAlignmentRectInsets(UIEdgeInsetsMake(0, 0, image.size.height/2, 0))
-            
-            // Initialize the ‘pisa’ annotation image with the UIImage we just loaded.
-            annotationImage = MGLAnnotationImage(image: image, reuseIdentifier: "pisa")
-            
-         
+        
+        var fallbackImage = mapView.dequeueReusableAnnotationImageWithIdentifier("fallback")
+        if fallbackImage == nil {
+             var image = UIImage(named: "plus")!
+             image = resizeImage(image)
+             image = image.imageWithAlignmentRectInsets(UIEdgeInsetsMake(0, 0, image.size.height/2, 0))
+            fallbackImage = MGLAnnotationImage(image: image, reuseIdentifier: "fallback")
         }
         
-        return annotationImage
+        if let momentTags = momentTags {
+            let objectId = annotation.title!
+            
+            //Find corresponding moment tag
+            if let momentTagIndex = momentTags.indexOf({$0.objectId == objectId}) {
+                let momentTag = momentTags[momentTagIndex]
+                
+                var annotationImage = mapView.dequeueReusableAnnotationImageWithIdentifier(objectId!)
+                
+                if annotationImage == nil {
+                    if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
+                        if thumbnailFile.dataAvailable {
+                            if let data = try? thumbnailFile.getData() {
+                                let image = UIImage(data:data, scale: 2.0)
+                                annotationImage = MGLAnnotationImage(image: image!, reuseIdentifier: objectId!)
+                                return annotationImage
+                            }
+                        } else {
+                            thumbnailFile.getDataInBackgroundWithBlock {
+                                (imageData: NSData?, error: NSError?) -> Void in
+                                print("DOwnloaded thumbnail, should reset thumbnails")
+                                mapView.reloadStyle(self)
+                            }
+                            return fallbackImage
+                        }
+                    }
+                }
+            }
+        }
+        
+        return fallbackImage
     }
     
     func mapView(mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
