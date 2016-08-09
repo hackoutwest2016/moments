@@ -17,8 +17,8 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
     var selectedSong: Song?
     var filteredSongs = [Song]()
     let searchController = UISearchController(searchResultsController: nil)
-    var userCoordinate:CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 59.31, longitude: 18.06)
-    //it should be ?
+    var userCoordinate:CLLocationCoordinate2D?
+    //it should be ? or = CLLocationCoordinate2D(latitude: 59.31, longitude: 18.06)
     
     //typealias song = (artist:String,song:String)
     var songs:[Song] = []
