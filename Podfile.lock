@@ -32,10 +32,6 @@ SPEC CHECKSUMS:
   Mapbox-iOS-SDK: b22da0d9703fcfb0a8b592b6a7f6a21264fe44b0
   Spotify-iOS-SDK: 9703e35df012ef12a37736feaa5ee1ee3fcd12f8
 
-<<<<<<< HEAD
 PODFILE CHECKSUM: c55ed961ec93bc5daf762f3214f3a7bdc38e14dd
-=======
-PODFILE CHECKSUM: f0eda1bac3d028eeaf7e26840b524f2cd4b07a03
->>>>>>> loginScreen
 
 COCOAPODS: 1.0.1
