@@ -11,28 +11,66 @@ import UIKit
 import AVFoundation
 
 class SongViewController: UIViewController {
+    
+    var momentTag: PFObject? {
+        didSet {
+            //Fetch video files from parse and save to a file
+            if let videos = momentTag!["videos"] as? [PFObject] {
+                
+                downloadedVideos = 0
+                videosToDownload = videos.count
+                localVideoUrls = [NSURL]()
+                
+                for video in videos {
+                    video.fetchIfNeededInBackgroundWithBlock {
+                        (video: PFObject?, error: NSError?) -> Void in
+                        if let video = video {
+                            if let userVideoFile = video["videoFile"] as? PFFile {
+                                userVideoFile.getDataInBackgroundWithBlock {
+                                    (videoData: NSData?, error: NSError?) -> Void in
+                                    if error == nil {
+                                        if let videoData = videoData {
+                                            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
+                                            let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
+                                            
+                                            if videoData.writeToURL(destinationUrl, atomically: true) {
+                                                print("file saved [\(destinationUrl.path!)]")
+                                                self.videoDownloaded(destinationUrl, error: nil) //success
+                                            } else {
+                                                print("error saving file")
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //print(videos?["videoFile"])
+        }
+    }
 
+    @IBOutlet weak var slider: UISlider!
+    
     @IBOutlet weak var mediaView: UIView!
     var moviePlayer: AVPlayer?
+    var moviePlayerLayer: AVPlayerLayer?
     
     var videosToDownload = 2
     var downloadedVideos = 0
-    var remoteVideoUrls = [NSURL(string: "http://localhost:8080/video1.mp4")!,NSURL(string: "http://localhost:8080/video2.mp4")!]
     var localVideoUrls = [NSURL]()
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad()        // Do any additional setup after loading the view.
         
-
-        // Do any additional setup after loading the view.
-        videosToDownload = 2
-        downloadedVideos = 0
-        localVideoUrls = [NSURL]()
         
         //Download videos
+        /*
         for remoteVideoUrl in remoteVideoUrls {
             HttpDownloader.loadFileAsync(remoteVideoUrl, completion:videoDownloaded)
         }
+         */
     }
     
     func videoDownloaded(url: NSURL, error: NSError!) {
@@ -41,6 +79,16 @@ class SongViewController: UIViewController {
         localVideoUrls.append(url)
         downloadedVideos += 1
         
+        //Upload test
+        /*
+        let videoData = NSData(contentsOfURL: url)
+        let videoFile = PFFile(name:"video2.mp4", data:videoData!)
+        
+        var userVideo = PFObject(className:"UserVideo")
+        userVideo["videoName"] = "Video 2"
+        userVideo["videoFile"] = videoFile
+        userVideo.saveInBackground()
+        */
         if downloadedVideos == videosToDownload {
             print(localVideoUrls)
             print("Download done")
@@ -49,10 +97,24 @@ class SongViewController: UIViewController {
             
             moviePlayer = AVPlayer(playerItem: stitchedVideo.PlayerItem)
             
-            let playerLayer = AVPlayerLayer(player: moviePlayer)
-            playerLayer.frame = self.mediaView.bounds
-            self.view.layer.addSublayer(playerLayer)
+            moviePlayerLayer = AVPlayerLayer(player: moviePlayer)
+            moviePlayerLayer!.frame = self.mediaView.bounds
+            self.view.layer.addSublayer(moviePlayerLayer!)
         }
+    }
+    
+    @IBAction func sliderChange(sender: UISlider) {
+        print(sender.value)
+        let duration = Float(moviePlayer!.currentItem!.duration.seconds)
+        let seconds = Double(duration * sender.value)
+        
+        moviePlayer?.seekToTime(CMTime(seconds: seconds, preferredTimescale: 1))
+        moviePlayer?.play()
+        /*spotifyPlayer?.seekToOffset(seconds, callback: { (error: NSError!) in
+            if error != nil {
+                print("Seek error \(error)")
+            }
+        })*/
     }
 
     override func didReceiveMemoryWarning() {
@@ -72,8 +134,9 @@ class SongViewController: UIViewController {
             } else {
                 if moviePlayer.status == .ReadyToPlay {
                     print("play")
+                    moviePlayerLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
                     moviePlayer.play()
-                    moviePlayer.rate = 1
+                    
                 } else {
                     print("NOT READY!")
                 }

@@ -10,6 +10,7 @@
 #define Moments_Bridging_Header_h
 
 #import <Spotify-iOS-SDK/Spotify.h>
+#import <Parse/Parse.h>
 
 
 #endif /* Moments_Bridging_Header_h */

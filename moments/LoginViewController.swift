@@ -20,9 +20,17 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
     }
     
     override func viewDidAppear(animated: Bool) {
+        /*
+        var tag = PFObject(className: "MomentTag")
+        var video1 = PFObject(className: "MomentVideo")
+        var video2 = PFObject(className: "MomentVideo")
+        tag["position"] = PFGeoPoint(latitude: 57.7039599, longitude: 11.9657933)
+        tag["videos"] = [video1,video2]
+        tag.saveInBackground()
+        */
         let auth = SPTAuth.defaultInstance()
-        auth.clientID        = "f51e1e2a1bad4bbfaa3350f7472696d7"
-        auth.redirectURL     = NSURL.init(string:"moments-login://callback")
+        auth.clientID        = MomentsConfig.spotify.clientId
+        auth.redirectURL     = NSURL.init(string:MomentsConfig.spotify.redirectUrl)
         auth.requestedScopes = [SPTAuthStreamingScope]
         
         let authvc = SPTAuthViewController.authenticationViewController()
@@ -57,7 +65,7 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
         if let spotifyPlayer = SPTAudioStreamingController.sharedInstance() {
             
             // Start the player (will start a thread)
-            if (try? spotifyPlayer.startWithClientId("e68a7d2684a1480a92c76af243bf0a30")) == nil {
+            if (try? spotifyPlayer.startWithClientId(MomentsConfig.spotify.clientId)) == nil {
                 print("Login error")
             }
             
@@ -68,7 +76,7 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
         }
         
         performSegueWithIdentifier("moveToDiscover", sender: nil)
-
+        //performSegueWithIdentifier("debug_moveToSong", sender: nil)
         
     }
 
@@ -77,6 +85,23 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
         {
             if let destinationVC = segue.destinationViewController as? LoginViewController {
 //                destinationVC.numberToDisplay = counter
+            }
+        }
+        if segue.identifier == "debug_moveToSong"
+        {
+            if let destinationVC = segue.destinationViewController as? SongViewController {
+                let query = PFQuery(className:"MomentTag")
+                query.getObjectInBackgroundWithId("lKABghHrhM").continueWithBlock({
+                    (task: BFTask!) -> AnyObject! in
+                    if task.error != nil {
+                        // There was an error.
+                        print("ERROR in retreiving debug moment tag")
+                        return task
+                    }
+                    
+                    destinationVC.momentTag = task.result as? PFObject
+                    return task
+                })
             }
         }
     }

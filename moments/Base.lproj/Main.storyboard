@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -107,17 +107,33 @@
                                     <outletCollection property="gestureRecognizers" destination="MS8-Ml-yak" appends="YES" id="ZEa-FE-zaa"/>
                                 </connections>
                             </view>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="SKC-ri-zrz">
+                                <rect key="frame" x="18" y="545" width="564" height="31"/>
+                                <connections>
+                                    <action selector="sliderChange:" destination="ibI-tQ-O8l" eventType="valueChanged" id="Yxw-1q-cNf"/>
+                                </connections>
+                            </slider>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="SKC-ri-zrz" firstAttribute="top" secondItem="2AG-MF-Jub" secondAttribute="bottom" constant="29" id="2qJ-Rx-L68"/>
                             <constraint firstItem="VdD-Fg-JGJ" firstAttribute="top" secondItem="2AG-MF-Jub" secondAttribute="bottom" constant="84" id="3uM-6t-qYf"/>
                             <constraint firstAttribute="trailingMargin" secondItem="2AG-MF-Jub" secondAttribute="trailing" constant="-20" id="H3g-yS-qX9"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="SKC-ri-zrz" secondAttribute="leading" id="Ocj-Cy-jDU"/>
+                            <constraint firstItem="VdD-Fg-JGJ" firstAttribute="top" secondItem="SKC-ri-zrz" secondAttribute="bottom" constant="25" id="eKv-kh-I3i"/>
                             <constraint firstItem="2AG-MF-Jub" firstAttribute="leading" secondItem="Xj4-LC-ijT" secondAttribute="leadingMargin" constant="-20" id="kiN-zM-1eZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="SKC-ri-zrz" secondAttribute="trailing" id="lJk-4Y-oLK"/>
                             <constraint firstItem="2AG-MF-Jub" firstAttribute="top" secondItem="c0Y-Lw-PV6" secondAttribute="bottom" constant="8" id="xvr-m0-JtN"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="3uM-6t-qYf"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="mediaView" destination="2AG-MF-Jub" id="lSR-Fe-1cx"/>
+                        <outlet property="slider" destination="SKC-ri-zrz" id="8Iv-PY-oFN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2jT-Me-ini" userLabel="First Responder" sceneMemberID="firstResponder"/>
