@@ -10,7 +10,7 @@
 import UIKit
 import AVFoundation
 
-class SongViewController: UIViewController {
+class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate {
     
     var momentTag: PFObject? {
         didSet {
@@ -50,27 +50,44 @@ class SongViewController: UIViewController {
             //print(videos?["videoFile"])
         }
     }
+    
+    var spotifyUrl: String? {
+        didSet {
+            
+        }
+    }
+    
+    var currentOffset: Float = 0 //In seconds
 
     @IBOutlet weak var slider: UISlider!
     
     @IBOutlet weak var mediaView: UIView!
-    var moviePlayer: AVPlayer?
-    var moviePlayerLayer: AVPlayerLayer?
+    var videoPlayer: AVPlayer?
+    var videoPlayerLayer: AVPlayerLayer?
     
     var videosToDownload = 2
     var downloadedVideos = 0
     var localVideoUrls = [NSURL]()
     
+    var spotifyPlayer: SPTAudioStreamingController?
+    
     override func viewDidLoad() {
-        super.viewDidLoad()        // Do any additional setup after loading the view.
+        super.viewDidLoad()
         
+        spotifyPlayer = SPTAudioStreamingController.sharedInstance()
+        spotifyPlayer?.playbackDelegate = self
         
-        //Download videos
-        /*
-        for remoteVideoUrl in remoteVideoUrls {
-            HttpDownloader.loadFileAsync(remoteVideoUrl, completion:videoDownloaded)
+        var timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(updateSongProgress), userInfo: nil, repeats: true)
+    }
+    
+    func updateSongProgress() {
+        if let spotifyPlayer = spotifyPlayer {
+            if spotifyPlayer.isPlaying {
+                let playbackPosition = spotifyPlayer.currentPlaybackPosition
+                currentOffset = Float(playbackPosition)
+                slider.value = currentOffset/Float(spotifyPlayer.currentTrackDuration)
+            }
         }
-         */
     }
     
     func videoDownloaded(url: NSURL, error: NSError!) {
@@ -79,42 +96,43 @@ class SongViewController: UIViewController {
         localVideoUrls.append(url)
         downloadedVideos += 1
         
-        //Upload test
-        /*
-        let videoData = NSData(contentsOfURL: url)
-        let videoFile = PFFile(name:"video2.mp4", data:videoData!)
-        
-        var userVideo = PFObject(className:"UserVideo")
-        userVideo["videoName"] = "Video 2"
-        userVideo["videoFile"] = videoFile
-        userVideo.saveInBackground()
-        */
         if downloadedVideos == videosToDownload {
             print(localVideoUrls)
             print("Download done")
             
             let stitchedVideo = StitchedVideo(videoUrls: localVideoUrls)
             
-            moviePlayer = AVPlayer(playerItem: stitchedVideo.PlayerItem)
+            videoPlayer = AVPlayer(playerItem: stitchedVideo.PlayerItem)
+            videoPlayer?.actionAtItemEnd = .None
             
-            moviePlayerLayer = AVPlayerLayer(player: moviePlayer)
-            moviePlayerLayer!.frame = self.mediaView.bounds
-            self.view.layer.addSublayer(moviePlayerLayer!)
+            videoPlayerLayer = AVPlayerLayer(player: videoPlayer)
+            videoPlayerLayer!.frame = self.mediaView.bounds
+            self.view.layer.addSublayer(videoPlayerLayer!)
         }
     }
     
     @IBAction func sliderChange(sender: UISlider) {
         print(sender.value)
-        let duration = Float(moviePlayer!.currentItem!.duration.seconds)
-        let seconds = Double(duration * sender.value)
+        let musicDuration = Float(spotifyPlayer!.currentTrackDuration)
+        let musicOffset = musicDuration * sender.value
+        setMusicOffset(musicOffset)
+    }
+    
+    func setMusicOffset(musicOffset: Float) {
+        currentOffset = musicOffset
         
-        moviePlayer?.seekToTime(CMTime(seconds: seconds, preferredTimescale: 1))
-        moviePlayer?.play()
-        /*spotifyPlayer?.seekToOffset(seconds, callback: { (error: NSError!) in
+        let videoDuration = Float(videoPlayer!.currentItem!.duration.seconds)
+        var videoOffset = musicOffset
+        if(musicOffset > videoDuration) {
+            //TODO: Show empty image instead of video
+            videoOffset = videoDuration
+        }
+        videoPlayer?.seekToTime(CMTime(seconds: Double(videoOffset), preferredTimescale: 1), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+        spotifyPlayer?.seekToOffset(Double(musicOffset), callback: { (error: NSError!) in
             if error != nil {
                 print("Seek error \(error)")
             }
-        })*/
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -124,19 +142,33 @@ class SongViewController: UIViewController {
     
     @IBAction func mediaViewTapped(sender: AnyObject) {
         
-        if let moviePlayer = moviePlayer {
+        if let videoPlayer = videoPlayer {
             
-            print(moviePlayer.currentItem?.loadedTimeRanges)
-            print(moviePlayer.rate)
-            if moviePlayer.rate > 0 {
+            print(videoPlayer.currentItem?.loadedTimeRanges)
+            print(videoPlayer.rate)
+            if videoPlayer.rate > 0 {
                 print("pause")
-                moviePlayer.pause()
+                videoPlayer.pause()
+                spotifyPlayer?.setIsPlaying(false, callback: { (error: NSError!) in
+                    if error != nil {
+                        print("Couldnt pause spotify")
+                    }
+                })
             } else {
-                if moviePlayer.status == .ReadyToPlay {
+                if videoPlayer.status == .ReadyToPlay {
                     print("play")
-                    moviePlayerLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-                    moviePlayer.play()
+                    //videoPlayerLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
                     
+                    if let spotifyUrl = spotifyUrl {
+                        spotifyPlayer?.playURIs([NSURL(string: spotifyUrl)!], fromIndex: 0, callback: { (error: NSError!) in
+                            if error != nil {
+                                print("Couldnt play from spotify")
+                            } else {
+                                self.setMusicOffset(self.currentOffset)
+                                videoPlayer.play()
+                            }
+                        })
+                    }
                 } else {
                     print("NOT READY!")
                 }
