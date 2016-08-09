@@ -13,22 +13,34 @@ import Mapbox
 
 
 class DiscoverViewController: UIViewController {
+    
+    var mapView = MGLMapView()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setStyle()
+        trackUser()
+        }
+    
+        func setStyle() {
+            // Fill in the next line with your style URL from Mapbox Studio.
+            let styleURL = NSURL(string: "mapbox://styles/heddao/cirnd85rm000fgzni87petcp9")
+            mapView = MGLMapView(frame: view.bounds,
+                                     styleURL: styleURL)
+            mapView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+            view.addSubview(mapView)
+            
+            // Set the map’s center coordinate and zoom level.
+            mapView.setCenterCoordinate(CLLocationCoordinate2D(latitude:  7.7039557,
+                longitude: 1.9637917),zoomLevel: 14, animated: false)
+        }
         
-        // Fill in the next line with your style URL from Mapbox Studio.
-        let styleURL = NSURL(string: "mapbox://styles/heddao/cirnd85rm000fgzni87petcp9")
-        let mapView = MGLMapView(frame: view.bounds,
-                                 styleURL: styleURL)
-        mapView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        
-        // Set the map’s center coordinate and zoom level.
-       
-        mapView.setCenterCoordinate(CLLocationCoordinate2D(latitude:  7.7039557,
-            longitude: 1.9637917),
-                                    zoomLevel: 14, animated: false)
-        
-        mapView.userTrackingMode = MGLUserTrackingMode.Follow
-        view.addSubview(mapView)
-    }
+        func trackUser() {
+            mapView.userTrackingMode = MGLUserTrackingMode.Follow
+            
+        }
+   
 }
+
+
