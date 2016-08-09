@@ -12,8 +12,11 @@ import AVFoundation
 
 class SongViewController: UIViewController {
 
+    @IBOutlet weak var slider: UISlider!
+    
     @IBOutlet weak var mediaView: UIView!
     var moviePlayer: AVPlayer?
+    var moviePlayerLayer: AVPlayerLayer?
     
     var videosToDownload = 2
     var downloadedVideos = 0
@@ -104,10 +107,24 @@ class SongViewController: UIViewController {
             
             moviePlayer = AVPlayer(playerItem: stitchedVideo.PlayerItem)
             
-            let playerLayer = AVPlayerLayer(player: moviePlayer)
-            playerLayer.frame = self.mediaView.bounds
-            self.view.layer.addSublayer(playerLayer)
+            moviePlayerLayer = AVPlayerLayer(player: moviePlayer)
+            moviePlayerLayer!.frame = self.mediaView.bounds
+            self.view.layer.addSublayer(moviePlayerLayer!)
         }
+    }
+    
+    @IBAction func sliderChange(sender: UISlider) {
+        print(sender.value)
+        let duration = Float(moviePlayer!.currentItem!.duration.seconds)
+        let seconds = Double(duration * sender.value)
+        
+        moviePlayer?.seekToTime(CMTime(seconds: seconds, preferredTimescale: 1))
+        moviePlayer?.play()
+        /*spotifyPlayer?.seekToOffset(seconds, callback: { (error: NSError!) in
+            if error != nil {
+                print("Seek error \(error)")
+            }
+        })*/
     }
 
     override func didReceiveMemoryWarning() {
@@ -127,8 +144,9 @@ class SongViewController: UIViewController {
             } else {
                 if moviePlayer.status == .ReadyToPlay {
                     print("play")
+                    moviePlayerLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
                     moviePlayer.play()
-                    moviePlayer.rate = 1
+                    
                 } else {
                     print("NOT READY!")
                 }
