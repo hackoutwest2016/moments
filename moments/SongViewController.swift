@@ -17,22 +17,68 @@ class SongViewController: UIViewController {
     
     var videosToDownload = 2
     var downloadedVideos = 0
-    var remoteVideoUrls = [NSURL(string: "http://localhost:8080/video1.mp4")!,NSURL(string: "http://localhost:8080/video2.mp4")!]
+    //var remoteVideoUrls = [NSURL(string: "http://localhost:8080/video1.mp4")!,NSURL(string: "http://localhost:8080/video1.mp4")!]
     var localVideoUrls = [NSURL]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
+        
+        //Download video files with Parse
+        
+        let predicate = NSPredicate(format: "videoName BEGINSWITH 'Video'")
+        var query = PFQuery(className:"UserVideo", predicate: predicate)
+        //query.whereKey("videoFile", equalTo:"video")
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [PFObject]?, error: NSError?) -> Void in
+            
+            if error == nil {
+                // The find succeeded.
+                print("Successfully retrieved \(objects!.count) scores.")
+                // Do something with the found objects
+                if let objects = objects {
+                    for object in objects {
+                        print(object.objectId)
+                        
+                        if let userVideoFile = object["videoFile"] as? PFFile {
+                            userVideoFile.getDataInBackgroundWithBlock {
+                                (videoData: NSData?, error: NSError?) -> Void in
+                                if error == nil {
+                                    if let videoData = videoData {
+                                        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
+                                        let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
+                                        if videoData.writeToURL(destinationUrl, atomically: true) {
+                                            print("file saved [\(destinationUrl.path!)]")
+                                            self.videoDownloaded(destinationUrl, error: nil)
+                                            //completion(url: destinationUrl, error:nil)
+                                        } else {
+                                            print("error saving file")
+                                            //let error = NSError(domain:"Error saving file", code:1001, userInfo:nil)
+                                            //completion(url: destinationUrl, error:error)
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            print("It isn't a file")
+                        }
+                    }
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+            }
+        }
+        
         // Do any additional setup after loading the view.
         videosToDownload = 2
         downloadedVideos = 0
         localVideoUrls = [NSURL]()
         
         //Download videos
-        for remoteVideoUrl in remoteVideoUrls {
+        /*for remoteVideoUrl in remoteVideoUrls {
             HttpDownloader.loadFileAsync(remoteVideoUrl, completion:videoDownloaded)
-        }
+        }*/
     }
     
     func videoDownloaded(url: NSURL, error: NSError!) {
@@ -41,6 +87,15 @@ class SongViewController: UIViewController {
         localVideoUrls.append(url)
         downloadedVideos += 1
         
+        //Upload
+        /*let videoData = NSData(contentsOfURL: url)
+        let videoFile = PFFile(name:"video2.mp4", data:videoData!)
+        
+        var userVideo = PFObject(className:"UserVideo")
+        userVideo["videoName"] = "Video 2"
+        userVideo["videoFile"] = videoFile
+        userVideo.saveInBackground()
+        */
         if downloadedVideos == videosToDownload {
             print(localVideoUrls)
             print("Download done")
