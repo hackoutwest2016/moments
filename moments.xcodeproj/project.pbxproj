@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		201BD7B0CE243DCB1A72A7AC /* libPods-momentsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 294B2485FD2341E5C26BF5B8 /* libPods-momentsTests.a */; };
+		272D9ED21D5A7B290036826A /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272D9ED11D5A7B290036826A /* RecordViewController.swift */; };
 		27313B081D59CAEE0059B5DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27313B071D59CAEE0059B5DF /* AppDelegate.swift */; };
 		27313B0A1D59CAEE0059B5DF /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27313B091D59CAEE0059B5DF /* DiscoverViewController.swift */; };
 		27313B0D1D59CAEE0059B5DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27313B0B1D59CAEE0059B5DF /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		272D9ED11D5A7B290036826A /* RecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
 		27313B041D59CAEE0059B5DF /* moments.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = moments.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27313B071D59CAEE0059B5DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27313B091D59CAEE0059B5DF /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				2734ABCC1D59D0C80041B0F4 /* SongViewController.swift */,
 				2734ABCE1D59D0DB0041B0F4 /* SearchViewController.swift */,
 				27313B0B1D59CAEE0059B5DF /* Main.storyboard */,
+				272D9ED11D5A7B290036826A /* RecordViewController.swift */,
 				27313B111D59CAEE0059B5DF /* Assets.xcassets */,
 				27313B131D59CAEE0059B5DF /* LaunchScreen.storyboard */,
 				27313B161D59CAEE0059B5DF /* Info.plist */,
@@ -370,6 +373,7 @@
 				2734ABCF1D59D0DB0041B0F4 /* SearchViewController.swift in Sources */,
 				2734ABCB1D59CF260041B0F4 /* LoginViewController.swift in Sources */,
 				27313B101D59CAEE0059B5DF /* moments.xcdatamodeld in Sources */,
+				272D9ED21D5A7B290036826A /* RecordViewController.swift in Sources */,
 				2734ABCD1D59D0C80041B0F4 /* SongViewController.swift in Sources */,
 				27313B0A1D59CAEE0059B5DF /* DiscoverViewController.swift in Sources */,
 				27313B081D59CAEE0059B5DF /* AppDelegate.swift in Sources */,

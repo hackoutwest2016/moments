@@ -214,7 +214,8 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         if segue.identifier == "moveToSearch"
         {
             if let destinationVC = segue.destinationViewController as? SearchViewController {
-                //                destinationVC.numberToDisplay = counter
+                destinationVC.userCoordinate = mapView.userLocation?.coordinate
+                print("userCoordinate: \(mapView.userLocation?.coordinate)")
             }
         }
     }
