@@ -11,18 +11,39 @@
 
 import Mapbox
 
+
 class SearchViewController: UIViewController, MGLMapViewDelegate {
     
-    var userCoordinate:CLLocationCoordinate2D? = nil
+    var userCoordinate:CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 59.31, longitude: 18.06)
+    //it should be ?
     
     @IBOutlet weak var mapView: MGLMapView!
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpMiniMap()
+        searchSong()
      
     }
     
-    
+    func searchSong(){
+        
+        let search = SPTSearch()
+        
+        SPTRequest.performSearchWithQuery("ta det lugnt", queryType: SPTSearchQueryType.QueryTypeTrack, session: nil) { (error, data) in
+            print(data)
+            let items = (data as! SPTListPage).items
+            print(items)
+            
+            //take the first one
+            let selectedSong = items.first as! SPTPartialTrack
+            print(selectedSong.name)
+            print(selectedSong.artists)
+            
+        }
+        
+        
+        
+    }
     func setUpMiniMap(){
         //let mapView = MGLMapView(frame: view.bounds)
         mapView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
