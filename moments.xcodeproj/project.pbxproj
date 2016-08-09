@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		270BD83B1D5A02BA0037507C /* pisavector.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 270BD83A1D5A02BA0037507C /* pisavector.xcassets */; };
+		270BD83D1D5A035B0037507C /* hat.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 270BD83C1D5A035B0037507C /* hat.jpg */; };
 		27313B081D59CAEE0059B5DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27313B071D59CAEE0059B5DF /* AppDelegate.swift */; };
 		27313B0A1D59CAEE0059B5DF /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27313B091D59CAEE0059B5DF /* DiscoverViewController.swift */; };
 		27313B0D1D59CAEE0059B5DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27313B0B1D59CAEE0059B5DF /* Main.storyboard */; };
@@ -33,6 +35,8 @@
 
 /* Begin PBXFileReference section */
 		1667CCB35E862943B0C397E7 /* Pods-momentsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-momentsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-momentsTests/Pods-momentsTests.debug.xcconfig"; sourceTree = "<group>"; };
+		270BD83A1D5A02BA0037507C /* pisavector.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = pisavector.xcassets; sourceTree = "<group>"; };
+		270BD83C1D5A035B0037507C /* hat.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = hat.jpg; sourceTree = "<group>"; };
 		27313B041D59CAEE0059B5DF /* moments.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = moments.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27313B071D59CAEE0059B5DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27313B091D59CAEE0059B5DF /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +79,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		270BD8391D5A029E0037507C /* Design Resources */ = {
+			isa = PBXGroup;
+			children = (
+				270BD83A1D5A02BA0037507C /* pisavector.xcassets */,
+				270BD83C1D5A035B0037507C /* hat.jpg */,
+			);
+			name = "Design Resources";
+			sourceTree = "<group>";
+		};
 		27313AFB1D59CAEE0059B5DF = {
 			isa = PBXGroup;
 			children = (
@@ -98,6 +111,7 @@
 		27313B061D59CAEE0059B5DF /* moments */ = {
 			isa = PBXGroup;
 			children = (
+				270BD8391D5A029E0037507C /* Design Resources */,
 				27313B071D59CAEE0059B5DF /* AppDelegate.swift */,
 				2734ABCA1D59CF260041B0F4 /* LoginViewController.swift */,
 				27313B091D59CAEE0059B5DF /* DiscoverViewController.swift */,
@@ -232,6 +246,8 @@
 				27313B151D59CAEE0059B5DF /* LaunchScreen.storyboard in Resources */,
 				27313B121D59CAEE0059B5DF /* Assets.xcassets in Resources */,
 				27313B0D1D59CAEE0059B5DF /* Main.storyboard in Resources */,
+				270BD83D1D5A035B0037507C /* hat.jpg in Resources */,
+				270BD83B1D5A02BA0037507C /* pisavector.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
