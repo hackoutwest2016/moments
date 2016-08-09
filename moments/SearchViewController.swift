@@ -161,6 +161,8 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
         
     }
     
+
+    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "moveToRecord"
@@ -172,6 +174,7 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
     }
     
 }
+
 
 
 struct Song {

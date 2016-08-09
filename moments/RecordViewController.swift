@@ -8,31 +8,36 @@
 
 import UIKit
 
+
 class RecordViewController: UIViewController {
 
     //get this from SearchView
     var selectedSong:Song?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewDidLoad()
+    {
+        self.initView()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func initView()
+    {
+        // Button
+        let btn: UIButton = UIButton(type: .Custom)
+        btn.setImage(UIImage(named: "camera"), forState: .Normal)
+        btn.frame = CGRectMake(0, 0, 70, 70)
+        btn.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2)
+        btn.layer.cornerRadius = 35
+        btn.layer.borderWidth = 3
+        btn.layer.borderColor = UIColor.lightGrayColor().colorWithAlphaComponent(0.2).CGColor
+        btn.addTarget(self, action:"showCustomCamera", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(btn)
     }
-    */
+    
+    func showCustomCamera()
+    {
+        let vc = WMCamera()
+        self.presentViewController(vc, animated: true, completion: nil)
+        vc.rvc = self
+    }
 
 }
