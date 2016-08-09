@@ -58,7 +58,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate {
     }
     
     var currentOffset: Float = 0 //In seconds
-
+    
     @IBOutlet weak var slider: UISlider!
     
     @IBOutlet weak var mediaView: UIView!
@@ -78,6 +78,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate {
         spotifyPlayer?.playbackDelegate = self
         
         var timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(updateSongProgress), userInfo: nil, repeats: true)
+        initCamera(.Back)
     }
     
     func updateSongProgress() {
@@ -125,7 +126,12 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate {
         var videoOffset = musicOffset
         if(musicOffset > videoDuration) {
             //TODO: Show empty image instead of video
+            cameraLayer?.hidden = false
+            videoPlayerLayer?.hidden = true
             videoOffset = videoDuration
+        } else {
+            cameraLayer?.hidden = true
+            videoPlayerLayer?.hidden = false
         }
         videoPlayer?.seekToTime(CMTime(seconds: Double(videoOffset), preferredTimescale: 1), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
         spotifyPlayer?.seekToOffset(Double(musicOffset), callback: { (error: NSError!) in
@@ -134,7 +140,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate {
             }
         })
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -175,15 +181,84 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate {
             }
         }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    // MARK: - Camera
+    private var cameraLayer : AVCaptureVideoPreviewLayer?
+    private var imgOutput : AVCaptureStillImageOutput?
+    private var vidOutput : AVCaptureMovieFileOutput?
+    private var session : AVCaptureSession?
+    private var tm : NSTimer?
+    func initCamera(position: AVCaptureDevicePosition)
+    {
+        var myDevice: AVCaptureDevice?
+        let devices = AVCaptureDevice.devices()
+        let audioDevices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio)
+        
+        // Back camera
+        var videoInput: AVCaptureDeviceInput? = nil
+        for device in devices
+        {
+            if(device.position == position)
+            {
+                myDevice = device as? AVCaptureDevice
+                do {
+                    videoInput = try AVCaptureDeviceInput(device: myDevice)
+                }
+                catch let error as NSError
+                {
+                    print(error)
+                    return
+                }
+            }
+        }
+        
+        // Audio
+        var audioInput: AVCaptureDeviceInput? = nil
+        if audioDevices.count > 0 {
+            do {
+                audioInput = try AVCaptureDeviceInput(device: audioDevices[0] as! AVCaptureDevice)
+            }
+            catch let error as NSError
+            {
+                print(error)
+                return
+            }
+        }
+        
+        // Create session
+        vidOutput = AVCaptureMovieFileOutput()
+        imgOutput = AVCaptureStillImageOutput()
+        session = AVCaptureSession()
+        session?.beginConfiguration()
+        session?.sessionPreset = AVCaptureSessionPresetMedium
+        if videoInput != nil {
+            session?.addInput(videoInput)
+        }
+        if audioInput != nil {
+            session?.addInput(audioInput)
+        }
+        //session?.addOutput(imgOutput)
+        session?.addOutput(vidOutput)
+        session?.commitConfiguration()
+        
+        // Video Screen
+        cameraLayer = AVCaptureVideoPreviewLayer(session: session)
+        cameraLayer?.frame = mediaView.frame
+        cameraLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+        self.mediaView.layer.addSublayer(cameraLayer!)
+        
+        // Start session
+        session?.startRunning()
     }
-    */
-
+    
+    /*
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
