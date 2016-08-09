@@ -25,6 +25,9 @@
                                     <constraint firstAttribute="height" constant="100" id="qO3-sV-KG7"/>
                                 </constraints>
                                 <state key="normal" title="Button" image="plus"/>
+                                <connections>
+                                    <action selector="addButtonTapped:" destination="MKg-n0-nGv" eventType="touchUpInside" id="LLV-2y-RHa"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -35,6 +38,7 @@
                     </view>
                     <connections>
                         <outlet property="addButton" destination="kiH-l4-9mG" id="i9h-GZ-Fpm"/>
+                        <segue destination="nzf-yo-HH4" kind="presentation" identifier="moveToSearch" id="Xqi-xk-MC6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="khZ-aR-GUR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -121,7 +125,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xOr-30-tt0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-763" y="78"/>
+            <point key="canvasLocation" x="-787" y="-397"/>
         </scene>
     </scenes>
     <resources>

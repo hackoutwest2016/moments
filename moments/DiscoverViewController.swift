@@ -15,8 +15,12 @@ import Mapbox
 class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
     
     @IBOutlet weak var addButton: UIButton!
+    
     var mapView = MGLMapView()
     
+    @IBAction func addButtonTapped(sender: UIButton) {
+        performSegueWithIdentifier("moveToSearch", sender: sender)
+    }
     override func viewDidLayoutSubviews() {
         
         
@@ -43,17 +47,12 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
       
     }
     
-    func setUpButton() {
-        //addButton.clipsToBounds = true
-        //addButton.layer.backgroundColor = UIColor.darkGrayColor().CGColor
-        //addButton.layer.cornerRadius = 0.5 * addButton.bounds.size.width
-        
-    }
     
     func getUserLocation() -> CLLocationCoordinate2D {
         let location = MGLUserLocation()
         return location.coordinate
     }
+    
     func setStyle() {
         
         mapView.setZoomLevel(16, animated: false)
@@ -152,6 +151,15 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         UIGraphicsEndImageContext()
         
         return UIImage(data: imageData)!
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "moveToSearch"
+        {
+            if let destinationVC = segue.destinationViewController as? SearchViewController {
+                //                destinationVC.numberToDisplay = counter
+            }
+        }
     }
 }
 
