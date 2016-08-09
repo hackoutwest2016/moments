@@ -23,6 +23,8 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>paksnicefriends.com.moments</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>moments</string>
