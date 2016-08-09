@@ -12,15 +12,16 @@
 import Mapbox
 
 
-class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDataSource, UITableViewDelegate {
+class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating {
     
-    
-    
+    var selectedSong: Song?
+    var filteredSongs = [Song]()
+    let searchController = UISearchController(searchResultsController: nil)
     var userCoordinate:CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 59.31, longitude: 18.06)
     //it should be ?
     
-    typealias song = (artist:String,song:String)
-    var dataSource:[song] = []
+    //typealias song = (artist:String,song:String)
+    var songs:[Song] = []
     let textCellIdentifier = "TrackCell"
     
     @IBOutlet weak var songListView: UITableView!
@@ -31,10 +32,27 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
         setUpMiniMap()
         
         setUpSongListView()
-        searchSong()
         
         
+        //search bar
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        songListView.tableHeaderView = searchController.searchBar
     }
+    
+    
+    func filterContentForSearchText(searchText: String, scope: String = "All") {
+        filteredSongs = songs.filter { song in
+            return song.name.lowercaseString.containsString(searchText.lowercaseString)
+        }
+        
+        songListView.reloadData()
+    }
+    
+ 
+    
+    
     
     func setUpSongListView(){
         songListView.delegate = self
@@ -46,15 +64,19 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.count
+//        if searchController.active && searchController.searchBar.text != "" {
+//            return filteredSongs.count
+//        }
+        return songs.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(textCellIdentifier, forIndexPath: indexPath)
         
         let row = indexPath.row
-        cell.textLabel?.text = dataSource[row].song
-        cell.detailTextLabel?.text = dataSource[row].artist
+        print("row:\(row)")
+        cell.textLabel?.text = songs[row].name
+        cell.detailTextLabel?.text = songs[row].artist
         
         return cell
     }
@@ -64,40 +86,52 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
         let row = indexPath.row
-        //print(swiftBlogs[row])
+        selectedSong = songs[row]
+        performSegueWithIdentifier("moveToRecord", sender: nil)
+        
     }
     
     
-    func searchSong(){
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        //filterContentForSearchText(searchController.searchBar.text!)
         
-        let search = SPTSearch()
-        
-        SPTRequest.performSearchWithQuery("ta det lugnt", queryType: SPTSearchQueryType.QueryTypeTrack, session: nil) { (error, data) in
-            //print(data)
-            let items = (data as! SPTListPage).items
-            //print(items)
-            
-            //take the first one
-            let selectedSong = items.first as! SPTPartialTrack
-//            print(selectedSong.name)
-//            print(selectedSong.artists)
-            
-            //update the table
-            for n in 0..<items.count {
-                let currentItem = items[n] as! SPTPartialTrack
-                print(currentItem.artists)
-                
-                //just gonna pretend there is only one artist
-                let artist = currentItem.artists.first as! SPTPartialArtist
-                let songName = currentItem.name
-                let currentSong:song = (artist.name , songName)
-                self.dataSource.append(currentSong)
+        let keyword = searchController.searchBar.text
+        if let k = keyword {
+            if(k != ""){
+              searchSong(k)
             }
-           
+        }
+    }
+    
+    func searchSong(keyword:String){
+        
+
+        
+        SPTRequest.performSearchWithQuery(keyword, queryType: SPTSearchQueryType.QueryTypeTrack, session: nil) { (error, data) in
+            //remove all songs in array
+            self.songs.removeAll()
             
-          
-            
-            self.songListView.reloadData()
+            if let items = (data as! SPTListPage).items{
+                
+                
+                //update the table
+                for n in 0..<items.count {
+                    
+                    if let currentItem = items[n] as? SPTPartialTrack{
+                        
+                        
+                        //just gonna pretend there is only one artist
+                        let artist = currentItem.artists.first as! SPTPartialArtist
+                        let songName = currentItem.name
+                        let currentSong:Song = Song(artist:artist.name,name:songName, link: currentItem.identifier)
+                        print(currentSong)
+                        self.songs.append(currentSong)
+                        
+                        
+                        self.songListView.reloadData()
+                    }
+                }
+            }
         }
         
         
@@ -128,4 +162,24 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
         
         print("userCoordinate in SearchVC :\(userCoordinate)")
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "moveToRecord"
+        {
+            if let destinationVC = segue.destinationViewController as? SearchViewController {
+                destinationVC.selectedSong = selectedSong!
+                //print("userCoordinate: \(mapView.userLocation?.coordinate)")
+            }
+        }
+    }
+    
 }
+
+
+struct Song {
+    let artist : String
+    let name : String
+    let link : String
+}
+
+
