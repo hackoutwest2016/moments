@@ -8,7 +8,6 @@
 
 
 class LoginViewController: UIViewController, SPTAuthViewDelegate {
-    var player:SPTAudioStreamingController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,20 +38,34 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
     
     func authenticationViewController(authenticationViewController: SPTAuthViewController!, didLoginWithSession session: SPTSession!) {
         print("Login")
+        
         self.loginUsingSession(session)
         
     }
     
     func authenticationViewController(authenticationViewController: SPTAuthViewController!, didFailToLogin error: NSError!) {
-        print("Fail to login")
+        print("Failed to login")
     }
     
     func authenticationViewControllerDidCancelLogin(authenticationViewController: SPTAuthViewController!) {
-        print("Cancel login")
+        print("Cancelled Spotify login")
     }
     
 
     func loginUsingSession(session:SPTSession){
+        // Get the player instance
+        if let spotifyPlayer = SPTAudioStreamingController.sharedInstance() {
+            
+            // Start the player (will start a thread)
+            if (try? spotifyPlayer.startWithClientId("e68a7d2684a1480a92c76af243bf0a30")) == nil {
+                print("Login error")
+            }
+            
+            // Login SDK before we can start playback
+            spotifyPlayer.loginWithAccessToken(session.accessToken)
+        } else {
+            print("Couldnt find spotify instance")
+        }
         
         performSegueWithIdentifier("moveToDiscover", sender: nil)
 
