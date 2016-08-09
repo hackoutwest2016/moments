@@ -17,6 +17,8 @@
 		2734ABCB1D59CF260041B0F4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2734ABCA1D59CF260041B0F4 /* LoginViewController.swift */; };
 		2734ABCD1D59D0C80041B0F4 /* SongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2734ABCC1D59D0C80041B0F4 /* SongViewController.swift */; };
 		2734ABCF1D59D0DB0041B0F4 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2734ABCE1D59D0DB0041B0F4 /* SearchViewController.swift */; };
+		809409294463F434C42B13C2 /* libPods-momentsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D112BB9C0793241CB1B650 /* libPods-momentsTests.a */; };
+		8D0CD43B51F6EFEB40B13822 /* libPods-moments.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D277ACD949C2381CE40C0FF2 /* libPods-moments.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,12 @@
 		2734ABCA1D59CF260041B0F4 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		2734ABCC1D59D0C80041B0F4 /* SongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongViewController.swift; sourceTree = "<group>"; };
 		2734ABCE1D59D0DB0041B0F4 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		69D112BB9C0793241CB1B650 /* libPods-momentsTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-momentsTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D277ACD949C2381CE40C0FF2 /* libPods-moments.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-moments.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E01A6C16888F9793BFD235E6 /* Pods-momentsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-momentsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-momentsTests/Pods-momentsTests.release.xcconfig"; sourceTree = "<group>"; };
+		E2E3F655720756ABBA09B98A /* Pods-momentsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-momentsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-momentsTests/Pods-momentsTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E5348B6D69E7CC6F14ED57D9 /* Pods-moments.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-moments.release.xcconfig"; path = "Pods/Target Support Files/Pods-moments/Pods-moments.release.xcconfig"; sourceTree = "<group>"; };
+		F7142A839FA5E0BB16E3972B /* Pods-moments.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-moments.debug.xcconfig"; path = "Pods/Target Support Files/Pods-moments/Pods-moments.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D0CD43B51F6EFEB40B13822 /* libPods-moments.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				809409294463F434C42B13C2 /* libPods-momentsTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +80,8 @@
 				27313B061D59CAEE0059B5DF /* moments */,
 				27313B1E1D59CAEE0059B5DF /* momentsTests */,
 				27313B051D59CAEE0059B5DF /* Products */,
+				912CEED809B70875A4ED5AFB /* Pods */,
+				E77A4EB82062D5905351B02A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -108,6 +120,26 @@
 			path = momentsTests;
 			sourceTree = "<group>";
 		};
+		912CEED809B70875A4ED5AFB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F7142A839FA5E0BB16E3972B /* Pods-moments.debug.xcconfig */,
+				E5348B6D69E7CC6F14ED57D9 /* Pods-moments.release.xcconfig */,
+				E2E3F655720756ABBA09B98A /* Pods-momentsTests.debug.xcconfig */,
+				E01A6C16888F9793BFD235E6 /* Pods-momentsTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		E77A4EB82062D5905351B02A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D277ACD949C2381CE40C0FF2 /* libPods-moments.a */,
+				69D112BB9C0793241CB1B650 /* libPods-momentsTests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -115,9 +147,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 27313B241D59CAEE0059B5DF /* Build configuration list for PBXNativeTarget "moments" */;
 			buildPhases = (
+				D80A1D4A29A0B10B319DB296 /* [CP] Check Pods Manifest.lock */,
 				27313B001D59CAEE0059B5DF /* Sources */,
 				27313B011D59CAEE0059B5DF /* Frameworks */,
 				27313B021D59CAEE0059B5DF /* Resources */,
+				44298499FCE0B651AD84F5D0 /* [CP] Embed Pods Frameworks */,
+				72AD09C5D0555A89BF119BED /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -132,9 +167,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 27313B271D59CAEE0059B5DF /* Build configuration list for PBXNativeTarget "momentsTests" */;
 			buildPhases = (
+				94F6B9DCF35F66830BC4BECA /* [CP] Check Pods Manifest.lock */,
 				27313B171D59CAEE0059B5DF /* Sources */,
 				27313B181D59CAEE0059B5DF /* Frameworks */,
 				27313B191D59CAEE0059B5DF /* Resources */,
+				14EAB9B4FFC2887796505E19 /* [CP] Embed Pods Frameworks */,
+				A532B8BFF52BC6B98B009628 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -203,6 +241,99 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		14EAB9B4FFC2887796505E19 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-momentsTests/Pods-momentsTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		44298499FCE0B651AD84F5D0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-moments/Pods-moments-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		72AD09C5D0555A89BF119BED /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-moments/Pods-moments-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		94F6B9DCF35F66830BC4BECA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A532B8BFF52BC6B98B009628 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-momentsTests/Pods-momentsTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D80A1D4A29A0B10B319DB296 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		27313B001D59CAEE0059B5DF /* Sources */ = {
@@ -341,6 +472,7 @@
 		};
 		27313B251D59CAEE0059B5DF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F7142A839FA5E0BB16E3972B /* Pods-moments.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = moments/Info.plist;
@@ -352,6 +484,7 @@
 		};
 		27313B261D59CAEE0059B5DF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E5348B6D69E7CC6F14ED57D9 /* Pods-moments.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = moments/Info.plist;
@@ -363,6 +496,7 @@
 		};
 		27313B281D59CAEE0059B5DF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E2E3F655720756ABBA09B98A /* Pods-momentsTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = momentsTests/Info.plist;
@@ -375,6 +509,7 @@
 		};
 		27313B291D59CAEE0059B5DF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E01A6C16888F9793BFD235E6 /* Pods-momentsTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = momentsTests/Info.plist;

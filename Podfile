@@ -7,6 +7,7 @@ target 'moments' do
 
 pod 'Firebase/Core'
 pod 'Spotify-iOS-SDK', '~> 0.17.0'
+pod 'Mapbox-iOS-SDK', '~> 3.3.4'
 
 end
 
