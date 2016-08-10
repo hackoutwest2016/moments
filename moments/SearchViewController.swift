@@ -59,6 +59,11 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
         
         mapView.showsUserLocation = false
         mapView.userInteractionEnabled = false
+
+    
+        let styleURL = NSURL(string: MomentsConfig.mapbox.styleUrl)
+        mapView.styleURL = styleURL
+
     }
     
     func setUpSearchBar(){

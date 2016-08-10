@@ -75,8 +75,8 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
             print("Couldnt find spotify instance")
         }
         
-        //performSegueWithIdentifier("moveToDiscover", sender: nil)
-        performSegueWithIdentifier("debug_moveToSong", sender: nil)
+        performSegueWithIdentifier("moveToDiscover", sender: nil)
+        //performSegueWithIdentifier("debug_moveToSong", sender: nil)
         
     }
 
@@ -91,6 +91,8 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
         {
             if let destinationVC = segue.destinationViewController as? SongViewController {
                 let query = PFQuery(className:"MomentTag")
+                
+                
                 query.getObjectInBackgroundWithId("lKABghHrhM").continueWithBlock({
                     (task: BFTask!) -> AnyObject! in
                     if task.error != nil {
