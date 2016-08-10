@@ -12,33 +12,35 @@ import AVFoundation
 
 class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, AVCaptureFileOutputRecordingDelegate {
     
+    @IBOutlet weak var artistLabel: UILabel!
+    @IBOutlet weak var songLabel: UILabel!
+    
     var momentTag: PFObject? {
         didSet {
             //Fetch video files from parse and save to a file
-            if let videos = momentTag!["videos"] as? [PFObject] {
-                
-                downloadedVideos = 0
-                videosToDownload = videos.count
-                localVideoUrls = [NSURL]()
-                
-                for video in videos {
-                    video.fetchIfNeededInBackgroundWithBlock {
-                        (video: PFObject?, error: NSError?) -> Void in
-                        if let video = video {
-                            if let userVideoFile = video["videoFile"] as? PFFile {
-                                userVideoFile.getDataInBackgroundWithBlock {
-                                    (videoData: NSData?, error: NSError?) -> Void in
-                                    if error == nil {
-                                        if let videoData = videoData {
-                                            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
-                                            let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
-                                            
-                                            if videoData.writeToURL(destinationUrl, atomically: true) {
-                                                print("file saved [\(destinationUrl.path!)]")
-                                                self.videoDownloaded(destinationUrl, error: nil) //success
-                                            } else {
-                                                print("error saving file")
-                                            }
+            var query = PFQuery(className: "MomentVideo")
+            query.whereKey("parent", equalTo: momentTag!)
+            
+            query.findObjectsInBackgroundWithBlock { (videos: [PFObject]?, error: NSError?) in
+                if let videos = videos {
+                    self.downloadedVideos = 0
+                    self.videosToDownload = videos.count
+                    self.localVideoUrls = [NSURL]()
+                    
+                    for video in videos {
+                        if let userVideoFile = video["videoFile"] as? PFFile {
+                            userVideoFile.getDataInBackgroundWithBlock {
+                                (videoData: NSData?, error: NSError?) -> Void in
+                                if error == nil {
+                                    if let videoData = videoData {
+                                        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
+                                        let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
+                                        
+                                        if videoData.writeToURL(destinationUrl, atomically: true) {
+                                            print("file saved [\(destinationUrl.path!)]")
+                                            self.videoDownloaded(destinationUrl, error: nil) //success
+                                        } else {
+                                            print("error saving file")
                                         }
                                     }
                                 }
@@ -47,7 +49,6 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                     }
                 }
             }
-            //print(videos?["videoFile"])
         }
     }
     
@@ -254,7 +255,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         //imgOutput = AVCaptureStillImageOutput()
         session = AVCaptureSession()
         session?.beginConfiguration()
-        session?.sessionPreset = AVCaptureSessionPresetiFrame960x540
+        session?.sessionPreset = AVCaptureSessionPresetMedium
         
         if videoInput != nil {
             session?.addInput(videoInput)
@@ -331,11 +332,12 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         let path = "\(docDirectory)/square.mp4"
         let url = NSURL(fileURLWithPath: path)
         //VideoCropper.cropSquareVideo(outputFileURL, outputUrl: url) { (result) in
-        let videoFile = PFFile(data: NSData(contentsOfURL: outputFileURL)!)
+        let videoFile = PFFile(name: outputFileURL!.lastPathComponent, data: NSData(contentsOfURL: outputFileURL)!)
         let video = PFObject(className: "MomentVideo")
         video["videoFile"] = videoFile
         //TODO: Spotify name
         video["contributor"] = "hacker"
+        video["parent"] = momentTag!
         
         
         videoFile!.saveInBackgroundWithBlock({
@@ -359,8 +361,8 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         //self.momentTag?.addObjectsFromArray([video], forKey: "videos")
         //self.momentTag?["videos"] = []
         /*self.momentTag?.saveInBackgroundWithBlock( { (succeeded: Bool, error: NSError?) in
-            print("saved moment tag \(error)")
-        })*/
+         print("saved moment tag \(error)")
+         })*/
         
         self.localVideoUrls.append(outputFileURL)
         let durationBeforeRecording = self.videoDuration
