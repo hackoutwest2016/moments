@@ -32,20 +32,26 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                     self.videosToDownload = videos.count
                     self.localVideoUrls = [NSURL]()
                     
-                    for video in videos {
-                        if let userVideoFile = video["videoFile"] as? PFFile {
-                            userVideoFile.getDataInBackgroundWithBlock {
-                                (videoData: NSData?, error: NSError?) -> Void in
-                                if error == nil {
-                                    if let videoData = videoData {
-                                        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
-                                        let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
-                                        
-                                        if videoData.writeToURL(destinationUrl, atomically: true) {
-                                            print("file saved [\(destinationUrl.path!)]")
-                                            self.videoDownloaded(destinationUrl, error: nil) //success
-                                        } else {
-                                            print("error saving file")
+                    if self.videosToDownload == 0 {
+                        print("play")
+                        self.play()
+                    } else {
+                    
+                        for video in videos {
+                            if let userVideoFile = video["videoFile"] as? PFFile {
+                                userVideoFile.getDataInBackgroundWithBlock {
+                                    (videoData: NSData?, error: NSError?) -> Void in
+                                    if error == nil {
+                                        if let videoData = videoData {
+                                            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
+                                            let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
+                                            
+                                            if videoData.writeToURL(destinationUrl, atomically: true) {
+                                                print("file saved [\(destinationUrl.path!)]")
+                                                self.videoDownloaded(destinationUrl, error: nil) //success
+                                            } else {
+                                                print("error saving file")
+                                            }
                                         }
                                     }
                                 }
@@ -447,6 +453,10 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
      }
      */
     
+    @IBAction func backButton(sender: UIStoryboardSegue) {
+        //TODO: Return
+        //performSegueWithIdentifier("unwindSegue1", sender: self)
+    }
 }
 
 extension Array {
