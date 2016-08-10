@@ -100,6 +100,7 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
                     }
                     
                     destinationVC.momentTag = task.result as? PFObject
+                    destinationVC.spotifyUrl = "spotify:track:6sqo5lYZ3yJRv0auIWBNrm"
                     return task
                 })
             }
