@@ -23,6 +23,7 @@
 		F42D7AD31D59F708007867E2 /* StitchedVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42D7AD21D59F708007867E2 /* StitchedVideo.swift */; };
 		F42D7AD81D5A02B4007867E2 /* HttpDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42D7AD71D5A02B4007867E2 /* HttpDownloader.swift */; };
 		F42D7ADA1D5A4C0E007867E2 /* MomentsConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42D7AD91D5A4C0E007867E2 /* MomentsConfig.swift */; };
+		F42D7ADC1D5AAF63007867E2 /* VideoCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42D7ADB1D5AAF63007867E2 /* VideoCropper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		F42D7AD21D59F708007867E2 /* StitchedVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StitchedVideo.swift; sourceTree = "<group>"; };
 		F42D7AD71D5A02B4007867E2 /* HttpDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpDownloader.swift; sourceTree = "<group>"; };
 		F42D7AD91D5A4C0E007867E2 /* MomentsConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MomentsConfig.swift; sourceTree = "<group>"; };
+		F42D7ADB1D5AAF63007867E2 /* VideoCropper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCropper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				F42D7AD71D5A02B4007867E2 /* HttpDownloader.swift */,
+				F42D7ADB1D5AAF63007867E2 /* VideoCropper.swift */,
 			);
 			name = "Helper Classes";
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				272D9ED21D5A7B290036826A /* RecordViewController.swift in Sources */,
 				2734ABCD1D59D0C80041B0F4 /* SongViewController.swift in Sources */,
 				27313B0A1D59CAEE0059B5DF /* DiscoverViewController.swift in Sources */,
+				F42D7ADC1D5AAF63007867E2 /* VideoCropper.swift in Sources */,
 				27313B081D59CAEE0059B5DF /* AppDelegate.swift in Sources */,
 				F42D7AD81D5A02B4007867E2 /* HttpDownloader.swift in Sources */,
 				F42D7AD31D59F708007867E2 /* StitchedVideo.swift in Sources */,

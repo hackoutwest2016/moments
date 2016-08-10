@@ -105,6 +105,7 @@
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="MS8-Ml-yak" appends="YES" id="ZEa-FE-zaa"/>
+                                    <outletCollection property="gestureRecognizers" destination="7TZ-WT-ab6" appends="YES" id="vcq-wT-S1e"/>
                                 </connections>
                             </view>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="SKC-ri-zrz">
@@ -142,6 +143,11 @@
                         <action selector="mediaViewTapped:" destination="ibI-tQ-O8l" id="kG3-3p-LbA"/>
                     </connections>
                 </tapGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="7TZ-WT-ab6" userLabel="Media View Hold">
+                    <connections>
+                        <action selector="takeVideo:" destination="ibI-tQ-O8l" id="PLZ-s3-4c4"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-1529" y="390"/>
         </scene>
