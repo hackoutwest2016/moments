@@ -35,6 +35,7 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
         
         let authvc = SPTAuthViewController.authenticationViewController()
         // authvc.clearCookies(nil)
+        
         authvc.modalPresentationStyle   = UIModalPresentationStyle.OverCurrentContext
         authvc.modalTransitionStyle     = UIModalTransitionStyle.CrossDissolve
         authvc.delegate                 = self

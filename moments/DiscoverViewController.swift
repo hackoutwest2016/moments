@@ -115,7 +115,11 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                             annotation.coordinate = CLLocationCoordinate2DMake(position.latitude, position.longitude)
                             annotation.title = momentTag.objectId!
                             
-                            self.mapView.addAnnotation(annotation)
+                            
+                            UIView.animateWithDuration(0.3, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+                                    self.mapView.addAnnotation(annotation)
+                                }, completion: nil)
+                            
                         }
                     }
                 }
@@ -149,8 +153,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         mapView.userTrackingMode = MGLUserTrackingMode.Follow
         
     }
-    
-    
+   
     func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
         
         

@@ -19,6 +19,7 @@
 		2734ABCB1D59CF260041B0F4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2734ABCA1D59CF260041B0F4 /* LoginViewController.swift */; };
 		2734ABCD1D59D0C80041B0F4 /* SongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2734ABCC1D59D0C80041B0F4 /* SongViewController.swift */; };
 		2734ABCF1D59D0DB0041B0F4 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2734ABCE1D59D0DB0041B0F4 /* SearchViewController.swift */; };
+		274599821D5BBC35002D174E /* AnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274599811D5BBC35002D174E /* AnimationViewController.swift */; };
 		27701F3F1D5B1BA100B62829 /* Pacifico.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27701F3E1D5B1BA100B62829 /* Pacifico.ttf */; };
 		27701F411D5B1C4900B62829 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27701F401D5B1C4900B62829 /* Constants.swift */; };
 		DDE72562AD0D59D0FAFA7127 /* libPods-moments.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBD5AA454CFD93C4EE91B9B6 /* libPods-moments.a */; };
@@ -55,6 +56,7 @@
 		2734ABCC1D59D0C80041B0F4 /* SongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongViewController.swift; sourceTree = "<group>"; };
 		2734ABCE1D59D0DB0041B0F4 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		2734ABD11D59D5D20041B0F4 /* Moments-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Moments-Bridging-Header.h"; path = "../Moments-Bridging-Header.h"; sourceTree = "<group>"; };
+		274599811D5BBC35002D174E /* AnimationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationViewController.swift; sourceTree = "<group>"; };
 		27701F3E1D5B1BA100B62829 /* Pacifico.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Pacifico.ttf; sourceTree = "<group>"; };
 		27701F401D5B1C4900B62829 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		294B2485FD2341E5C26BF5B8 /* libPods-momentsTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-momentsTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,6 +122,7 @@
 				2734ABCC1D59D0C80041B0F4 /* SongViewController.swift */,
 				2734ABCE1D59D0DB0041B0F4 /* SearchViewController.swift */,
 				27313B0B1D59CAEE0059B5DF /* Main.storyboard */,
+				274599811D5BBC35002D174E /* AnimationViewController.swift */,
 				272D9ED11D5A7B290036826A /* RecordViewController.swift */,
 				27313B111D59CAEE0059B5DF /* Assets.xcassets */,
 				27313B131D59CAEE0059B5DF /* LaunchScreen.storyboard */,
@@ -235,7 +238,7 @@
 				TargetAttributes = {
 					27313B031D59CAEE0059B5DF = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 8F732M5KXK;
+						DevelopmentTeam = 54653AF2XS;
 					};
 					27313B1A1D59CAEE0059B5DF = {
 						CreatedOnToolsVersion = 7.3;
@@ -391,6 +394,7 @@
 				F42D7ADC1D5AAF63007867E2 /* VideoCropper.swift in Sources */,
 				27313B081D59CAEE0059B5DF /* AppDelegate.swift in Sources */,
 				F42D7AD81D5A02B4007867E2 /* HttpDownloader.swift in Sources */,
+				274599821D5BBC35002D174E /* AnimationViewController.swift in Sources */,
 				F42D7AD31D59F708007867E2 /* StitchedVideo.swift in Sources */,
 				F42D7ADA1D5A4C0E007867E2 /* MomentsConfig.swift in Sources */,
 			);
@@ -530,7 +534,7 @@
 				);
 				INFOPLIST_FILE = moments/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.simphax.moments;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pak.moments;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Moments-Bridging-Header.h";
@@ -550,7 +554,7 @@
 				);
 				INFOPLIST_FILE = moments/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.simphax.moments;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pak.moments;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Moments-Bridging-Header.h";

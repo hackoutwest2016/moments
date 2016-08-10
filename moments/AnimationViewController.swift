@@ -5,56 +5,66 @@
 //  Created by Pak on 10/08/16.
 //  Copyright © 2016 paksnicefriends. All rights reserved.
 //
+import Mapbox
 
-import UIKit
+class AnimationViewController: UIViewController, MGLMapViewDelegate {
+    @IBOutlet weak var btn: UIButton!
+    @IBAction func btnTapped(sender: UIButton) {
+        
+        
+      
+        /*
+         STEP 1: Get a login URL from SPAuth and open it in Safari.
+         */
 
-class AnimationViewController: UIViewController {
+        UIApplication.sharedApplication().openURL(SPTAuth.defaultInstance().loginURL)
+        
+        
+//        let hello = MGLPointAnnotation()
+//       
+//        hello.title = "Hello world!"
+//        hello.subtitle = "Welcome to my marker"
+//        hello.coordinate = CLLocationCoordinate2D(latitude: 40.7326808, longitude: -73.9843407)
+//        
+//        
+//        self.mapView.addAnnotation(hello)
+//        
+//        
+//        
+//        
+//        UIView.animateWithDuration(3, delay: 2, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+//             //hello.coordinate = CLLocationCoordinate2D(latitude: 40.7326808, longitude: -73.9843407)
+//            }, completion: nil)
 
+    }
+    
+    var mapView = MGLMapView()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        mapView = MGLMapView(frame: view.bounds)
+        mapView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         
-        var animationImages:[UIImage] = []
-        for n in 1...85 {
-            //moments0008
-            
-            var name = "moments00"
-            if n < 10{
-                name += "0"
-            }
-            name += String(n)
-            
-            print(name)
-            
-            let image = UIImage(named: name)
-            animationImages.append(image!)
-        }
+        // Set the map’s center coordinate and zoom level.
+        mapView.setCenterCoordinate(CLLocationCoordinate2D(latitude: 40.7326808, longitude: -73.9843407), zoomLevel: 12, animated: false)
+        view.addSubview(mapView)
         
-        let animationImageView = UIImageView()
-        animationImageView.animationImages = animationImages
-        self.view.addSubview(animationImageView)
+        // Set the delegate property of our map view to `self` after instantiating it.
+        mapView.delegate = self
         
-        animationImageView.startAnimating()
-        print(animationImageView.isAnimating())
+        view.sendSubviewToBack(mapView)
         
-        
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // Use the default marker. See also: our view annotation or custom marker examples.
+    func mapView(mapView: MGLMapView, viewForAnnotation annotation: MGLAnnotation) -> MGLAnnotationView? {
+        return nil
     }
-    */
-
+    
+    // Allow callout view to appear when an annotation is tapped.
+    func mapView(mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
+        return true
+    }
 }

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MKg-n0-nGv">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Pacifico.ttf">
+            <string>Pacifico</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
         <!--Discover View Controller-->
         <scene sceneID="MUG-2D-hIM">
@@ -109,7 +114,7 @@
                                             <fragment content="Let's Start!">
                                                 <attributes>
                                                     <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                    <font key="NSFont" size="26" name="Pacifico-Regular"/>
+                                                    <font key="NSFont" metaFont="system" size="26"/>
                                                 </attributes>
                                             </fragment>
                                         </attributedString>
@@ -276,11 +281,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lrr-mE-qsW" customClass="MGLMapView">
-                                <rect key="frame" x="20" y="60" width="560" height="180"/>
+                                <rect key="frame" x="0.0" y="60" width="600" height="180"/>
                                 <color key="backgroundColor" red="0.79352954899999995" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="59" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="eyG-cJ-v5e">
-                                <rect key="frame" x="0.0" y="278" width="600" height="322"/>
+                                <rect key="frame" x="0.0" y="240" width="600" height="360"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="600" id="0fe-Ww-Qpo"/>
@@ -330,25 +335,37 @@
                                     <segue destination="dLX-fO-pFR" kind="unwind" identifier="unwindSegue2" unwindAction="backButton:" id="8M4-0y-TEo"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tag this place!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aGa-48-OtX">
+                                <rect key="frame" x="199" y="7" width="202" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="202" id="0fd-Nt-LpA"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Pacifico" family="Pacifico" pointSize="25"/>
+                                <color key="textColor" red="1" green="0.90588235294117647" blue="0.38431372549019605" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="kuh-db-Nvz" firstAttribute="top" secondItem="p17-XN-HIF" secondAttribute="bottom" id="7ZD-LQ-sxw"/>
+                            <constraint firstItem="aGa-48-OtX" firstAttribute="centerY" secondItem="kuh-db-Nvz" secondAttribute="centerY" id="9Pn-vf-2TK"/>
                             <constraint firstItem="eyG-cJ-v5e" firstAttribute="top" secondItem="lrr-mE-qsW" secondAttribute="bottom" constant="38" id="BP4-xk-TEh"/>
-                            <constraint firstItem="eyG-cJ-v5e" firstAttribute="top" secondItem="lrr-mE-qsW" secondAttribute="bottom" constant="38" id="BbI-B8-IRR"/>
+                            <constraint firstItem="eyG-cJ-v5e" firstAttribute="top" secondItem="lrr-mE-qsW" secondAttribute="bottom" id="BbI-B8-IRR"/>
                             <constraint firstAttribute="trailingMargin" secondItem="eyG-cJ-v5e" secondAttribute="trailing" constant="-20" id="D44-9A-h0c"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="lrr-mE-qsW" secondAttribute="trailing" id="LmV-A3-Rvh"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="lrr-mE-qsW" secondAttribute="trailing" constant="-20" id="LmV-A3-Rvh"/>
                             <constraint firstItem="LZY-LE-NGO" firstAttribute="top" secondItem="eyG-cJ-v5e" secondAttribute="bottom" id="M5a-Wb-KzK"/>
                             <constraint firstItem="eyG-cJ-v5e" firstAttribute="leading" secondItem="Q14-Xf-bY8" secondAttribute="leadingMargin" constant="-20" id="M5y-uJ-OXq"/>
                             <constraint firstItem="eyG-cJ-v5e" firstAttribute="leading" secondItem="Q14-Xf-bY8" secondAttribute="leadingMargin" constant="-20" id="MvE-1b-0WV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="eyG-cJ-v5e" secondAttribute="trailing" constant="-20" id="QQT-Cn-sN8"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="lrr-mE-qsW" secondAttribute="leading" id="Xmo-Ln-4PF"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="lrr-mE-qsW" secondAttribute="leading" constant="20" id="Xmo-Ln-4PF"/>
                             <constraint firstAttribute="leadingMargin" secondItem="kuh-db-Nvz" secondAttribute="leading" id="bZM-hb-e6M"/>
+                            <constraint firstItem="lrr-mE-qsW" firstAttribute="top" secondItem="aGa-48-OtX" secondAttribute="bottom" constant="8" symbolic="YES" id="hqC-ch-4HY"/>
                             <constraint firstItem="lrr-mE-qsW" firstAttribute="top" secondItem="p17-XN-HIF" secondAttribute="bottom" constant="40" id="idk-uy-ram"/>
                             <constraint firstItem="LZY-LE-NGO" firstAttribute="top" secondItem="eyG-cJ-v5e" secondAttribute="bottom" constant="20" id="pqW-ig-v06"/>
                             <constraint firstAttribute="leadingMargin" secondItem="eyG-cJ-v5e" secondAttribute="leading" id="smZ-zM-lei"/>
                             <constraint firstItem="LZY-LE-NGO" firstAttribute="top" secondItem="eyG-cJ-v5e" secondAttribute="bottom" id="tM8-vM-7px"/>
-                            <constraint firstItem="lrr-mE-qsW" firstAttribute="height" secondItem="Q14-Xf-bY8" secondAttribute="height" multiplier="0.3" id="yht-SK-rDj"/>
+                            <constraint firstItem="aGa-48-OtX" firstAttribute="centerX" secondItem="lrr-mE-qsW" secondAttribute="centerX" id="vAo-Qs-U43"/>
+                            <constraint firstItem="lrr-mE-qsW" firstAttribute="height" secondItem="Q14-Xf-bY8" secondAttribute="height" multiplier="0.25" constant="30" id="yht-SK-rDj"/>
                             <constraint firstAttribute="trailingMargin" secondItem="eyG-cJ-v5e" secondAttribute="trailing" constant="-20" id="yl4-Eg-vny"/>
                         </constraints>
                         <variation key="default">
@@ -373,6 +390,36 @@
                 <exit id="dLX-fO-pFR" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-758" y="-532"/>
+        </scene>
+        <!--Animation View Controller-->
+        <scene sceneID="tbf-di-FiP">
+            <objects>
+                <viewController id="4N0-EV-hm8" customClass="AnimationViewController" customModule="moments" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="kc7-0O-Dis"/>
+                        <viewControllerLayoutGuide type="bottom" id="jKz-wY-7ZG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5Ci-YW-55x">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycO-Kp-V35">
+                                <rect key="frame" x="221" y="54" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="btnTapped:" destination="4N0-EV-hm8" eventType="touchUpInside" id="5ZR-an-X91"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="btn" destination="ycO-Kp-V35" id="GYA-16-UEp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ihA-s7-LHD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-649" y="260"/>
         </scene>
     </scenes>
     <resources>

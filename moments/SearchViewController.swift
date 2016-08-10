@@ -69,8 +69,11 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
     func setUpSearchBar(){
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search for a track"
         definesPresentationContext = true
         songListView.tableHeaderView = searchController.searchBar
+        
+        //searchController.searchBar.scopeButtonTitles = ["Song", "Artist", "Album"]
     }
     
     func setUpSongListView(){
@@ -93,10 +96,12 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
       
-        let keyword = searchController.searchBar.text
-        if let k = keyword {
-            if(k != ""){
-                searchSong(k)
+        let text = searchController.searchBar.text
+        if let keyword = text {
+            if(keyword != ""){
+                let editedKeyword = keyword.stringByReplacingOccurrencesOfString(" ", withString: "+")
+                print("editedKeyword:\(editedKeyword)")
+                searchSong(editedKeyword)
             }
         }
     }
