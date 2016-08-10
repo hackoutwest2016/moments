@@ -302,7 +302,7 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         let rect = CGRectMake(0, 0, newSize.width, newSize.height)
         
         // Actually do the resizing to the rect using the ImageContext stuff
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 2.0)
         image.drawInRect(rect)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
