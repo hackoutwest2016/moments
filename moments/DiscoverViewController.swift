@@ -37,19 +37,44 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         
         // Set the map view‘s delegate property.
         mapView.delegate = self
-        
-        
-        
-        // Initialize and add the point annotation.
-        /*let pisa = MGLPointAnnotation()
-        pisa.coordinate = CLLocationCoordinate2DMake(57.7039599,11.9657933)
-        pisa.title = "Spotify"
-        mapView.addAnnotation(pisa)
-       */
+
         view.sendSubviewToBack(mapView)
         
-        var timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(pollForTags), userInfo: nil, repeats: true)
+        let timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(pollForTags), userInfo: nil, repeats: true)
+        
+
     }
+    
+    
+    func createMarker(chosenImg:UIImage) -> UIImage{
+        // the chosen image
+        
+        var roundedImg = resizeImage(chosenImg)
+        roundedImg = maskRoundedImage(roundedImg, radius: 40)
+        
+        let drop = UIImage(named: "drop")!
+        let combined = combineImages(drop, topImage: roundedImg)
+        
+        return combined
+    }
+    
+    
+    func combineImages(bottomImage:UIImage, topImage:UIImage) -> UIImage {
+        
+        //let newSize = CGSizeMake(100, 100) // set this to what you need
+        UIGraphicsBeginImageContextWithOptions(bottomImage.size, false, 0.0)
+        
+        bottomImage.drawInRect(CGRect(origin: CGPointZero, size: bottomImage.size))
+        topImage.drawInRect(CGRect(origin: CGPointMake(10, 10), size: topImage.size))
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+    
+    
+    
     
     func pollForTags() {
         //Find all tags in database
@@ -141,8 +166,14 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
                 if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
                     if thumbnailFile.dataAvailable {
                         if let data = try? thumbnailFile.getData() {
-                            let image = UIImage(data:data, scale: 2.0)
+                            var image = UIImage(data:data, scale: 2.0)
+                            
+                            image = createMarker(image!)
+                            
                             annotationImage = MGLAnnotationImage(image: image!, reuseIdentifier: objectId!)
+                            
+                            
+                           
                             return annotationImage
                         }
                     } else {
@@ -172,8 +203,8 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         var actualHeight:Float = Float(image.size.height)
         var actualWidth:Float = Float(image.size.width)
         
-        let maxHeight:Float = 70.0 //your choose height
-        let maxWidth:Float = 70.0  //your choose width
+        let maxHeight:Float = 80.0 //your choose height
+        let maxWidth:Float = 80.0  //your choose width
         
         var imgRatio:Float = actualWidth/actualHeight
         let maxRatio:Float = maxWidth/maxHeight
@@ -209,6 +240,37 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         
         return UIImage(data: imageData)!
     }
+    
+    func maskRoundedImage(image: UIImage, radius: Float) -> UIImage {
+        let imageView: UIImageView = UIImageView(image: image)
+        var layer: CALayer = CALayer()
+        layer = imageView.layer
+        
+        layer.masksToBounds = true
+        layer.cornerRadius = CGFloat(radius)
+        
+        UIGraphicsBeginImageContext(imageView.bounds.size)
+        layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        let roundedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return roundedImage
+    }
+    
+//    func scaleUIImageToSize(let image: UIImage, let size: CGSize) -> UIImage {
+//        let hasAlpha = false
+//        let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
+//        
+//        UIGraphicsBeginImageContextWithOptions(size, !hasAlpha, scale)
+//        image.drawInRect(CGRect(origin: CGPointZero, size: size))
+//        
+//        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        
+//        return scaledImage
+//    }
+//    
+    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "moveToSearch"
