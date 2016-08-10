@@ -148,7 +148,7 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
                     } else {
                         thumbnailFile.getDataInBackgroundWithBlock {
                             (imageData: NSData?, error: NSError?) -> Void in
-                            print("DOwnloaded thumbnail, should reset thumbnails")
+                            print("Downloaded thumbnail, should reset thumbnails")
                             mapView.removeAnnotation(annotation)
                             mapView.addAnnotation(annotation)
                         }
