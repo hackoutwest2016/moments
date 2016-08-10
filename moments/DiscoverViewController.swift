@@ -327,43 +327,21 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                 
             }
         }
-        print("IHDFJHDALHJKADFJKLHFDSJKLHDFJKLHFDSJKLDSFKJHLDSKFJL")
+        
         if segue.identifier == "moveToViewSong"
         {
-            print("IHDFJHDALHJKADFJKLHFDSJKLHDFJKLHFDSJKLDSFKJHLDSKFJL")
-            /*if let destinationVC = segue.destinationViewController as? SongViewController {
-                let query = PFQuery(className:"MomentTag")
-                
+            if let destinationVC = segue.destinationViewController as? SongViewController {
                 if selectedParseId != "" {
                     for momentTag in momentTags {
                         
                         if momentTag.objectId == selectedParseId {
-                            print("WORKING")
                             destinationVC.momentTag = momentTag
-                            destinationVC.spotifySong = Song(artist: "Birdy", name: "Young Blood", link: "spotify:track:6sqo5lYZ3yJRv0auIWBNrm")
+                            destinationVC.spotifySong = Song(artist: "Birdy", name: "Young Blood", link: "spotify:track:4F9jpNQDKRFoyM4Ebpni6S")
                         }
     
                     }
                 }
             
-            }*/
-            if let destinationVC = segue.destinationViewController as? SongViewController {
-                let query = PFQuery(className:"MomentTag")
-                
-                
-                query.getObjectInBackgroundWithId("lKABghHrhM").continueWithBlock({
-                    (task: BFTask!) -> AnyObject! in
-                    if task.error != nil {
-                        // There was an error.
-                        print("ERROR in retreiving debug moment tag")
-                        return task
-                    }
-                    
-                    destinationVC.spotifySong = Song(artist: "Birdy", name: "Young Blood", link: "spotify:track:6sqo5lYZ3yJRv0auIWBNrm")
-                    
-                    destinationVC.momentTag = task.result as? PFObject
-                    return task
-                })
             }
         }
         
