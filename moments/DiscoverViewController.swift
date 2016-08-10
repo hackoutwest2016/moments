@@ -64,7 +64,7 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
     func combineImages(bottomImage:UIImage, topImage:UIImage) -> UIImage {
         
         //let newSize = CGSizeMake(100, 100) // set this to what you need
-        UIGraphicsBeginImageContextWithOptions(bottomImage.size, false, 0.0)
+        UIGraphicsBeginImageContextWithOptions(bottomImage.size, false, 2.0)
         
         bottomImage.drawInRect(CGRect(origin: CGPointZero, size: bottomImage.size))
         topImage.drawInRect(CGRect(origin: CGPointMake(10, 10), size: topImage.size))
@@ -168,7 +168,7 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
                 if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
                     if thumbnailFile.dataAvailable {
                         if let data = try? thumbnailFile.getData() {
-                            var image = UIImage(data:data, scale: 1.0)
+                            var image = UIImage(data:data, scale: 2.0)
                             image = createMarker(image!)
                             
                             
@@ -216,8 +216,8 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         var actualHeight:Float = Float(image.size.height)
         var actualWidth:Float = Float(image.size.width)
         
-        let maxHeight:Float = 80.0 //your choose height
-        let maxWidth:Float = 80.0  //your choose width
+        let maxHeight:Float = 40.0 //your choose height
+        let maxWidth:Float = 40.0  //your choose width
         
         var imgRatio:Float = actualWidth/actualHeight
         let maxRatio:Float = maxWidth/maxHeight
@@ -244,7 +244,8 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         }
         
         let rect:CGRect = CGRectMake(0.0, 0.0, CGFloat(actualWidth) , CGFloat(actualHeight) )
-        UIGraphicsBeginImageContext(rect.size)
+        //UIGraphicsBeginImageContext(rect.size)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 2.0)
         image.drawInRect(rect)
         
         let img:UIImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -272,7 +273,7 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
     
     func scaleUIImageToSize(let image: UIImage, let size: CGSize) -> UIImage {
         let hasAlpha = false
-        let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
+        let scale: CGFloat = 2.0 // Automatically use scale factor of main screen
         
         UIGraphicsBeginImageContextWithOptions(size, !hasAlpha, scale)
         image.drawInRect(CGRect(origin: CGPointZero, size: size))
