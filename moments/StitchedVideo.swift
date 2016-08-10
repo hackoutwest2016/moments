@@ -37,15 +37,22 @@ class StitchedVideo {
                 print("ERROR in adding video track")
             }
             
+            var transform = CGAffineTransform()
+            transform = CGAffineTransformRotate(transform, atan2(videoAssetTrack.preferredTransform.b, videoAssetTrack.preferredTransform.a))
+            
+            videoCompositionTrack.preferredTransform = videoAssetTrack.preferredTransform
+            
             let videoCompositionInstruction = AVMutableVideoCompositionInstruction()
             videoCompositionInstruction.timeRange = CMTimeRangeMake(time, videoAssetTrack.timeRange.duration);
             videoCompositionInstruction.layerInstructions = [AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)]
+            
             instructions.append(videoCompositionInstruction)
             
             time = CMTimeAdd(time, videoAssetTrack.timeRange.duration);
-            if CGSizeEqualToSize(size, CGSizeZero) {
-                size = videoAssetTrack.naturalSize
-            }
+            //if CGSizeEqualToSize(size, CGSizeZero) {
+            size = CGSize(width: 480,height: 480)//videoAssetTrack.naturalSize * videoAssetTrack.preferredTransform
+            print("SIZE: \(size)")
+            //}
         }
         let mutableVideoComposition = AVMutableVideoComposition()
         mutableVideoComposition.instructions = instructions

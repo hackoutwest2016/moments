@@ -92,7 +92,6 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         
         NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(updateSongProgress), userInfo: nil, repeats: true)
         
-        initCamera(.Back)
         
         slider.setThumbImage(UIImage(named:"slider-thumb"),forState: .Normal)
         
@@ -103,6 +102,11 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     override func viewDidAppear(animated: Bool) {
         artistLabel.text = spotifySong?.artist
         songLabel.text = spotifySong?.name
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        initCamera(.Back)
     }
     
     func updateSongProgress() {
@@ -127,21 +131,24 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
             print(localVideoUrls)
             print("Download done")
             
-            
             //TODO: Add timeline boxes
             //timelineView
             //timelineView.subviews
             
-            
             let stitchedVideo = StitchedVideo(videoUrls: localVideoUrls)
+            //let test = AVPlayerItem(URL: localVideoUrls[0])
             
             videoPlayer = AVPlayer(playerItem: stitchedVideo.PlayerItem)
             videoPlayer?.actionAtItemEnd = .None
             videoDuration = Float(videoPlayer!.currentItem!.duration.seconds)
             
+            mediaView.layoutIfNeeded()
             videoPlayerLayer = AVPlayerLayer(player: videoPlayer)
-            videoPlayerLayer!.frame = self.mediaView.bounds
-            self.view.layer.addSublayer(videoPlayerLayer!)
+            videoPlayerLayer!.frame = CGRect(x:-120,y:0,width: mediaView.bounds.width+120,height: mediaView.bounds.height)
+            videoPlayerLayer!.videoGravity = AVLayerVideoGravityResize
+            //videoPlayerLayer!.needsDisplayOnBoundsChange = true
+            
+            self.mediaView.layer.addSublayer(videoPlayerLayer!)
             
             play()
         }
@@ -256,19 +263,34 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     private var recordingBox : UIView?
     func initCamera(position: AVCaptureDevicePosition)
     {
-        var myDevice: AVCaptureDevice?
-        let devices = AVCaptureDevice.devices()
-        let audioDevices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio)
-        
-        // Back camera
-        var videoInput: AVCaptureDeviceInput? = nil
-        for device in devices
-        {
-            if(device.position == position)
+        if cameraLayer == nil {
+            var myDevice: AVCaptureDevice?
+            let devices = AVCaptureDevice.devices()
+            let audioDevices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio)
+            
+            // Back camera
+            var videoInput: AVCaptureDeviceInput? = nil
+            for device in devices
             {
-                myDevice = device as? AVCaptureDevice
+                if(device.position == position)
+                {
+                    myDevice = device as? AVCaptureDevice
+                    do {
+                        videoInput = try AVCaptureDeviceInput(device: myDevice)
+                    }
+                    catch let error as NSError
+                    {
+                        print(error)
+                        return
+                    }
+                }
+            }
+            
+            // Audio
+            var audioInput: AVCaptureDeviceInput? = nil
+            if audioDevices.count > 0 {
                 do {
-                    videoInput = try AVCaptureDeviceInput(device: myDevice)
+                    audioInput = try AVCaptureDeviceInput(device: audioDevices[0] as! AVCaptureDevice)
                 }
                 catch let error as NSError
                 {
@@ -276,50 +298,38 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                     return
                 }
             }
-        }
-        
-        // Audio
-        var audioInput: AVCaptureDeviceInput? = nil
-        if audioDevices.count > 0 {
-            do {
-                audioInput = try AVCaptureDeviceInput(device: audioDevices[0] as! AVCaptureDevice)
+            
+            // Create session
+            videoOutput = AVCaptureMovieFileOutput()
+            //imgOutput = AVCaptureStillImageOutput()
+            session = AVCaptureSession()
+            session?.beginConfiguration()
+            session?.sessionPreset = AVCaptureSessionPresetMedium
+            
+            if videoInput != nil {
+                session?.addInput(videoInput)
             }
-            catch let error as NSError
-            {
-                print(error)
-                return
+            if audioInput != nil {
+                session?.addInput(audioInput)
             }
+            //session?.addOutput(imgOutput)
+            session?.addOutput(videoOutput)
+            
+            var connection = videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
+            connection?.videoOrientation = .Portrait
+            
+            session?.commitConfiguration()
+            
+            mediaView.layoutIfNeeded()
+            // Video Screen
+            cameraLayer = AVCaptureVideoPreviewLayer(session: session)
+            cameraLayer?.frame = mediaView.bounds
+            cameraLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+            self.mediaView.layer.addSublayer(cameraLayer!)
+            
+            // Start session
+            session?.startRunning()
         }
-        
-        // Create session
-        videoOutput = AVCaptureMovieFileOutput()
-        //imgOutput = AVCaptureStillImageOutput()
-        session = AVCaptureSession()
-        session?.beginConfiguration()
-        session?.sessionPreset = AVCaptureSessionPresetMedium
-        
-        if videoInput != nil {
-            session?.addInput(videoInput)
-        }
-        if audioInput != nil {
-            session?.addInput(audioInput)
-        }
-        //session?.addOutput(imgOutput)
-        session?.addOutput(videoOutput)
-        
-        var connection = videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
-        connection?.videoOrientation = .Portrait
-        
-        session?.commitConfiguration()
-        
-        // Video Screen
-        cameraLayer = AVCaptureVideoPreviewLayer(session: session)
-        cameraLayer?.frame = mediaView.frame
-        cameraLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-        self.mediaView.layer.addSublayer(cameraLayer!)
-        
-        // Start session
-        session?.startRunning()
     }
     
     @IBAction func takeVideo(sender: UILongPressGestureRecognizer) {
@@ -336,7 +346,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
             let url = NSURL(fileURLWithPath: path)
             videoOutput?.startRecordingToOutputFileURL(url, recordingDelegate: self)
             setMusicOffset(videoDuration)
-            cameraLayer?.borderColor = UIColor.yellowColor().CGColor
+            cameraLayer?.borderColor = MomentsConfig.colors[0].CGColor
             cameraLayer?.borderWidth = 10
             
             // Timer
