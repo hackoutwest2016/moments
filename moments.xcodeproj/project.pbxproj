@@ -118,13 +118,13 @@
 				2734ABCC1D59D0C80041B0F4 /* SongViewController.swift */,
 				2734ABCE1D59D0DB0041B0F4 /* SearchViewController.swift */,
 				27313B0B1D59CAEE0059B5DF /* Main.storyboard */,
-				27701F401D5B1C4900B62829 /* Constants.swift */,
 				272D9ED11D5A7B290036826A /* RecordViewController.swift */,
 				27313B111D59CAEE0059B5DF /* Assets.xcassets */,
 				27313B131D59CAEE0059B5DF /* LaunchScreen.storyboard */,
 				27313B161D59CAEE0059B5DF /* Info.plist */,
 				27313B0E1D59CAEE0059B5DF /* moments.xcdatamodeld */,
 				2734ABD11D59D5D20041B0F4 /* Moments-Bridging-Header.h */,
+				27701F401D5B1C4900B62829 /* Constants.swift */,
 				F42D7AD91D5A4C0E007867E2 /* MomentsConfig.swift */,
 			);
 			path = moments;

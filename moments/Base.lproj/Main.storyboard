@@ -64,11 +64,12 @@
                     <connections>
                         <outlet property="addButton" destination="shO-fF-nwe" id="S8h-pW-aGC"/>
                         <segue destination="XZZ-w0-HkV" kind="presentation" identifier="moveToSearch" id="iBn-NY-Pvf"/>
+                        <segue destination="ibI-tQ-O8l" kind="show" identifier="moveToViewSong" id="GMe-F1-zIv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="khZ-aR-GUR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1537" y="-575"/>
+            <point key="canvasLocation" x="-1499" y="-527"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -262,4 +263,7 @@
     <resources>
         <image name="plus" width="100" height="100"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="GMe-F1-zIv"/>
+    </inferredMetricsTieBreakers>
 </document>
