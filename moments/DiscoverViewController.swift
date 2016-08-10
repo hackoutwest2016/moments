@@ -341,9 +341,14 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                             return task
                         }
                         
+                       
+    
                         destinationVC.momentTag = task.result as? PFObject
+                        destinationVC.spotifySong = Song(artist: "Birdy", name: "Young Blood", link: "spotify:track" + "spotify:track:")
                         return task
                     })
+                    
+                    
                 }
             
             }
