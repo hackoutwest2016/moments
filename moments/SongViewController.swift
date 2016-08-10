@@ -33,6 +33,8 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     
     var momentTag: PFObject? {
         didSet {
+            
+            
             //Fetch video files from parse and save to a file
             let query = PFQuery(className: "MomentVideo")
             query.whereKey("parent", equalTo: momentTag!)
@@ -69,6 +71,11 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                             }
                         }
                     }
+                } else {
+                    self.downloadedVideos = 0
+                    self.videosToDownload = 0
+                    self.localVideoUrls = [NSURL]()
+                    self.play()
                 }
             }
         }
@@ -133,23 +140,43 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         slider.setThumbImage(sliderThumbInvisibleImg,forState: .Normal)
         musicSlider.setThumbImage(UIImage(named:"slider-thumb-music"),forState: .Normal)
         
-        
-        //TODO: Spinning wheel
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        try? spotifyPlayer?.stop()
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        artistLabel.text = spotifySong?.artist
-        songLabel.text = spotifySong?.name
         saveButton.hidden = true
         redoButton.hidden = true
         cameraLayer?.hidden = true
         captureLabel.hidden = true
         holdLabel.hidden = true
         videoPlayerLayer?.hidden = true
+        
+        //TODO: Spinning wheel
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        //Reset everything
+        spotifyPlayer?.setIsPlaying(false, callback: nil)
+        videoPlayer?.rate = 0
+        for subview in self.timelineView.subviews {
+            subview.removeFromSuperview()
+        }
+        saveButton.hidden = true
+        redoButton.hidden = true
+        cameraLayer?.hidden = true
+        captureLabel.hidden = true
+        holdLabel.hidden = true
+        videoPlayerLayer?.hidden = true
+        startedRecording = false
+        recordingDone = false
+        buttonImage.hidden = false
+        self.videoDuration = 0
+        self.videoPlayer = nil
+        self.videoPlayerLayer?.removeFromSuperlayer()
+        self.videoPlayerLayer = nil
+        self.boxesXPos = 0
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        artistLabel.text = spotifySong?.artist
+        songLabel.text = spotifySong?.name
     }
     
     override func viewDidLayoutSubviews() {
@@ -208,14 +235,20 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     
     func reloadVideoPlayer() {
         let stitchedVideo = StitchedVideo(videoUrls: localVideoUrls)
-        let shouldPlay = videoPlayer?.rate > 0
+        //let shouldPlay = videoPlayer?.rate > 0
         videoPlayer = AVPlayer(playerItem: stitchedVideo.PlayerItem)
         videoPlayer?.actionAtItemEnd = .None
         videoDuration = Float(videoPlayer!.currentItem!.duration.seconds)
-        videoPlayerLayer?.player = videoPlayer
-        if shouldPlay {
+        videoPlayerLayer?.removeFromSuperlayer()
+        videoPlayerLayer = AVPlayerLayer(player: videoPlayer)
+        videoPlayerLayer!.frame = CGRect(x:-120,y:0,width: mediaView.bounds.width+120,height: mediaView.bounds.height)
+        videoPlayerLayer!.videoGravity = AVLayerVideoGravityResize
+        //videoPlayerLayer!.needsDisplayOnBoundsChange = true
+        
+        self.mediaView.layer.insertSublayer(videoPlayerLayer!, atIndex: 0)
+        
             videoPlayer?.play()
-        }
+        
     }
     
     @IBAction func sliderChange(sender: UISlider) {
@@ -256,7 +289,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         if let videoPlayer = videoPlayer {
             
             print(videoPlayer.currentItem?.loadedTimeRanges)
-            print(videoPlayer.rate)
+            print(videoPlayer.rate)/*
             if videoPlayer.rate > 0 {
                 print("pause")
                 videoPlayer.pause()
@@ -265,13 +298,13 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                         print("Couldnt pause spotify")
                     }
                 })
-            } else {
+            } else {*/
                 if videoPlayer.status == .ReadyToPlay {
                     print("play")
                     //videoPlayerLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
                     
                     if let spotifyUrl = spotifySong?.link {
-                        spotifyPlayer?.playURIs([NSURL(string: spotifyUrl)!], fromIndex: 0, callback: { (error: NSError!) in
+                        spotifyPlayer?.playURIs([NSURL(string: "spotify:track:"+spotifyUrl)!], fromIndex: 0, callback: { (error: NSError!) in
                             if error != nil {
                                 print("Couldnt play from spotify")
                             } else {
@@ -304,7 +337,21 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                 } else {
                     print("NOT READY!")
                 }
+            //}
+        } else { //No videos just music
+            print("play only music")
+            if let spotifyUrl = spotifySong?.link {
+                spotifyPlayer?.playURIs([NSURL(string: "spotify:track:"+spotifyUrl)!], fromIndex: 0, callback: { (error: NSError!) in
+                    if error != nil {
+                        print("Couldnt play from spotify")
+                    } else {
+                        
+                        self.setMusicOffset(self.currentOffset)
+                        
+                    }
+                })
             }
+
         }
     }
     
@@ -401,8 +448,9 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
             let url = NSURL(fileURLWithPath: path)
             videoOutput?.startRecordingToOutputFileURL(url, recordingDelegate: self)
             setMusicOffset(videoDuration)
-            cameraLayer?.borderColor = MomentsConfig.colors[0].CGColor
+            cameraLayer?.borderColor = MomentsConfig.yellow.CGColor
             cameraLayer?.borderWidth = 10
+            buttonImage.hidden = true
             
             startedRecording = true
             
@@ -413,7 +461,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
             
             recordingBox = UIView()
             recordingBox!.frame = CGRect(x: boxesXPos, y: -30, width: 1, height: self.timelineView.frame.height)
-            recordingBox!.backgroundColor = MomentsConfig.yellow
+            recordingBox!.backgroundColor = MomentsConfig.colors.randomItem()
             self.timelineView.addSubview(recordingBox!)
             
         case UIGestureRecognizerState.Ended:
@@ -449,49 +497,9 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     {
         print("didFinishRecordingToOutputFileAtURL, error: \(error)")
         recordedVideoUrl = outputFileURL
-        //TODO: Spinning wheel
-        /*
-         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-         guard let docDirectory = paths[0] as String? else
-         {
-         return
-         }
-         //let path = "\(docDirectory)/square.mp4"
-         //let url = NSURL(fileURLWithPath: path)
-         //VideoCropper.cropSquareVideo(outputFileURL, outputUrl: url) { (result) in
-         let videoFile = PFFile(name: outputFileURL!.lastPathComponent, data: NSData(contentsOfURL: outputFileURL)!)
-         let video = PFObject(className: "MomentVideo")
-         video["videoFile"] = videoFile
-         //TODO: Spotify name
-         video["contributor"] = "hacker"
-         video["parent"] = momentTag!
-         
-         
-         videoFile!.saveInBackgroundWithBlock({
-         (succeeded: Bool, error: NSError?) -> Void in
-         if succeeded {
-         print("Uploading done!")
-         
-         }
-         }, progressBlock: {
-         (percentDone: Int32) -> Void in
-         
-         print("Uploading video: \(percentDone)%")
-         })
-         
-         video.saveInBackgroundWithBlock( { (succeeded: Bool, error: NSError?) in
-         print("saved video info \(video.objectId)")
-         })
-         */
         recordingDone = true
         saveButton.hidden = false
         redoButton.hidden = false
-        
-        //self.momentTag?.addObjectsFromArray([video], forKey: "videos")
-        //self.momentTag?["videos"] = []
-        /*self.momentTag?.saveInBackgroundWithBlock( { (succeeded: Bool, error: NSError?) in
-         print("saved moment tag \(error)")
-         })*/
         
         self.localVideoUrls.append(outputFileURL)
         let durationBeforeRecording = self.videoDuration
@@ -538,7 +546,8 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
             momentTag?.ACL?.publicReadAccess = true
             
             momentTag?.saveInBackgroundWithBlock({ (success: Bool, error: NSError?) in
-                print("moment tag saved, error: \(error)")
+                
+                print("moment tag saved,success: \(success) error: \(error)")
             })
             
             //let path = "\(docDirectory)/square.mp4"

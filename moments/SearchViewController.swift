@@ -170,12 +170,13 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
         {
             if let destinationVC = segue.destinationViewController as? SongViewController {
                 destinationVC.spotifySong = selectedSong!
-                var newTag = PFObject(className: "MomentsTag")
+                var newTag = PFObject(className: "MomentTag")
                 
                 if let location = self.userCoordinate {
                     var position = PFGeoPoint(latitude: location.latitude, longitude: location.longitude)
                     newTag["position"] = position
                 }
+                destinationVC.momentTag = newTag
             }
         }
     }

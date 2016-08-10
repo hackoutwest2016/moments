@@ -335,8 +335,8 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                     for momentTag in momentTags {
                         
                         if momentTag.objectId == selectedParseId {
+                            destinationVC.spotifySong = Song(artist: "Birdy", name: "Young Blood", link: "5G1cncTOGFQhhq0b0L1Hnf")
                             destinationVC.momentTag = momentTag
-                            destinationVC.spotifySong = Song(artist: "Birdy", name: "Young Blood", link: "spotify:track:4F9jpNQDKRFoyM4Ebpni6S")
                         }
     
                     }
