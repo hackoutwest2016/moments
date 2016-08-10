@@ -12,7 +12,7 @@ import Mapbox
 
 
 
-class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
+class DiscoverViewController: UIViewController, MGLMapViewDelegate {
     
     @IBOutlet weak var addButton: UIButton!
     
@@ -20,9 +20,13 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
     
     var momentTags: [PFObject] = []
     
+    let locationManager = CLLocationManager()
+    
     @IBAction func addButtonTapped(sender: UIButton) {
+        
         performSegueWithIdentifier("moveToSearch", sender: sender)
     }
+    
     override func viewDidLayoutSubviews() {
         
         
@@ -37,8 +41,6 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
         
         // Set the map view‘s delegate property.
         mapView.delegate = self
-        
-        
         
         // Initialize and add the point annotation.
         /*let pisa = MGLPointAnnotation()
@@ -216,6 +218,7 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
             if let destinationVC = segue.destinationViewController as? SearchViewController {
                 destinationVC.userCoordinate = mapView.userLocation?.coordinate
                 print("userCoordinate: \(mapView.userLocation?.coordinate)")
+                
             }
         }
     }

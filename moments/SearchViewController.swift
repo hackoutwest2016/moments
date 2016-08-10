@@ -17,7 +17,7 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
     var selectedSong: Song?
     var filteredSongs = [Song]()
     let searchController = UISearchController(searchResultsController: nil)
-    var userCoordinate:CLLocationCoordinate2D?
+    var userCoordinate: CLLocationCoordinate2D?
     //it should be ? or = CLLocationCoordinate2D(latitude: 59.31, longitude: 18.06)
     
     //typealias song = (artist:String,song:String)
@@ -37,7 +37,6 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
     
     
     //MARK:Basic Set Ups
-    
     func setUpMiniMap(){
         //let mapView = MGLMapView(frame: view.bounds)
         mapView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
@@ -60,7 +59,6 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
         
         mapView.showsUserLocation = false
         mapView.userInteractionEnabled = false
-        
     }
     
     func setUpSearchBar(){
@@ -165,8 +163,14 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "moveToRecord"
         {
-            if let destinationVC = segue.destinationViewController as? SearchViewController {
-                destinationVC.selectedSong = selectedSong!
+            if let destinationVC = segue.destinationViewController as? SongViewController {
+                destinationVC.spotifySong = selectedSong!
+                var newTag = PFObject(className: "MomentsTag")
+                
+                if let location = self.userCoordinate {
+                    var position = PFGeoPoint(latitude: location.latitude, longitude: location.longitude)
+                    newTag["position"] = position
+                }
             }
         }
     }

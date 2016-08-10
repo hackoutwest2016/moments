@@ -15,6 +15,11 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var songLabel: UILabel!
     
+    @IBOutlet weak var timelineViewParent: UIView!
+    @IBOutlet weak var timelineView: UIView!
+    
+    var spotifySong: Song?
+    
     var momentTag: PFObject? {
         didSet {
             //Fetch video files from parse and save to a file
@@ -49,12 +54,6 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                     }
                 }
             }
-        }
-    }
-    
-    var spotifyUrl: String? {
-        didSet {
-            
         }
     }
     
@@ -93,7 +92,15 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         
         initCamera(.Back)
         
+        slider.setThumbImage(UIImage(named:"slider-thumb"),forState: .Normal)
+        
+        
         //TODO: Spinning wheel
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        artistLabel.text = spotifySong?.artist
+        songLabel.text = spotifySong?.name
     }
     
     func updateSongProgress() {
@@ -117,6 +124,13 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         if downloadedVideos == videosToDownload {
             print(localVideoUrls)
             print("Download done")
+            
+            
+            //TODO: Add timeline boxes
+            //timelineView
+            //timelineView.subviews
+            
+            
             let stitchedVideo = StitchedVideo(videoUrls: localVideoUrls)
             
             videoPlayer = AVPlayer(playerItem: stitchedVideo.PlayerItem)
@@ -126,6 +140,8 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
             videoPlayerLayer = AVPlayerLayer(player: videoPlayer)
             videoPlayerLayer!.frame = self.mediaView.bounds
             self.view.layer.addSublayer(videoPlayerLayer!)
+            
+            play()
         }
     }
     
@@ -170,10 +186,10 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     
     @IBAction func mediaViewTapped(sender: AnyObject) {
         
-        playPause()
+        //playPause()
     }
     
-    func playPause() {
+    func play() {
         if let videoPlayer = videoPlayer {
             
             print(videoPlayer.currentItem?.loadedTimeRanges)
@@ -191,13 +207,34 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                     print("play")
                     //videoPlayerLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
                     
-                    if let spotifyUrl = spotifyUrl {
+                    if let spotifyUrl = spotifySong?.link {
                         spotifyPlayer?.playURIs([NSURL(string: spotifyUrl)!], fromIndex: 0, callback: { (error: NSError!) in
                             if error != nil {
                                 print("Couldnt play from spotify")
                             } else {
+                                
                                 self.setMusicOffset(self.currentOffset)
                                 videoPlayer.play()
+                                
+                                var colorI = 0
+                                var xPos: CGFloat = 0.0
+                                for videoUrl in self.localVideoUrls {
+                                    let asset = AVURLAsset(URL: videoUrl)
+                                    let videoDuration = CMTimeGetSeconds(asset.duration)
+                                    
+                                    let musicDuration = self.spotifyPlayer!.currentTrackDuration
+                                    let fragment = CGFloat(videoDuration/musicDuration)
+                                    print(musicDuration)
+                                    print(videoDuration)
+                                    print(fragment)
+                                    print(self.timelineView.frame.width)
+                                    
+                                    var newBox = UIView()
+                                    newBox.frame = CGRect(x: xPos, y: 0, width: self.timelineView.frame.width * fragment, height: self.timelineView.frame.height)
+                                    newBox.backgroundColor = MomentsConfig.colors[colorI++ % MomentsConfig.colors.count]
+                                    self.timelineView.addSubview(newBox)
+                                    xPos += self.timelineView.frame.width * fragment
+                                }
                             }
                         })
                     }
@@ -380,4 +417,11 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
      }
      */
     
+}
+
+extension Array {
+    func randomItem() -> Element {
+        let index = Int(arc4random_uniform(UInt32(self.count)))
+        return self[index]
+    }
 }

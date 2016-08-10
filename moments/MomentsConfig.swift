@@ -20,4 +20,12 @@ struct MomentsConfig {
     struct mapbox {
         static let styleUrl = "mapbox://styles/heddao/cirnd85rm000fgzni87petcp9"
     }
+    static let colors = [
+        UIColor(red:0.97, green:0.26, blue:0.66, alpha:1.0),
+        UIColor(red:0.00, green:0.76, blue:0.95, alpha:1.0),
+        UIColor(red:0.28, green:0.05, blue:0.56, alpha:1.0),//purple
+        UIColor(red:0.06, green:0.81, blue:0.64, alpha:1.0)//green
+    ]
+    
+    static let yellow = UIColor(red:1.00, green:0.91, blue:0.38, alpha:1.0)//yellow
 }

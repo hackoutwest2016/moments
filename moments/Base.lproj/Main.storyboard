@@ -108,38 +108,69 @@
                                     <outletCollection property="gestureRecognizers" destination="7TZ-WT-ab6" appends="YES" id="vcq-wT-S1e"/>
                                 </connections>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rick Astley" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pFD-nN-hEb">
+                                <rect key="frame" x="0.0" y="38" width="600" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Never Gonna Give You Up" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fbf-7m-NnK">
+                                <rect key="frame" x="0.0" y="61" width="600" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="irz-f4-aq4">
+                                <rect key="frame" x="20" y="530" width="560" height="56"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Spb-Do-rSf">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="56"/>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="Spb-Do-rSf" firstAttribute="width" secondItem="irz-f4-aq4" secondAttribute="width" id="42B-fd-8t8"/>
+                                    <constraint firstItem="Spb-Do-rSf" firstAttribute="top" secondItem="irz-f4-aq4" secondAttribute="top" id="O2o-Kh-fhd"/>
+                                    <constraint firstAttribute="height" constant="56" id="SCP-lK-DOm"/>
+                                    <constraint firstItem="Spb-Do-rSf" firstAttribute="leading" secondItem="irz-f4-aq4" secondAttribute="leading" id="UMt-Xw-OYA"/>
+                                    <constraint firstItem="Spb-Do-rSf" firstAttribute="height" secondItem="irz-f4-aq4" secondAttribute="height" id="xNR-FF-zQA"/>
+                                </constraints>
+                            </view>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="SKC-ri-zrz">
-                                <rect key="frame" x="18" y="545" width="564" height="31"/>
+                                <rect key="frame" x="18" y="568" width="564" height="31"/>
+                                <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <action selector="sliderChange:" destination="ibI-tQ-O8l" eventType="valueChanged" id="Yxw-1q-cNf"/>
                                 </connections>
                             </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Rick Astley" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pFD-nN-hEb">
-                                <rect key="frame" x="14" y="28" width="84" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Never Gonna Give You Up" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fbf-7m-NnK">
-                                <rect key="frame" x="14" y="51" width="198" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="irz-f4-aq4" firstAttribute="top" secondItem="2AG-MF-Jub" secondAttribute="bottom" constant="14" id="01X-bz-PVm"/>
                             <constraint firstItem="SKC-ri-zrz" firstAttribute="top" secondItem="2AG-MF-Jub" secondAttribute="bottom" constant="29" id="2qJ-Rx-L68"/>
                             <constraint firstItem="VdD-Fg-JGJ" firstAttribute="top" secondItem="2AG-MF-Jub" secondAttribute="bottom" constant="84" id="3uM-6t-qYf"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="irz-f4-aq4" secondAttribute="leading" id="8bP-5z-skc"/>
                             <constraint firstAttribute="trailingMargin" secondItem="2AG-MF-Jub" secondAttribute="trailing" constant="-20" id="H3g-yS-qX9"/>
+                            <constraint firstItem="fbf-7m-NnK" firstAttribute="width" secondItem="Xj4-LC-ijT" secondAttribute="width" id="KFh-kh-BVm"/>
+                            <constraint firstItem="fbf-7m-NnK" firstAttribute="centerX" secondItem="Xj4-LC-ijT" secondAttribute="centerX" id="OFl-1p-qsY"/>
+                            <constraint firstItem="pFD-nN-hEb" firstAttribute="width" secondItem="Xj4-LC-ijT" secondAttribute="width" id="ORL-zY-Agp"/>
                             <constraint firstAttribute="leadingMargin" secondItem="SKC-ri-zrz" secondAttribute="leading" id="Ocj-Cy-jDU"/>
-                            <constraint firstItem="VdD-Fg-JGJ" firstAttribute="top" secondItem="SKC-ri-zrz" secondAttribute="bottom" constant="25" id="eKv-kh-I3i"/>
+                            <constraint firstItem="VdD-Fg-JGJ" firstAttribute="top" secondItem="irz-f4-aq4" secondAttribute="bottom" constant="14" id="QXq-tN-zB1"/>
+                            <constraint firstItem="fbf-7m-NnK" firstAttribute="top" secondItem="pFD-nN-hEb" secondAttribute="bottom" constant="2" id="ToR-F4-HJe"/>
+                            <constraint firstItem="VdD-Fg-JGJ" firstAttribute="top" secondItem="SKC-ri-zrz" secondAttribute="bottom" constant="2" id="eKv-kh-I3i"/>
                             <constraint firstItem="2AG-MF-Jub" firstAttribute="leading" secondItem="Xj4-LC-ijT" secondAttribute="leadingMargin" constant="-20" id="kiN-zM-1eZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="SKC-ri-zrz" secondAttribute="trailing" id="lJk-4Y-oLK"/>
+                            <constraint firstItem="pFD-nN-hEb" firstAttribute="top" secondItem="c0Y-Lw-PV6" secondAttribute="bottom" constant="18" id="lcs-ai-xz8"/>
+                            <constraint firstItem="irz-f4-aq4" firstAttribute="top" secondItem="2AG-MF-Jub" secondAttribute="bottom" constant="14" id="m0L-K9-8ui"/>
+                            <constraint firstItem="pFD-nN-hEb" firstAttribute="centerX" secondItem="Xj4-LC-ijT" secondAttribute="centerX" id="vnB-ex-f6V"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="irz-f4-aq4" secondAttribute="trailing" id="wxw-fj-jDd"/>
                             <constraint firstItem="2AG-MF-Jub" firstAttribute="top" secondItem="c0Y-Lw-PV6" secondAttribute="bottom" constant="76" id="xvr-m0-JtN"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="m0L-K9-8ui"/>
+                                <exclude reference="2qJ-Rx-L68"/>
                                 <exclude reference="3uM-6t-qYf"/>
                             </mask>
                         </variation>
@@ -149,6 +180,8 @@
                         <outlet property="mediaView" destination="2AG-MF-Jub" id="lSR-Fe-1cx"/>
                         <outlet property="slider" destination="SKC-ri-zrz" id="8Iv-PY-oFN"/>
                         <outlet property="songLabel" destination="fbf-7m-NnK" id="mWv-0m-0bp"/>
+                        <outlet property="timelineView" destination="Spb-Do-rSf" id="KbE-sZ-cF0"/>
+                        <outlet property="timelineViewParent" destination="irz-f4-aq4" id="G4w-L1-gf0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2jT-Me-ini" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -230,33 +263,18 @@
                     <connections>
                         <outlet property="mapView" destination="lrr-mE-qsW" id="jxn-GU-eTU"/>
                         <outlet property="songListView" destination="eyG-cJ-v5e" id="wfo-IV-WPd"/>
-                        <segue destination="1Pp-mU-85E" kind="show" identifier="moveToRecord" id="KTT-Qc-6I7"/>
+                        <segue destination="ibI-tQ-O8l" kind="show" identifier="moveToRecord" id="axv-10-VVx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pUa-cm-PpR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-820" y="-476"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="yRB-lW-wIm">
-            <objects>
-                <viewController id="1Pp-mU-85E" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="x26-BT-LOT"/>
-                        <viewControllerLayoutGuide type="bottom" id="xGk-KO-8bt"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="aRQ-CK-HEe">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bLY-Ka-Iez" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-489" y="268"/>
+            <point key="canvasLocation" x="-758" y="-532"/>
         </scene>
     </scenes>
     <resources>
         <image name="plus" width="100" height="100"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="axv-10-VVx"/>
+    </inferredMetricsTieBreakers>
 </document>
