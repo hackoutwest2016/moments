@@ -82,6 +82,8 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     
     var spotifyPlayer: SPTAudioStreamingController?
     
+    var boxesXPos: CGFloat = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -217,7 +219,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                 videoPlayer.play()
                                 
                                 var colorI = 0
-                                var xPos: CGFloat = 0.0
+                                
                                 for videoUrl in self.localVideoUrls {
                                     let asset = AVURLAsset(URL: videoUrl)
                                     let videoDuration = CMTimeGetSeconds(asset.duration)
@@ -230,10 +232,10 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                     print(self.timelineView.frame.width)
                                     
                                     var newBox = UIView()
-                                    newBox.frame = CGRect(x: xPos, y: 0, width: self.timelineView.frame.width * fragment, height: self.timelineView.frame.height)
+                                    newBox.frame = CGRect(x: self.boxesXPos, y: 0, width: self.timelineView.frame.width * fragment, height: self.timelineView.frame.height)
                                     newBox.backgroundColor = MomentsConfig.colors[colorI++ % MomentsConfig.colors.count]
                                     self.timelineView.addSubview(newBox)
-                                    xPos += self.timelineView.frame.width * fragment
+                                    self.boxesXPos += self.timelineView.frame.width * fragment
                                 }
                             }
                         })
@@ -250,6 +252,8 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     private var videoOutput : AVCaptureMovieFileOutput?
     private var session : AVCaptureSession?
     private var tm : NSTimer?
+    private var recordingDuration : Double = 0
+    private var recordingBox : UIView?
     func initCamera(position: AVCaptureDevicePosition)
     {
         var myDevice: AVCaptureDevice?
@@ -336,11 +340,18 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
             cameraLayer?.borderWidth = 10
             
             // Timer
-            //tm = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: Selector("recordVideo:"), userInfo: nil, repeats: true)
+            tm = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: Selector("recordVideo:"), userInfo: nil, repeats: true)
+            
+            //Yellow recording bar
+            
+            recordingBox = UIView()
+            recordingBox!.frame = CGRect(x: boxesXPos, y: -30, width: 1, height: self.timelineView.frame.height)
+            recordingBox!.backgroundColor = MomentsConfig.yellow
+            self.timelineView.addSubview(recordingBox!)
             
         case UIGestureRecognizerState.Ended:
             print("long tap end")
-            //tm?.invalidate()
+            tm?.invalidate()
             videoOutput?.stopRecording()
             cameraLayer?.borderWidth = 0
             
@@ -350,6 +361,18 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         }
     }
     
+    internal func recordVideo(tm: NSTimer)
+    {
+        let interval = 0.01
+        let musicDuration = self.spotifyPlayer!.currentTrackDuration
+        recordingDuration += interval
+        let fragment = CGFloat(recordingDuration/musicDuration)
+        
+        recordingBox?.frame = CGRect(x: boxesXPos, y: -20, width: self.timelineView.frame.width * fragment, height: self.timelineView.frame.height)
+    }
+    
+    
+    
     // MARK: AVCaptureFileOutputRecordingDelegate
     func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!)
     {
@@ -358,7 +381,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!)
     {
-        print("didFinishRecordingToOutputFileAtURL")
+        print("didFinishRecordingToOutputFileAtURL, error: \(error)")
         
         //TODO: Spinning wheel
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
@@ -393,8 +416,6 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
             print("saved video info \(video.objectId)")
         })
         
-        
-        
         //self.momentTag?.addObjectsFromArray([video], forKey: "videos")
         //self.momentTag?["videos"] = []
         /*self.momentTag?.saveInBackgroundWithBlock( { (succeeded: Bool, error: NSError?) in
@@ -405,7 +426,6 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         let durationBeforeRecording = self.videoDuration
         self.reloadVideoPlayer()
         self.setMusicOffset(durationBeforeRecording)
-        
     }
     /*
      // MARK: - Navigation
