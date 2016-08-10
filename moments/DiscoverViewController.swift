@@ -172,7 +172,7 @@ class DiscoverViewController: UIViewController ,MGLMapViewDelegate {
                             image = createMarker(image!)
                             
                             
-                            image = resizeImage2(image!, targetSize: CGSizeMake(70.0, 70.0))
+                            image = resizeImage2(image!, targetSize: CGSizeMake(90.0, 90.0))
                             
                             annotationImage = MGLAnnotationImage(image: image!, reuseIdentifier: objectId!)
                             
