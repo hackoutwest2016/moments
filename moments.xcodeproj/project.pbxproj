@@ -27,6 +27,7 @@
 		F42D7ADA1D5A4C0E007867E2 /* MomentsConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42D7AD91D5A4C0E007867E2 /* MomentsConfig.swift */; };
 		F42D7ADC1D5AAF63007867E2 /* VideoCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42D7ADB1D5AAF63007867E2 /* VideoCropper.swift */; };
 		F4571AD31D5BE054004633D1 /* ImageCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4571AD21D5BE054004633D1 /* ImageCropper.swift */; };
+		F4571AD51D5C6C90004633D1 /* animationImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4571AD41D5C6C90004633D1 /* animationImages.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		F42D7AD91D5A4C0E007867E2 /* MomentsConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MomentsConfig.swift; sourceTree = "<group>"; };
 		F42D7ADB1D5AAF63007867E2 /* VideoCropper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCropper.swift; sourceTree = "<group>"; };
 		F4571AD21D5BE054004633D1 /* ImageCropper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCropper.swift; sourceTree = "<group>"; };
+		F4571AD41D5C6C90004633D1 /* animationImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = animationImages.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 				2734ABD11D59D5D20041B0F4 /* Moments-Bridging-Header.h */,
 				27701F401D5B1C4900B62829 /* Constants.swift */,
 				F42D7AD91D5A4C0E007867E2 /* MomentsConfig.swift */,
+				F4571AD41D5C6C90004633D1 /* animationImages.xcassets */,
 			);
 			path = moments;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				27313B151D59CAEE0059B5DF /* LaunchScreen.storyboard in Resources */,
+				F4571AD51D5C6C90004633D1 /* animationImages.xcassets in Resources */,
 				27313B121D59CAEE0059B5DF /* Assets.xcassets in Resources */,
 				27701F3F1D5B1BA100B62829 /* Pacifico.ttf in Resources */,
 				27313B0D1D59CAEE0059B5DF /* Main.storyboard in Resources */,

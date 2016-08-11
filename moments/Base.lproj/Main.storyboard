@@ -83,9 +83,23 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="moments84" translatesAutoresizingMaskIntoConstraints="NO" id="ZlI-ZP-ibi">
+                                <rect key="frame" x="204" y="0.0" width="192" height="253"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="192" id="NrV-kG-ia6"/>
+                                    <constraint firstAttribute="height" constant="253" id="mff-c8-rId"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.40341862416107382" green="0.9377621644295302" blue="0.67232067953020136" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="ZlI-ZP-ibi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Rje-yk-Qff"/>
+                            <constraint firstItem="ZlI-ZP-ibi" firstAttribute="bottom" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="233" id="apx-YR-Qeg"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="animationImageView" destination="ZlI-ZP-ibi" id="gce-kg-SM9"/>
                         <segue destination="MKg-n0-nGv" kind="show" identifier="moveToDiscover" id="1tp-HT-8XY"/>
                         <segue destination="ibI-tQ-O8l" kind="show" identifier="debug_moveToSong" id="Qvx-DK-6eo"/>
                     </connections>
@@ -449,10 +463,11 @@
         <image name="back" width="366" height="208"/>
         <image name="button-redo" width="250" height="250"/>
         <image name="button-save" width="250" height="250"/>
+        <image name="moments84" width="192" height="253"/>
         <image name="plus" width="100" height="100"/>
-        <image name="plustransparent" width="256" height="256"/>
+        <image name="plustransparent" width="70" height="70"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="axv-10-VVx"/>
+        <segue reference="Qvx-DK-6eo"/>
     </inferredMetricsTieBreakers>
 </document>
