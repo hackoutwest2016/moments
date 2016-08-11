@@ -69,6 +69,7 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
     func setUpSearchBar(){
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Find a song with Spotify"
         definesPresentationContext = true
         songListView.tableHeaderView = searchController.searchBar
     }
