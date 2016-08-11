@@ -111,7 +111,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IxO-oz-yrB">
                                         <rect key="frame" x="0.0" y="0.0" width="580" height="420"/>
-                                        <color key="backgroundColor" red="0.1112146812" green="0.55702646060000005" blue="0.69267424740000005" alpha="0.38386314655172415" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Capture this moment" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7f6-t7-5ls">
                                         <rect key="frame" x="166" y="182" width="248" height="56"/>
@@ -131,7 +131,7 @@
                                         </attributedString>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plus" translatesAutoresizingMaskIntoConstraints="NO" id="Abd-sh-uxG">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plustransparent" translatesAutoresizingMaskIntoConstraints="NO" id="Abd-sh-uxG">
                                         <rect key="frame" x="256" y="342" width="68" height="70"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="EbS-sP-wlK"/>
@@ -450,6 +450,7 @@
         <image name="button-redo" width="250" height="250"/>
         <image name="button-save" width="250" height="250"/>
         <image name="plus" width="100" height="100"/>
+        <image name="plustransparent" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="axv-10-VVx"/>
