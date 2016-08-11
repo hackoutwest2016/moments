@@ -335,7 +335,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                     for momentTag in momentTags {
                         
                         if momentTag.objectId == selectedParseId {
-                            destinationVC.spotifySong = Song(artist: "Birdy", name: "Young Blood", link: "5G1cncTOGFQhhq0b0L1Hnf")
+                            destinationVC.spotifySong = Song(artist: "Ghostboy", name: "Robotaki, Claire Ridgely", link: "6sqo5lYZ3yJRv0auIWBNrm")
                             destinationVC.momentTag = momentTag
                         }
     
@@ -349,6 +349,19 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
     
     @IBAction func backButton(sender: UIStoryboardSegue) {
         //TODO: Return
+        /*if let previousVS = sender.sourceViewController as? SongViewController {
+            if let momentTagIndex = momentTags.indexOf({$0.objectId == previousVS.momentTag?.objectId}) {
+                let momentTag = momentTags[momentTagIndex]
+                
+                if let annotationIndex = mapView.annotations!.indexOf({$0.title! == momentTag.objectId}) {
+                    let annotation = mapView.annotations![annotationIndex]
+                    
+                    mapView.removeAnnotation(annotation)
+                    mapView.addAnnotation(annotation)
+                    //TODO POP animation
+                }
+            }
+        }*/
         //performSegueWithIdentifier("unwindSegue1", sender: self)
     }
 }

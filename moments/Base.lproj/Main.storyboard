@@ -128,21 +128,15 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Capture this moment" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7f6-t7-5ls">
-                                        <rect key="frame" x="149" y="193" width="283" height="35"/>
+                                        <rect key="frame" x="167" y="183" width="248" height="56"/>
                                         <fontDescription key="fontDescription" name="Pacifico" family="Pacifico" pointSize="30"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="1" green="0.90588235294117647" blue="0.38431372549019605" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOI-am-cgF">
-                                        <rect key="frame" x="233" y="229" width="114" height="17"/>
-                                        <attributedString key="attributedText">
-                                            <fragment content="Tap &amp; hold to film">
-                                                <attributes>
-                                                    <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                    <font key="NSFont" size="17" name="KozGoPr6N-Regular"/>
-                                                </attributes>
-                                            </fragment>
-                                        </attributedString>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tap &amp; hold to film" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOI-am-cgF">
+                                        <rect key="frame" x="232" y="240" width="117" height="18"/>
+                                        <fontDescription key="fontDescription" name="KozGoPr6N-Regular" family="Kozuka Gothic Pr6N" pointSize="15"/>
+                                        <color key="textColor" red="0.96862745098039216" green="0.25882352941176467" blue="0.6588235294117647" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plustransparent" translatesAutoresizingMaskIntoConstraints="NO" id="Abd-sh-uxG">
