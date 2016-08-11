@@ -42,19 +42,21 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
             //Fetch video files from parse and save to a file
             let query = PFQuery(className: "MomentVideo")
             query.whereKey("parent", equalTo: momentTag!)
+            query.orderByAscending("createdAt")
             
             query.findObjectsInBackgroundWithBlock { (videos: [PFObject]?, error: NSError?) in
                 if let videos = videos {
+                    
                     self.downloadedVideos = 0
                     self.videosToDownload = videos.count
-                    self.localVideoUrls = [NSURL]()
+                    self.localVideoUrls = [NSURL](count: self.videosToDownload, repeatedValue: NSURL())
                     
                     if self.videosToDownload == 0 {
                         print("play")
                         self.play()
                     } else {
                         
-                        for video in videos {
+                        for (index, video) in videos.enumerate() {
                             if let userVideoFile = video["videoFile"] as? PFFile {
                                 userVideoFile.getDataInBackgroundWithBlock {
                                     (videoData: NSData?, error: NSError?) -> Void in
@@ -65,7 +67,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                             
                                             if videoData.writeToURL(destinationUrl, atomically: true) {
                                                 print("file saved [\(destinationUrl.path!)]")
-                                                self.videoDownloaded(destinationUrl, error: nil) //success
+                                                self.videoDownloaded(index,url: destinationUrl, error: nil) //success
                                             } else {
                                                 print("error saving file")
                                             }
@@ -215,10 +217,10 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         }
     }
     
-    func videoDownloaded(url: NSURL, error: NSError!) {
+    func videoDownloaded(index: Int, url: NSURL, error: NSError!) {
         //TODO: error handling (not downloaded)
-        print("Video downloaded to \(url)")
-        localVideoUrls.append(url)
+        print("Video downloaded to \(url) with index \(index)")
+        localVideoUrls[index] = url
         downloadedVideos += 1
         
         if downloadedVideos == videosToDownload {
