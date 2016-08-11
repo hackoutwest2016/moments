@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MKg-n0-nGv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4N0-EV-hm8">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -403,18 +403,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycO-Kp-V35">
-                                <rect key="frame" x="221" y="54" width="46" height="30"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oS8-Rg-xOm" customClass="MGLMapView">
+                                <rect key="frame" x="20" y="20" width="560" height="317"/>
+                                <color key="backgroundColor" red="0.31590813758389263" green="0.037429042760000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lip-kj-lSS">
+                                <rect key="frame" x="277" y="350" width="46" height="30"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
-                                    <action selector="btnTapped:" destination="4N0-EV-hm8" eventType="touchUpInside" id="5ZR-an-X91"/>
+                                    <action selector="btnTapped:" destination="4N0-EV-hm8" eventType="touchUpInside" id="FHt-4K-TpB"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="jKz-wY-7ZG" firstAttribute="top" secondItem="oS8-Rg-xOm" secondAttribute="bottom" constant="263" id="4jt-Ee-303"/>
+                            <constraint firstItem="oS8-Rg-xOm" firstAttribute="leading" secondItem="5Ci-YW-55x" secondAttribute="leadingMargin" id="YaM-Me-Seb"/>
+                            <constraint firstItem="oS8-Rg-xOm" firstAttribute="top" secondItem="kc7-0O-Dis" secondAttribute="bottom" id="n8P-0B-saC"/>
+                            <constraint firstItem="oS8-Rg-xOm" firstAttribute="trailing" secondItem="5Ci-YW-55x" secondAttribute="trailingMargin" id="wYB-lP-R9w"/>
+                        </constraints>
                     </view>
                     <connections>
-                        <outlet property="btn" destination="ycO-Kp-V35" id="GYA-16-UEp"/>
+                        <outlet property="mapView" destination="oS8-Rg-xOm" id="AyZ-rA-QvA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ihA-s7-LHD" userLabel="First Responder" sceneMemberID="firstResponder"/>

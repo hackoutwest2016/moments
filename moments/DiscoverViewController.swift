@@ -159,7 +159,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         
         var fallbackImage = mapView.dequeueReusableAnnotationImageWithIdentifier("fallback")
         if fallbackImage == nil {
-            var image = UIImage(named: "plus")!
+            var image = UIImage(named: "drop")!
             image = resizeImage(image)
             image = image.imageWithAlignmentRectInsets(UIEdgeInsetsMake(0, 0, image.size.height/2, 0))
             fallbackImage = MGLAnnotationImage(image: image, reuseIdentifier: "fallback")
