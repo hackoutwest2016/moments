@@ -25,11 +25,15 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var redoButton: UIButton!
+    @IBOutlet weak var overlay: UIView!
     
     var spotifySong: Song?
     
     var startedRecording = false
     var recordingDone = false
+    
+    //Sorted list with offset in seconds and overlay color
+    var colorDurations: [(Float, UIColor)] = []
     
     var momentTag: PFObject? {
         didSet {
@@ -104,6 +108,15 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                 holdLabel.hidden = true
                 videoPlayerLayer?.hidden = false
             }
+            
+            /*
+            for colorDuration in colorDurations {
+                if currentOffset > colorDuration.0-0.15 {
+                    var color = colorDuration.1.colorWithAlphaComponent(0.3)
+                    overlay?.backgroundColor = color
+                }
+            }
+            */
         }
     }//In seconds
     
@@ -133,7 +146,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         spotifyPlayer = SPTAudioStreamingController.sharedInstance()
         spotifyPlayer?.playbackDelegate = self
         
-        NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(updateSongProgress), userInfo: nil, repeats: true)
+        NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: #selector(updateSongProgress), userInfo: nil, repeats: true)
         
         
         //slider.setThumbImage(UIImage(named:"slider-thumb"),forState: .Normal)
@@ -146,6 +159,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         captureLabel.hidden = true
         holdLabel.hidden = true
         videoPlayerLayer?.hidden = true
+        colorDurations = [(0,MomentsConfig.colors.randomItem())]
         
         //TODO: Spinning wheel
     }
@@ -171,6 +185,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         self.videoPlayerLayer?.removeFromSuperlayer()
         self.videoPlayerLayer = nil
         self.boxesXPos = 0
+        colorDurations = [(0,MomentsConfig.colors.randomItem())]
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -285,6 +300,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         //playPause()
     }
     
+    
     func play() {
         if let videoPlayer = videoPlayer {
             
@@ -312,6 +328,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                 self.setMusicOffset(self.currentOffset)
                                 videoPlayer.play()
                                 
+                                var totalDuration: Float64 = 0
                                 var colorI = 0
                                 
                                 for videoUrl in self.localVideoUrls {
@@ -320,16 +337,18 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                     
                                     let musicDuration = self.spotifyPlayer!.currentTrackDuration
                                     let fragment = CGFloat(videoDuration/musicDuration)
-                                    print(musicDuration)
-                                    print(videoDuration)
-                                    print(fragment)
-                                    print(self.timelineView.frame.width)
                                     
-                                    var newBox = UIView()
+                                    let color = MomentsConfig.colors[colorI++ % MomentsConfig.colors.count]
+                                    
+                                    self.colorDurations.append((Float(totalDuration),color))
+                                    
+                                    let newBox = UIView()
                                     newBox.frame = CGRect(x: self.boxesXPos, y: 0, width: self.timelineView.frame.width * fragment, height: self.timelineView.frame.height)
-                                    newBox.backgroundColor = MomentsConfig.colors[colorI++ % MomentsConfig.colors.count]
+                                    newBox.backgroundColor = color
                                     self.timelineView.addSubview(newBox)
                                     self.boxesXPos += self.timelineView.frame.width * fragment
+                                    
+                                    totalDuration += videoDuration
                                 }
                             }
                         })
