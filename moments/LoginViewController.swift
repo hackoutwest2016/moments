@@ -45,7 +45,7 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
         tag.saveInBackground()
         */
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(3 * NSEC_PER_SEC)), dispatch_get_main_queue()) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0 * NSEC_PER_SEC)), dispatch_get_main_queue()) {
             let auth = SPTAuth.defaultInstance()
             auth.clientID        = MomentsConfig.spotify.clientId
             auth.redirectURL     = NSURL.init(string:MomentsConfig.spotify.redirectUrl)
@@ -121,7 +121,6 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
                     }
                     
                     destinationVC.momentTag = task.result as? PFObject
-                    destinationVC.spotifySong = Song(artist: "Woho", name: "Wanna get ready", link: "spotify:track:6sqo5lYZ3yJRv0auIWBNrm")
                     return task
                 })
             }

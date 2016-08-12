@@ -156,7 +156,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         
         var fallbackImage = mapView.dequeueReusableAnnotationImageWithIdentifier("fallback")
         if fallbackImage == nil {
-            var image = UIImage(named: "plus")!
+            var image = UIImage(named: "slider-thumb-invisible")!
             image = resizeImage(image)
             image = image.imageWithAlignmentRectInsets(UIEdgeInsetsMake(0, 0, image.size.height/2, 0))
             fallbackImage = MGLAnnotationImage(image: image, reuseIdentifier: "fallback")
@@ -210,8 +210,6 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         print("seelected")
         selectedParseId = annotation.title!!
         performSegueWithIdentifier("moveToViewSong", sender: nil)
-        
-        
     }
     
     
@@ -336,33 +334,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                         
                         if momentTag.objectId == selectedParseId {
                             
-                            //spotify URI
-                            var spotifyUrl = momentTag["spotifyUrl"] as? String
-                            if (spotifyUrl == nil){
-                                spotifyUrl = "0EFEkt29P7Icr7dO4vN6yk"
-                            }
-                            
-                            var spotifySong = Song(artist: "Test", name: "Test", link: spotifyUrl!)
-                            
-                            SPTTrack.trackWithURI(NSURL(string: "spotify:track:"+spotifyUrl!), session: nil, callback: { (error, data) in
-                                
-                                if let track = data as? SPTTrack{
-                                    print(track)
-                                    print(track.artists.first)
-                                    print(track.name)
-                                    
-                                    let artist =  "\((track.artists.first as! SPTPartialArtist).name)"
-                                    let name = track.name
-                                    spotifySong = Song(artist: artist, name: name, link: spotifyUrl!)
-                                    
-                                    print("spotifySong: \(spotifySong)")
-                                    
-                                    destinationVC.spotifySong = spotifySong
-                                    destinationVC.momentTag = momentTag
-                                }
-                            })
-                            
-                           
+                            destinationVC.momentTag = momentTag
                         
                         }
                         

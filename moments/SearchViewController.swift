@@ -170,7 +170,6 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
         if segue.identifier == "moveToRecord"
         {
             if let destinationVC = segue.destinationViewController as? SongViewController {
-                destinationVC.spotifySong = selectedSong!
                 var newTag = PFObject(className: "MomentTag")
                 
                 if let location = self.userCoordinate {
@@ -180,8 +179,6 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
                 
                     
                 newTag["spotifyUrl"] = selectedSong?.link
-                
-                destinationVC.spotifySong = selectedSong
                 destinationVC.momentTag = newTag
             }
         }

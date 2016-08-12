@@ -27,16 +27,45 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     @IBOutlet weak var redoButton: UIButton!
     @IBOutlet weak var overlay: UIView!
     
-    var spotifySong: Song?
+    @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var musicSlider: UISlider!
     
-    var startedRecording = false
-    var recordingDone = false
+    @IBOutlet weak var mediaView: UIView!
     
-    //Sorted list with offset in seconds and overlay color
-    var colorDurations: [(Float, UIColor)] = []
+    private var spotifySong: Song? {
+        didSet {
+            artistLabel?.text = spotifySong?.artist
+            songLabel?.text = spotifySong?.name
+        }
+    }
     
     var momentTag: PFObject? {
         didSet {
+            
+            //spotify URI
+            var spotifyUrl = momentTag?["spotifyUrl"] as? String
+            if (spotifyUrl == nil){
+                spotifyUrl = "0EFEkt29P7Icr7dO4vN6yk"
+            }
+            
+            self.spotifySong = Song(artist: "Test", name: "Test", link: spotifyUrl!)
+            
+            SPTTrack.trackWithURI(NSURL(string: "spotify:track:"+spotifyUrl!), session: nil, callback: { (error, data) in
+                if let track = data as? SPTTrack{
+                    print(track)
+                    print(track.artists.first)
+                    print(track.name)
+                    
+                    let artist =  "\((track.artists.first as! SPTPartialArtist).name)"
+                    let name = track.name
+                    self.spotifySong = Song(artist: artist, name: name, link: spotifyUrl!)
+                    
+                    print("spotifySong: \(self.spotifySong)")
+                    
+                    self.spotifyReady = true
+                    self.playIfReady()
+                }
+            })
             
             
             //Fetch video files from parse and save to a file
@@ -52,8 +81,10 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                     self.localVideoUrls = [NSURL](count: self.videosToDownload, repeatedValue: NSURL())
                     
                     if self.videosToDownload == 0 {
-                        print("play")
-                        self.play()
+                        print("play without videos")
+                        self.videoReady = true
+                        self.videoAvailable = false
+                        self.playIfReady()
                     } else {
                         
                         for (index, video) in videos.enumerate() {
@@ -62,14 +93,18 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                     (videoData: NSData?, error: NSError?) -> Void in
                                     if error == nil {
                                         if let videoData = videoData {
-                                            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
-                                            let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
-                                            
-                                            if videoData.writeToURL(destinationUrl, atomically: true) {
-                                                print("file saved [\(destinationUrl.path!)]")
-                                                self.videoDownloaded(index,url: destinationUrl, error: nil) //success
-                                            } else {
-                                                print("error saving file")
+                                            {
+                                                let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
+                                                let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
+                                                
+                                                if videoData.writeToURL(destinationUrl, atomically: true) {
+                                                    //print("file saved [\(destinationUrl.path!)]")
+                                                    self.videoDownloaded(index,url: destinationUrl, error: nil) //success
+                                                } else {
+                                                    print("error saving file")
+                                                }
+                                                } ~> {
+                                                    
                                             }
                                         }
                                     }
@@ -81,13 +116,15 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                     self.downloadedVideos = 0
                     self.videosToDownload = 0
                     self.localVideoUrls = [NSURL]()
-                    self.play()
+                    self.videoReady = true
+                    self.videoAvailable = false
+                    self.playIfReady()
                 }
             }
         }
     }
     
-    var currentOffset: Float = 0 {
+    private var currentOffset: Float = 0 {
         didSet {
             if(currentOffset > videoDuration-0.1) {
                 if !recordingDone {
@@ -112,39 +149,46 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
             }
             
             /*
-            for colorDuration in colorDurations {
-                if currentOffset > colorDuration.0-0.15 {
-                    var color = colorDuration.1.colorWithAlphaComponent(0.3)
-                    overlay?.backgroundColor = color
-                }
-            }
-            */
+             for colorDuration in colorDurations {
+             if currentOffset > colorDuration.0-0.15 {
+             var color = colorDuration.1.colorWithAlphaComponent(0.3)
+             overlay?.backgroundColor = color
+             }
+             }
+             */
         }
     }//In seconds
     
-    @IBOutlet weak var slider: UISlider!
-    @IBOutlet weak var musicSlider: UISlider!
+    private var videoPlayer: AVPlayer?
+    private var videoPlayerLayer: AVPlayerLayer?
+    private var videoDuration: Float = 0
     
-    @IBOutlet weak var mediaView: UIView!
-    var videoPlayer: AVPlayer?
-    var videoPlayerLayer: AVPlayerLayer?
-    var videoDuration: Float = 0
+    private var videosToDownload = 2
+    private var downloadedVideos = 0
+    private var localVideoUrls = [NSURL]()
     
-    var videosToDownload = 2
-    var downloadedVideos = 0
-    var localVideoUrls = [NSURL]()
+    private var spotifyPlayer: SPTAudioStreamingController?
     
-    var spotifyPlayer: SPTAudioStreamingController?
-    
-    var boxesXPos: CGFloat = 0.0
+    private var boxesXPos: CGFloat = 0.0
     
     
-    let sliderThumbImg = UIImage(named:"slider-thumb")
-    let sliderThumbInvisibleImg = UIImage(named:"slider-thumb-invisible")
+    private let sliderThumbImg = UIImage(named:"slider-thumb")
+    private let sliderThumbInvisibleImg = UIImage(named:"slider-thumb-invisible")
+    
+    private var startedRecording = false
+    private var recordingDone = false
+    private var videoReady = false
+    private var videoAvailable = false
+    private var spotifyReady = false
+    private var cameraReady = false
+    
+    //Sorted list with offset in seconds and overlay color
+    private var colorDurations: [(Float, UIColor)] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
         spotifyPlayer = SPTAudioStreamingController.sharedInstance()
         spotifyPlayer?.playbackDelegate = self
         
@@ -164,6 +208,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         colorDurations = [(0,MomentsConfig.colors.randomItem())]
         
         //TODO: Spinning wheel
+        self.initCamera(.Back)
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -188,18 +233,19 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         self.videoPlayerLayer = nil
         self.boxesXPos = 0
         colorDurations = [(0,MomentsConfig.colors.randomItem())]
+        videoReady = false
+        videoAvailable = false
+        spotifyReady = false
     }
     
-
+    
     
     override func viewDidAppear(animated: Bool) {
-        print("spotifySong in viewDidAppear: \(spotifySong)")
-        artistLabel.text = spotifySong?.artist
-        songLabel.text = spotifySong?.name
+        artistLabel?.text = spotifySong?.artist
+        songLabel?.text = spotifySong?.name
     }
     
     override func viewDidLayoutSubviews() {
-        initCamera(.Back)
     }
     
     func updateSongProgress() {
@@ -221,34 +267,38 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     
     func videoDownloaded(index: Int, url: NSURL, error: NSError!) {
         //TODO: error handling (not downloaded)
-        print("Video downloaded to \(url) with index \(index)")
+        //print("Video downloaded to \(url) with index \(index)")
         localVideoUrls[index] = url
         downloadedVideos += 1
         
         if downloadedVideos == videosToDownload {
-            print(localVideoUrls)
-            print("Download done")
-            
-            //TODO: Add timeline boxes
-            //timelineView
-            //timelineView.subviews
-            
-            let stitchedVideo = StitchedVideo(videoUrls: localVideoUrls)
-            //let test = AVPlayerItem(URL: localVideoUrls[0])
-            
-            videoPlayer = AVPlayer(playerItem: stitchedVideo.PlayerItem)
-            videoPlayer?.actionAtItemEnd = .None
-            videoDuration = Float(videoPlayer!.currentItem!.duration.seconds)
-            
-            mediaView.layoutIfNeeded()
-            videoPlayerLayer = AVPlayerLayer(player: videoPlayer)
-            videoPlayerLayer!.frame = CGRect(x:-120,y:0,width: mediaView.bounds.width+120,height: mediaView.bounds.height)
-            videoPlayerLayer!.videoGravity = AVLayerVideoGravityResize
-            //videoPlayerLayer!.needsDisplayOnBoundsChange = true
-            
-            self.mediaView.layer.insertSublayer(videoPlayerLayer!, atIndex: 0)
-            
-            play()
+            //print(localVideoUrls)
+            //print("Download done")
+                
+                //TODO: Add timeline boxes
+                //timelineView
+                //timelineView.subviews
+            {
+                let stitchedVideo = StitchedVideo(videoUrls: self.localVideoUrls)
+                //let test = AVPlayerItem(URL: localVideoUrls[0])
+                
+                self.videoPlayer = AVPlayer(playerItem: stitchedVideo.PlayerItem)
+                self.videoPlayer?.actionAtItemEnd = .None
+                self.videoDuration = Float(self.videoPlayer!.currentItem!.duration.seconds)
+                } ~> {
+                    self.mediaView.layoutIfNeeded()
+                    self.videoPlayerLayer = AVPlayerLayer(player: self.videoPlayer)
+                    self.videoPlayerLayer!.frame = CGRect(x:-120,y:0,width: self.mediaView.bounds.width+120,height: self.mediaView.bounds.height)
+                    self.videoPlayerLayer!.videoGravity = AVLayerVideoGravityResize
+                    //videoPlayerLayer!.needsDisplayOnBoundsChange = true
+                    
+                    self.mediaView.layer.insertSublayer(self.videoPlayerLayer!, atIndex: 0)
+                    
+                    self.videoReady = true
+                    self.videoAvailable = true
+                    
+                    self.playIfReady()
+            }
         }
     }
     
@@ -266,12 +316,12 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         
         self.mediaView.layer.insertSublayer(videoPlayerLayer!, atIndex: 0)
         
-            videoPlayer?.play()
+        videoPlayer?.play()
         
     }
     
     @IBAction func sliderChange(sender: UISlider) {
-        print(sender.value)
+        //print(sender.value)
         let musicDuration = Float(spotifyPlayer!.currentTrackDuration)
         let musicOffset = musicDuration * sender.value
         setMusicOffset(musicOffset)
@@ -305,20 +355,10 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     }
     
     
-    func play() {
-        if let videoPlayer = videoPlayer {
-            
-            print(videoPlayer.currentItem?.loadedTimeRanges)
-            print(videoPlayer.rate)/*
-            if videoPlayer.rate > 0 {
-                print("pause")
-                videoPlayer.pause()
-                spotifyPlayer?.setIsPlaying(false, callback: { (error: NSError!) in
-                    if error != nil {
-                        print("Couldnt pause spotify")
-                    }
-                })
-            } else {*/
+    func playIfReady() {
+        print("playIfReady, cameraReady: \(cameraReady), spotifyReady: \(spotifyReady), videoReady: \(videoReady), videoAvailable \(videoAvailable)")
+        if cameraReady && spotifyReady && videoReady && videoAvailable {
+            if let videoPlayer = videoPlayer {
                 if videoPlayer.status == .ReadyToPlay {
                     print("play")
                     //videoPlayerLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
@@ -360,8 +400,8 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                 } else {
                     print("NOT READY!")
                 }
-            //}
-        } else { //No videos just music
+            }
+        } else if cameraReady && videoReady && spotifyReady { //No videos just music
             print("play only music")
             if let spotifyUrl = spotifySong?.link {
                 spotifyPlayer?.playURIs([NSURL(string: "spotify:track:"+spotifyUrl)!], fromIndex: 0, callback: { (error: NSError!) in
@@ -374,7 +414,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                     }
                 })
             }
-
+            
         }
     }
     
@@ -388,20 +428,35 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     private var recordedVideoUrl: NSURL?
     func initCamera(position: AVCaptureDevicePosition)
     {
-        if cameraLayer == nil {
-            var myDevice: AVCaptureDevice?
-            let devices = AVCaptureDevice.devices()
-            let audioDevices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio)
-            
-            // Back camera
-            var videoInput: AVCaptureDeviceInput? = nil
-            for device in devices
-            {
-                if(device.position == position)
+        {
+            if self.cameraLayer == nil {
+                var myDevice: AVCaptureDevice?
+                let devices = AVCaptureDevice.devices()
+                let audioDevices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio)
+                
+                // Back camera
+                var videoInput: AVCaptureDeviceInput? = nil
+                for device in devices
                 {
-                    myDevice = device as? AVCaptureDevice
+                    if(device.position == position)
+                    {
+                        myDevice = device as? AVCaptureDevice
+                        do {
+                            videoInput = try AVCaptureDeviceInput(device: myDevice)
+                        }
+                        catch let error as NSError
+                        {
+                            print(error)
+                            return
+                        }
+                    }
+                }
+                
+                // Audio
+                var audioInput: AVCaptureDeviceInput? = nil
+                if audioDevices.count > 0 {
                     do {
-                        videoInput = try AVCaptureDeviceInput(device: myDevice)
+                        audioInput = try AVCaptureDeviceInput(device: audioDevices[0] as! AVCaptureDevice)
                     }
                     catch let error as NSError
                     {
@@ -409,51 +464,43 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                         return
                     }
                 }
-            }
-            
-            // Audio
-            var audioInput: AVCaptureDeviceInput? = nil
-            if audioDevices.count > 0 {
-                do {
-                    audioInput = try AVCaptureDeviceInput(device: audioDevices[0] as! AVCaptureDevice)
+                
+                // Create session
+                self.videoOutput = AVCaptureMovieFileOutput()
+                //imgOutput = AVCaptureStillImageOutput()
+                self.session = AVCaptureSession()
+                self.session?.beginConfiguration()
+                self.session?.sessionPreset = AVCaptureSessionPresetMedium
+                
+                if videoInput != nil {
+                    self.session?.addInput(videoInput)
                 }
-                catch let error as NSError
-                {
-                    print(error)
-                    return
+                if audioInput != nil {
+                    self.session?.addInput(audioInput)
                 }
+                //session?.addOutput(imgOutput)
+                self.session?.addOutput(self.videoOutput)
+                
+                let connection = self.videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
+                connection?.videoOrientation = .Portrait
+                
+                self.session?.commitConfiguration()
+                
+                
+                
+                // Start session
+                self.session?.startRunning()
+                
             }
-            
-            // Create session
-            videoOutput = AVCaptureMovieFileOutput()
-            //imgOutput = AVCaptureStillImageOutput()
-            session = AVCaptureSession()
-            session?.beginConfiguration()
-            session?.sessionPreset = AVCaptureSessionPresetMedium
-            
-            if videoInput != nil {
-                session?.addInput(videoInput)
-            }
-            if audioInput != nil {
-                session?.addInput(audioInput)
-            }
-            //session?.addOutput(imgOutput)
-            session?.addOutput(videoOutput)
-            
-            var connection = videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
-            connection?.videoOrientation = .Portrait
-            
-            session?.commitConfiguration()
-            
-            mediaView.layoutIfNeeded()
-            // Video Screen
-            cameraLayer = AVCaptureVideoPreviewLayer(session: session)
-            cameraLayer?.frame = mediaView.bounds
-            cameraLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-            self.mediaView.layer.insertSublayer(cameraLayer!, atIndex: 0)
-            
-            // Start session
-            session?.startRunning()
+            } ~> {
+                // Video Screen
+                self.mediaView.layoutIfNeeded()
+                self.cameraLayer = AVCaptureVideoPreviewLayer(session: self.session)
+                self.cameraLayer?.frame = self.mediaView.bounds
+                self.cameraLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+                self.mediaView.layer.insertSublayer(self.cameraLayer!, atIndex: 0)
+                self.cameraReady = true
+                self.playIfReady()
         }
     }
     
@@ -507,8 +554,6 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         
         recordingBox?.frame = CGRect(x: boxesXPos, y: -20, width: self.timelineView.frame.width * fragment, height: self.timelineView.frame.height)
     }
-    
-    
     
     // MARK: AVCaptureFileOutputRecordingDelegate
     func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!)
