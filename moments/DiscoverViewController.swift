@@ -152,23 +152,46 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         guard annotation is MGLPointAnnotation else {
             return nil
         }
+        //new lines
         
-     
+        
+        
         
         // Use the point annotation’s longitude value (as a string) as the reuse identifier for its view.
         let reuseIdentifier = "\(annotation.coordinate.longitude)"
         
         // For better performance, always try to reuse existing annotations.
         var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseIdentifier)
+
+        // the annotation.title was previously set to be the objectId of moment tag object
+        let objectId = annotation.title!
         
-        // If there’s no reusable annotation view available, initialize a new one.
-        if annotationView == nil {
-            annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
-            annotationView!.frame = CGRectMake(-40, 0, 40, 40)
+        //Find corresponding moment tag
+        
+        //Find the index
+        if let momentTagIndex = momentTags.indexOf({$0.objectId == objectId}) {
+            let momentTag = momentTags[momentTagIndex]
             
-            // Set the annotation view’s background color to a value determined by its longitude.
-            let hue = CGFloat(annotation.coordinate.longitude) / 100
-            annotationView!.backgroundColor = UIColor(hue: hue, saturation: 0.5, brightness: 1, alpha: 1)
+            
+            // If there’s no reusable annotation view available, initialize a new one.
+            if annotationView == nil {
+                
+                if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
+                    if thumbnailFile.dataAvailable {
+                        if let data = try? thumbnailFile.getData() {
+                            
+                            annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
+                            annotationView!.frame = CGRectMake(-40, 0, 40, 40)
+                            
+                            // Set the annotation view’s background color to a value determined by its longitude.
+                            let hue = CGFloat(annotation.coordinate.longitude) / 100
+                            annotationView!.backgroundColor = UIColor(hue: hue, saturation: 0.5, brightness: 1, alpha: 1)
+                            
+                           
+                        }
+                    }
+                }
+            }
         }
         
         return annotationView
