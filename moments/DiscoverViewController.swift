@@ -131,16 +131,12 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
     
     func setStyle() {
         
+        // 20 is max
         mapView.setZoomLevel(16, animated: false)
-        
-        // Fill in the next line with your style URL from Mapbox Studio.
         let styleURL = NSURL(string: MomentsConfig.mapbox.styleUrl)
-        mapView = MGLMapView(frame: view.bounds,
-                             styleURL: styleURL)
+        mapView = MGLMapView(frame: view.bounds, styleURL: styleURL)
         mapView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         view.addSubview(mapView)
-        
-        
         
         
     }
@@ -151,56 +147,31 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
     }
     
     
-    func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-        
-        //fallbackImage
-        var fallbackImage = mapView.dequeueReusableAnnotationImageWithIdentifier("fallback")
-        if fallbackImage == nil {
-            var image = UIImage(named: "plus")!
-            image = resizeImage(image)
-            image = image.imageWithAlignmentRectInsets(UIEdgeInsetsMake(0, 0, image.size.height/2, 0))
-            fallbackImage = MGLAnnotationImage(image: image, reuseIdentifier: "fallback")
+    func mapView(mapView: MGLMapView, viewForAnnotation annotation: MGLAnnotation) -> MGLAnnotationView? {
+        // This example is only concerned with point annotations.
+        guard annotation is MGLPointAnnotation else {
+            return nil
         }
         
-        // the annotation.title was previously set to be the objectId of moment tag object
-        let objectId = annotation.title!
+     
         
-        //Find corresponding moment tag
+        // Use the point annotation’s longitude value (as a string) as the reuse identifier for its view.
+        let reuseIdentifier = "\(annotation.coordinate.longitude)"
         
-        //Find the index
-        if let momentTagIndex = momentTags.indexOf({$0.objectId == objectId}) {
-            let momentTag = momentTags[momentTagIndex]
+        // For better performance, always try to reuse existing annotations.
+        var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseIdentifier)
+        
+        // If there’s no reusable annotation view available, initialize a new one.
+        if annotationView == nil {
+            annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
+            annotationView!.frame = CGRectMake(-40, 0, 40, 40)
             
-            //Try to reuse the existing 'objectId' annotation image, if it exists.
-            // annoataion image is named with the objectId
-            //image size: 360X360 pulled from parse
-            var annotationImage = mapView.dequeueReusableAnnotationImageWithIdentifier(objectId!)
-            
-            //create an innotation image
-            if annotationImage == nil {
-                if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
-                    if thumbnailFile.dataAvailable {
-                        if let data = try? thumbnailFile.getData() {
-                            var image = UIImage(data:data, scale: 2.0)
-                            image = createMarker(image!)
-                            image = resizeImage2(image!, targetSize: CGSizeMake(90.0, 90.0))
-                            annotationImage = MGLAnnotationImage(image: image!, reuseIdentifier: objectId!)
-                            return annotationImage
-                        }
-                    } else {
-                        thumbnailFile.getDataInBackgroundWithBlock {
-                            (imageData: NSData?, error: NSError?) -> Void in
-                            print("Downloaded thumbnail, should reset thumbnails")
-                            mapView.removeAnnotation(annotation)
-                            mapView.addAnnotation(annotation)
-                        }
-                        return fallbackImage
-                    }
-                }
-            }
+            // Set the annotation view’s background color to a value determined by its longitude.
+            let hue = CGFloat(annotation.coordinate.longitude) / 100
+            annotationView!.backgroundColor = UIColor(hue: hue, saturation: 0.5, brightness: 1, alpha: 1)
         }
         
-        return fallbackImage
+        return annotationView
     }
     
     func mapView(mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
