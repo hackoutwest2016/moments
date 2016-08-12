@@ -24,6 +24,8 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
         animationImageView.animationImages = animationImages
         animationImageView.animationDuration = 2
         animationImageView.animationRepeatCount = 1
+        
+     
     }
     
     override func didReceiveMemoryWarning() {
@@ -45,24 +47,31 @@ class LoginViewController: UIViewController, SPTAuthViewDelegate {
         tag.saveInBackground()
         */
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(3 * NSEC_PER_SEC)), dispatch_get_main_queue()) {
-            let auth = SPTAuth.defaultInstance()
-            auth.clientID        = MomentsConfig.spotify.clientId
-            auth.redirectURL     = NSURL.init(string:MomentsConfig.spotify.redirectUrl)
-            auth.requestedScopes = [SPTAuthStreamingScope]
-            
-            let authvc = SPTAuthViewController.authenticationViewController()
-            // authvc.clearCookies(nil)
-            authvc.modalPresentationStyle   = UIModalPresentationStyle.OverCurrentContext
-            authvc.modalTransitionStyle     = UIModalTransitionStyle.CrossDissolve
-            authvc.delegate                 = self
-            
-            self.modalPresentationStyle     = UIModalPresentationStyle.CurrentContext
-            self.definesPresentationContext = true
-            self.presentViewController(authvc, animated: true, completion: nil)
-        }
+        //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(3 * NSEC_PER_SEC)), dispatch_get_main_queue()) {
+        //
+        //        }
+        
+           spotifyLoginPopUp()
+        
     }
     
+    func spotifyLoginPopUp(){
+        let auth = SPTAuth.defaultInstance()
+        auth.clientID        = MomentsConfig.spotify.clientId
+        auth.redirectURL     = NSURL.init(string:MomentsConfig.spotify.redirectUrl)
+        auth.requestedScopes = [SPTAuthStreamingScope]
+        
+        let authvc = SPTAuthViewController.authenticationViewController()
+        // authvc.clearCookies(nil)
+        authvc.modalPresentationStyle   = UIModalPresentationStyle.OverCurrentContext
+        authvc.modalTransitionStyle     = UIModalTransitionStyle.CrossDissolve
+        authvc.delegate                 = self
+        
+        self.modalPresentationStyle     = UIModalPresentationStyle.CurrentContext
+        self.definesPresentationContext = true
+        self.presentViewController(authvc, animated: true, completion: nil)
+    }
+
     func authenticationViewController(authenticationViewController: SPTAuthViewController!, didLoginWithSession session: SPTSession!) {
         print("Login")
         
