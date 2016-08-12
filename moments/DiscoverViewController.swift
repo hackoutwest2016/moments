@@ -26,7 +26,25 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
     
     @IBAction func addButtonTapped(sender: UIButton) {
         
-        performSegueWithIdentifier("moveToSearch", sender: sender)
+        fakeAnnotation()
+        //performSegueWithIdentifier("moveToSearch", sender: sender)
+    }
+    
+    func fakeAnnotation() {
+        let newTag = PFObject(className: "MomentTag")
+        let location =  mapView.userLocation!.coordinate
+        let parseLocation = PFGeoPoint(latitude: location.latitude, longitude: location.longitude)
+        newTag["position"] = parseLocation
+        let imageData = UIImagePNGRepresentation(UIImage(named: "hat")!)
+        let thumbnailFile = PFFile(name: "thumb.png", data: imageData!)
+        newTag["thumbnail"] = thumbnailFile
+        newTag["debug"] = "y"
+        newTag.ACL?.publicWriteAccess = true
+        newTag.ACL?.publicReadAccess = true
+        
+        newTag.saveInBackground()
+        
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -48,9 +66,6 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         view.sendSubviewToBack(mapView)
         
         let timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(pollForTags), userInfo: nil, repeats: true)
-        
-        
-        
     }
     
     
@@ -183,32 +198,43 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                             // make it rounded
                             thumbnail = maskRoundedImage(thumbnail!, radius: Float((thumbnail?.size.height)!/2))
                             
+                            
+                            
+                            
                             //size of images
                             let imageSize:CGFloat = 60
                             let borderWidth:CGFloat = 0
-                            let totalSize:CGFloat = borderWidth+imageSize
+                            //let totalSize:CGFloat = borderWidth+imageSize
                             
-                            let thumbnailView = UIImageView(frame: CGRectMake(borderWidth/2, borderWidth/2, 0, 0))
+                            let thumbnailView = UIImageView(frame: CGRectMake(0, 0 , imageSize, imageSize))
                             thumbnailView.image = thumbnail
-                            print(thumbnailView.center)
-                            thumbnailView.center = CGPoint(x: imageSize/2, y: imageSize/2)
-                            print(thumbnailView.center)
+//                            thumbnailView.center = CGPoint(x: imageSize/2, y: imageSize/2)
+//                            
+                            //style
+                            thumbnailView.layer.cornerRadius = thumbnailView.frame.width / 2
+                            thumbnailView.layer.borderWidth = 3
+                            thumbnailView.layer.borderColor = Palette.purple.CGColor
+                            thumbnailView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+                            //thumbnailView.frame = CGRectMake(0, 0, 5, 5)
+                            
                             
                             annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
-                            annotationView!.frame = CGRectMake(0, 0, totalSize, totalSize)
-                            
+                            annotationView!.frame = CGRectMake(0, 0, 0, 0)
                             annotationView?.addSubview(thumbnailView)
-                            //annotationView!.backgroundColor = Palette.purple
-                            
-                            
-                            let randomDelay = arc4random_uniform(5)
-                         
-                            UIView.animateWithDuration(10, delay: NSTimeInterval(0 ) , usingSpringWithDamping: 0.2, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-                                thumbnailView.frame.size = CGSize(width: imageSize, height: imageSize)
-                         
-                                
+      
+                            //let randomDelay = arc4random_uniform(5)
+                           
+                            UIView.animateWithDuration(0.6, delay: 0,usingSpringWithDamping: 0.3, initialSpringVelocity: 0.3, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+                                thumbnailView.transform = CGAffineTransformMakeScale(1, 1)
                                 }, completion: nil)
-                            
+  
+                        }
+                    }else {
+                        thumbnailFile.getDataInBackgroundWithBlock {
+                            (imageData: NSData?, error: NSError?) -> Void in
+                            print("Downloaded thumbnail, should reset thumbnails")
+                            mapView.removeAnnotation(annotation)
+                            mapView.addAnnotation(annotation)
                         }
                     }
                 }
@@ -420,9 +446,9 @@ class CustomAnnotationView: MGLAnnotationView {
         scalesWithViewingDistance = true
         
         // Use CALayer’s corner radius to turn this view into a circle.
-        layer.cornerRadius = frame.width / 2
-//        layer.borderWidth = 3
-//        layer.borderColor = Palette.purple.CGColor
+        //        layer.cornerRadius = frame.width / 2
+        //        layer.borderWidth = 3
+        //        layer.borderColor = Palette.purple.CGColor
     }
     
     override func setSelected(selected: Bool, animated: Bool) {

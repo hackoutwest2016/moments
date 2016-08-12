@@ -341,49 +341,6 @@
             </objects>
             <point key="canvasLocation" x="-1529" y="390"/>
         </scene>
-        <!--Animation View Controller-->
-        <scene sceneID="KM5-ye-oje">
-            <objects>
-                <viewController id="8tN-hR-enl" customClass="AnimationViewController" customModule="moments" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="f3d-ug-ysW"/>
-                        <viewControllerLayoutGuide type="bottom" id="Hrh-1g-rG2"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="O7O-gC-1AG">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nwS-Rm-4BW" customClass="MGLMapView">
-                                <rect key="frame" x="20" y="20" width="560" height="376"/>
-                                <color key="backgroundColor" red="0.98878632479999995" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sxQ-B6-6XQ">
-                                <rect key="frame" x="277" y="440" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="btnTapped:" destination="8tN-hR-enl" eventType="touchUpInside" id="o32-l2-g9r"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="nwS-Rm-4BW" firstAttribute="top" secondItem="f3d-ug-ysW" secondAttribute="bottom" id="0s8-xA-yzT"/>
-                            <constraint firstItem="sxQ-B6-6XQ" firstAttribute="centerX" secondItem="nwS-Rm-4BW" secondAttribute="centerX" id="1sY-2y-Rgi"/>
-                            <constraint firstItem="Hrh-1g-rG2" firstAttribute="top" secondItem="nwS-Rm-4BW" secondAttribute="bottom" constant="204" id="CA8-rN-uLm"/>
-                            <constraint firstItem="nwS-Rm-4BW" firstAttribute="leading" secondItem="O7O-gC-1AG" secondAttribute="leadingMargin" id="Low-Of-Mhs"/>
-                            <constraint firstItem="nwS-Rm-4BW" firstAttribute="trailing" secondItem="O7O-gC-1AG" secondAttribute="trailingMargin" id="jNr-qY-P15"/>
-                            <constraint firstItem="sxQ-B6-6XQ" firstAttribute="top" secondItem="nwS-Rm-4BW" secondAttribute="bottom" constant="44" id="q8j-38-BDn"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="btn" destination="sxQ-B6-6XQ" id="FuT-mf-lCE"/>
-                        <outlet property="mapView" destination="nwS-Rm-4BW" id="MC3-89-dXd"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0ee-9D-Y5T" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-755" y="413"/>
-        </scene>
         <!--Search View Controller-->
         <scene sceneID="L7A-lW-bdS">
             <objects>
