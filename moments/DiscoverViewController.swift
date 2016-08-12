@@ -229,7 +229,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                             tagView.transform = CGAffineTransformMakeScale(0.1, 0.1)
                             //let randomDelay = arc4random_uniform(5)
                            
-                            UIView.animateWithDuration(0.3, delay: 0,usingSpringWithDamping: 0.3, initialSpringVelocity: 0.3, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+                            UIView.animateWithDuration(0.3, delay: 0,usingSpringWithDamping: 0.9, initialSpringVelocity: 0.3, options: UIViewAnimationOptions.CurveEaseOut, animations: {
                                 tagView.transform = CGAffineTransformMakeScale(1, 1)
                                 }, completion: nil)
   
