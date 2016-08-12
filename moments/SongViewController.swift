@@ -31,6 +31,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     @IBOutlet weak var musicSlider: UISlider!
     
     @IBOutlet weak var mediaView: UIView!
+    @IBOutlet weak var loadingView: UIView!
     
     private var spotifySong: Song? {
         didSet {
@@ -206,6 +207,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         holdLabel.hidden = true
         videoPlayerLayer?.hidden = true
         colorDurations = [(0,MomentsConfig.colors.randomItem())]
+        loadingView.hidden = false
         
         //TODO: Spinning wheel
         self.initCamera(.Back)
@@ -236,6 +238,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         videoReady = false
         videoAvailable = false
         spotifyReady = false
+        loadingView.hidden = false
     }
     
     
@@ -394,6 +397,9 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                     
                                     totalDuration += videoDuration
                                 }
+                                
+                                
+                                self.loadingView.hidden = true
                             }
                         })
                     }
@@ -410,7 +416,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                     } else {
                         
                         self.setMusicOffset(self.currentOffset)
-                        
+                        self.loadingView.hidden = true
                     }
                 })
             }

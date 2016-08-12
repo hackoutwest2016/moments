@@ -166,18 +166,39 @@
                                             <action selector="saveRecording:" destination="ibI-tQ-O8l" eventType="touchUpInside" id="iYK-YG-SC1"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1bL-9a-kZI">
+                                        <rect key="frame" x="0.0" y="0.0" width="580" height="420"/>
+                                        <subviews>
+                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="hES-Pe-o0d">
+                                                <rect key="frame" x="250" y="170" width="80" height="80"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="80" id="tYn-Ne-WDt"/>
+                                                    <constraint firstAttribute="width" constant="80" id="uJE-zA-VZn"/>
+                                                </constraints>
+                                            </activityIndicatorView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="hES-Pe-o0d" firstAttribute="centerY" secondItem="1bL-9a-kZI" secondAttribute="centerY" id="ZIX-Kw-cFy"/>
+                                            <constraint firstItem="hES-Pe-o0d" firstAttribute="centerX" secondItem="1bL-9a-kZI" secondAttribute="centerX" id="ZfD-Vg-Kjq"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
+                                    <constraint firstItem="1bL-9a-kZI" firstAttribute="centerX" secondItem="2AG-MF-Jub" secondAttribute="centerX" id="2Sh-BW-s7O"/>
+                                    <constraint firstItem="1bL-9a-kZI" firstAttribute="height" secondItem="2AG-MF-Jub" secondAttribute="height" id="9Pc-Cg-Tbr"/>
                                     <constraint firstItem="IxO-oz-yrB" firstAttribute="centerY" secondItem="2AG-MF-Jub" secondAttribute="centerY" id="BbD-BG-iKO"/>
                                     <constraint firstItem="IxO-oz-yrB" firstAttribute="centerX" secondItem="2AG-MF-Jub" secondAttribute="centerX" id="E0G-jj-Y3G"/>
+                                    <constraint firstItem="1bL-9a-kZI" firstAttribute="width" secondItem="2AG-MF-Jub" secondAttribute="width" id="EQy-JI-gic"/>
                                     <constraint firstItem="qGz-IQ-G96" firstAttribute="centerY" secondItem="2AG-MF-Jub" secondAttribute="centerY" id="Lgo-1c-XAe"/>
                                     <constraint firstItem="Abd-sh-uxG" firstAttribute="centerX" secondItem="2AG-MF-Jub" secondAttribute="centerX" id="U4H-iX-pi1"/>
                                     <constraint firstAttribute="bottom" secondItem="Abd-sh-uxG" secondAttribute="bottom" constant="8" id="UBW-O8-cG6"/>
                                     <constraint firstItem="7f6-t7-5ls" firstAttribute="centerY" secondItem="2AG-MF-Jub" secondAttribute="centerY" id="WXJ-SQ-SYt"/>
                                     <constraint firstItem="sOI-am-cgF" firstAttribute="top" secondItem="7f6-t7-5ls" secondAttribute="bottom" constant="1" id="YGM-m6-x8t"/>
                                     <constraint firstItem="0IM-FK-QA9" firstAttribute="centerY" secondItem="2AG-MF-Jub" secondAttribute="centerY" id="b15-qy-evF"/>
+                                    <constraint firstItem="1bL-9a-kZI" firstAttribute="centerY" secondItem="2AG-MF-Jub" secondAttribute="centerY" id="cGu-2N-Cir"/>
                                     <constraint firstItem="IxO-oz-yrB" firstAttribute="height" secondItem="2AG-MF-Jub" secondAttribute="height" id="ema-Ml-WgL"/>
                                     <constraint firstItem="qGz-IQ-G96" firstAttribute="leading" secondItem="2AG-MF-Jub" secondAttribute="leading" constant="40" id="gPB-Ry-4St"/>
                                     <constraint firstItem="IxO-oz-yrB" firstAttribute="width" secondItem="2AG-MF-Jub" secondAttribute="width" id="iFO-bh-F3l"/>
@@ -314,6 +335,7 @@
                         <outlet property="buttonImage" destination="Abd-sh-uxG" id="Djc-b2-JSc"/>
                         <outlet property="captureLabel" destination="7f6-t7-5ls" id="nUk-Wz-wT4"/>
                         <outlet property="holdLabel" destination="sOI-am-cgF" id="ocg-BK-HVp"/>
+                        <outlet property="loadingView" destination="1bL-9a-kZI" id="DOc-OO-z44"/>
                         <outlet property="mediaView" destination="2AG-MF-Jub" id="lSR-Fe-1cx"/>
                         <outlet property="musicSlider" destination="6Q3-hh-U63" id="5KO-Qo-eQZ"/>
                         <outlet property="overlay" destination="IxO-oz-yrB" id="1OQ-H1-lYL"/>
