@@ -206,26 +206,31 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                             let borderWidth:CGFloat = 0
                             //let totalSize:CGFloat = borderWidth+imageSize
                             
-                            let thumbnailView = UIImageView(frame: CGRectMake(0, 0 , imageSize, imageSize))
-                            thumbnailView.image = thumbnail
+                            
+                            
+                            let thumbnailView  = UIImageView(image: thumbnail)
+                            thumbnailView.frame = CGRectMake(5, 5, imageSize, imageSize)
 //                            thumbnailView.center = CGPoint(x: imageSize/2, y: imageSize/2)
 //                            
                             //style
                             thumbnailView.layer.cornerRadius = thumbnailView.frame.width / 2
-                            thumbnailView.layer.borderWidth = 3
-                            thumbnailView.layer.borderColor = Palette.purple.CGColor
-                            thumbnailView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+//                            thumbnailView.layer.borderWidth = 3
+//                            thumbnailView.layer.borderColor = Palette.purple.CGColor
+                            
                             //thumbnailView.frame = CGRectMake(0, 0, 5, 5)
                             
+                            let tagView = UIImageView(image: UIImage(named: "drop"))
+                            tagView.addSubview(thumbnailView)
                             
                             annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
-                            annotationView!.frame = CGRectMake(0, 0, 0, 0)
-                            annotationView?.addSubview(thumbnailView)
-      
+                            annotationView!.frame = CGRectMake(0,0, 0, 0)
+                            annotationView?.addSubview(tagView)
+                            tagView.frame = CGRect(origin: CGPoint(x: 0 - tagView.frame.width/2, y: 0 - tagView.frame.height) , size: tagView.frame.size)
+                            tagView.transform = CGAffineTransformMakeScale(0.1, 0.1)
                             //let randomDelay = arc4random_uniform(5)
                            
-                            UIView.animateWithDuration(0.6, delay: 0,usingSpringWithDamping: 0.3, initialSpringVelocity: 0.3, options: UIViewAnimationOptions.CurveEaseIn, animations: {
-                                thumbnailView.transform = CGAffineTransformMakeScale(1, 1)
+                            UIView.animateWithDuration(0.3, delay: 0,usingSpringWithDamping: 0.3, initialSpringVelocity: 0.3, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+                                tagView.transform = CGAffineTransformMakeScale(1, 1)
                                 }, completion: nil)
   
                         }
