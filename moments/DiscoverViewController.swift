@@ -153,7 +153,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
     
     func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
         
-        
+        //fallbackImage
         var fallbackImage = mapView.dequeueReusableAnnotationImageWithIdentifier("fallback")
         if fallbackImage == nil {
             var image = UIImage(named: "plus")!
@@ -162,27 +162,29 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
             fallbackImage = MGLAnnotationImage(image: image, reuseIdentifier: "fallback")
         }
         
+        // the annotation.title was previously set to be the objectId of moment tag object
         let objectId = annotation.title!
         
         //Find corresponding moment tag
+        
+        //Find the index
         if let momentTagIndex = momentTags.indexOf({$0.objectId == objectId}) {
             let momentTag = momentTags[momentTagIndex]
             
+            //Try to reuse the existing 'objectId' annotation image, if it exists.
+            // annoataion image is named with the objectId
+            //image size: 360X360 pulled from parse
             var annotationImage = mapView.dequeueReusableAnnotationImageWithIdentifier(objectId!)
             
+            //create an innotation image
             if annotationImage == nil {
                 if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
                     if thumbnailFile.dataAvailable {
                         if let data = try? thumbnailFile.getData() {
                             var image = UIImage(data:data, scale: 2.0)
                             image = createMarker(image!)
-                            
-                            
                             image = resizeImage2(image!, targetSize: CGSizeMake(90.0, 90.0))
-                            
                             annotationImage = MGLAnnotationImage(image: image!, reuseIdentifier: objectId!)
-                            
-                            
                             return annotationImage
                         }
                     } else {
