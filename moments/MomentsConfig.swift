@@ -31,6 +31,10 @@ struct MomentsConfig {
     
 }
 
+struct Palette{
+    static let purple = UIColor(red:0.40, green:0.21, blue:0.58, alpha:1.0)
+}
+
 class Song {
     let artist:String
     let name:String

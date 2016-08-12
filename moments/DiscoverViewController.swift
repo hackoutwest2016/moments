@@ -162,7 +162,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         
         // For better performance, always try to reuse existing annotations.
         var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseIdentifier)
-
+        
         // the annotation.title was previously set to be the objectId of moment tag object
         let objectId = annotation.title!
         
@@ -179,15 +179,36 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                 if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
                     if thumbnailFile.dataAvailable {
                         if let data = try? thumbnailFile.getData() {
+                            var thumbnail = UIImage(data:data, scale: 2.0)
+                            // make it rounded
+                            thumbnail = maskRoundedImage(thumbnail!, radius: Float((thumbnail?.size.height)!/2))
+                            
+                            //size of images
+                            let imageSize:CGFloat = 60
+                            let borderWidth:CGFloat = 0
+                            let totalSize:CGFloat = borderWidth+imageSize
+                            
+                            let thumbnailView = UIImageView(frame: CGRectMake(borderWidth/2, borderWidth/2, 0, 0))
+                            thumbnailView.image = thumbnail
+                            print(thumbnailView.center)
+                            thumbnailView.center = CGPoint(x: imageSize/2, y: imageSize/2)
+                            print(thumbnailView.center)
                             
                             annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
-                            annotationView!.frame = CGRectMake(-40, 0, 40, 40)
+                            annotationView!.frame = CGRectMake(0, 0, totalSize, totalSize)
                             
-                            // Set the annotation view’s background color to a value determined by its longitude.
-                            let hue = CGFloat(annotation.coordinate.longitude) / 100
-                            annotationView!.backgroundColor = UIColor(hue: hue, saturation: 0.5, brightness: 1, alpha: 1)
+                            annotationView?.addSubview(thumbnailView)
+                            //annotationView!.backgroundColor = Palette.purple
                             
-                           
+                            
+                            let randomDelay = arc4random_uniform(5)
+                         
+                            UIView.animateWithDuration(10, delay: NSTimeInterval(0 ) , usingSpringWithDamping: 0.2, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+                                thumbnailView.frame.size = CGSize(width: imageSize, height: imageSize)
+                         
+                                
+                                }, completion: nil)
+                            
                         }
                     }
                 }
@@ -358,8 +379,8 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                                 }
                             })
                             
-                           
-                        
+                            
+                            
                         }
                         
                     }
@@ -391,5 +412,28 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
 }
 
 
+class CustomAnnotationView: MGLAnnotationView {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        // Force the annotation view to maintain a constant size when the map is tilted.
+        scalesWithViewingDistance = true
+        
+        // Use CALayer’s corner radius to turn this view into a circle.
+        layer.cornerRadius = frame.width / 2
+//        layer.borderWidth = 3
+//        layer.borderColor = Palette.purple.CGColor
+    }
+    
+    override func setSelected(selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        // Animate the border width in/out, creating an iris effect.
+        let animation = CABasicAnimation(keyPath: "borderWidth")
+        animation.duration = 0.1
+        layer.borderWidth = selected ? frame.width / 4 : 2
+        layer.addAnimation(animation, forKey: "borderWidth")
+    }
+}
 
 
