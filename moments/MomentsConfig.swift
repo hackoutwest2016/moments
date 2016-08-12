@@ -28,4 +28,17 @@ struct MomentsConfig {
     ]
     
     static let yellow = UIColor(red:1.00, green:0.91, blue:0.38, alpha:1.0)//yellow
+    
+}
+
+class Song {
+    let artist:String
+    let name:String
+    let link:String
+    
+    init(artist: String, name: String,link: String) {
+        self.artist = artist
+        self.name = name
+        self.link = link
+    }
 }

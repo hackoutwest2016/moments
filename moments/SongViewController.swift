@@ -144,7 +144,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         spotifyPlayer = SPTAudioStreamingController.sharedInstance()
         spotifyPlayer?.playbackDelegate = self
         
@@ -190,8 +190,10 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         colorDurations = [(0,MomentsConfig.colors.randomItem())]
     }
     
-    override func viewWillAppear(animated: Bool) {
-        
+
+    
+    override func viewDidAppear(animated: Bool) {
+        print("spotifySong in viewDidAppear: \(spotifySong)")
         artistLabel.text = spotifySong?.artist
         songLabel.text = spotifySong?.name
     }

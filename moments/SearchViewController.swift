@@ -177,6 +177,11 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
                     var position = PFGeoPoint(latitude: location.latitude, longitude: location.longitude)
                     newTag["position"] = position
                 }
+                
+                    
+                newTag["spotifyUrl"] = selectedSong?.link
+                
+                destinationVC.spotifySong = selectedSong
                 destinationVC.momentTag = newTag
             }
         }
@@ -186,13 +191,6 @@ class SearchViewController: UIViewController, MGLMapViewDelegate, UITableViewDat
         //TODO: Return
         //performSegueWithIdentifier("unwindSegue2", sender: self)
     }
-}
-
-
-struct Song {
-    let artist : String
-    let name : String
-    let link : String
 }
 
 

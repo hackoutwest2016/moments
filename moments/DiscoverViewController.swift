@@ -44,12 +44,12 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         // Set the map view‘s delegate property.
         mapView.delegate = self
         
-
+        
         view.sendSubviewToBack(mapView)
         
         let timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(pollForTags), userInfo: nil, repeats: true)
         
-
+        
         
     }
     
@@ -182,7 +182,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                             
                             annotationImage = MGLAnnotationImage(image: image!, reuseIdentifier: objectId!)
                             
-                           
+                            
                             return annotationImage
                         }
                     } else {
@@ -335,13 +335,40 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                     for momentTag in momentTags {
                         
                         if momentTag.objectId == selectedParseId {
-                            destinationVC.spotifySong = Song(artist: "Ghostboy", name: "Robotaki, Claire Ridgely", link: "6sqo5lYZ3yJRv0auIWBNrm")
-                            destinationVC.momentTag = momentTag
+                            
+                            //spotify URI
+                            var spotifyUrl = momentTag["spotifyUrl"] as? String
+                            if (spotifyUrl == nil){
+                                spotifyUrl = "0EFEkt29P7Icr7dO4vN6yk"
+                            }
+                            
+                            var spotifySong = Song(artist: "Test", name: "Test", link: spotifyUrl!)
+                            
+                            SPTTrack.trackWithURI(NSURL(string: "spotify:track:"+spotifyUrl!), session: nil, callback: { (error, data) in
+                                
+                                if let track = data as? SPTTrack{
+                                    print(track)
+                                    print(track.artists.first)
+                                    print(track.name)
+                                    
+                                    let artist =  "\((track.artists.first as! SPTPartialArtist).name)"
+                                    let name = track.name
+                                    spotifySong = Song(artist: artist, name: name, link: spotifyUrl!)
+                                    
+                                    print("spotifySong: \(spotifySong)")
+                                    
+                                    destinationVC.spotifySong = spotifySong
+                                    destinationVC.momentTag = momentTag
+                                }
+                            })
+                            
+                           
+                        
                         }
-    
+                        
                     }
                 }
-            
+                
             }
         }
         
@@ -350,18 +377,18 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
     @IBAction func backButton(sender: UIStoryboardSegue) {
         //TODO: Return
         /*if let previousVS = sender.sourceViewController as? SongViewController {
-            if let momentTagIndex = momentTags.indexOf({$0.objectId == previousVS.momentTag?.objectId}) {
-                let momentTag = momentTags[momentTagIndex]
-                
-                if let annotationIndex = mapView.annotations!.indexOf({$0.title! == momentTag.objectId}) {
-                    let annotation = mapView.annotations![annotationIndex]
-                    
-                    mapView.removeAnnotation(annotation)
-                    mapView.addAnnotation(annotation)
-                    //TODO POP animation
-                }
-            }
-        }*/
+         if let momentTagIndex = momentTags.indexOf({$0.objectId == previousVS.momentTag?.objectId}) {
+         let momentTag = momentTags[momentTagIndex]
+         
+         if let annotationIndex = mapView.annotations!.indexOf({$0.title! == momentTag.objectId}) {
+         let annotation = mapView.annotations![annotationIndex]
+         
+         mapView.removeAnnotation(annotation)
+         mapView.addAnnotation(annotation)
+         //TODO POP animation
+         }
+         }
+         }*/
         //performSegueWithIdentifier("unwindSegue1", sender: self)
     }
 }
