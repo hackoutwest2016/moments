@@ -94,7 +94,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                     (videoData: NSData?, error: NSError?) -> Void in
                                     if error == nil {
                                         if let videoData = videoData {
-                                            runInBackground({ 
+                                            inBackground(withData:nil, run: { data in
                                                 let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
                                                 let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
                                                 
@@ -104,7 +104,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                                 } else {
                                                     print("error saving file")
                                                 }
-                                            }, delay: 0, then: nil)
+                                            }, then: nil)
                                         }
                                     }
                                 }
@@ -279,14 +279,15 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
             //TODO: Add timeline boxes
             //timelineView
             //timelineView.subviews
-            runInBackground({ 
+            inBackground(withData: nil, run: { data in
                 let stitchedVideo = StitchedVideo(videoUrls: self.localVideoUrls)
                 //let test = AVPlayerItem(URL: localVideoUrls[0])
                 
                 self.videoPlayer = AVPlayer(playerItem: stitchedVideo.PlayerItem)
                 self.videoPlayer?.actionAtItemEnd = .None
                 self.videoDuration = Float(self.videoPlayer!.currentItem!.duration.seconds)
-            }, delay: 0, then: {
+                return nil
+            }, then: { result in
                 self.mediaView.layoutIfNeeded()
                 self.videoPlayerLayer = AVPlayerLayer(player: self.videoPlayer)
                 self.videoPlayerLayer!.frame = CGRect(x:-120,y:0,width: self.mediaView.bounds.width+120,height: self.mediaView.bounds.height)
@@ -432,7 +433,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     private var recordedVideoUrl: NSURL?
     func initCamera(position: AVCaptureDevicePosition)
     {
-        runInBackground({
+        inBackground(withData: nil, run: { data in
             if self.cameraLayer == nil {
                 var myDevice: AVCaptureDevice?
                 let devices = AVCaptureDevice.devices()
@@ -451,7 +452,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                         catch let error as NSError
                         {
                             print(error)
-                            return
+                            return nil
                         }
                     }
                 }
@@ -465,7 +466,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                     catch let error as NSError
                     {
                         print(error)
-                        return
+                        return nil
                     }
                 }
                 
@@ -496,8 +497,8 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                 self.session?.startRunning()
                 
             }
-        }, delay: 0,
-        then: {
+            return nil
+        }, then: { result in
             // Video Screen
             self.mediaView.layoutIfNeeded()
             self.cameraLayer = AVCaptureVideoPreviewLayer(session: self.session)
