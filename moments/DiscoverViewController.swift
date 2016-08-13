@@ -149,11 +149,10 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                         
                         var thumbnail = UIImage(data:imageData!, scale: 2.0)
                         // make it rounded
-                        thumbnail = self.maskRoundedImage(thumbnail!, radius: Float((thumbnail?.size.height)!/2))
+                        thumbnail = ImageCropper.cropToCircle(thumbnail!, radius: Float((thumbnail?.size.height)!/2))
                         
                         //size of images
                         let imageSize:CGFloat = 60
-                        let borderWidth:CGFloat = 0
                         
                         let thumbnailView  = UIImageView(image: thumbnail)
                         thumbnailView.frame = CGRectMake(5, 5, imageSize, imageSize)
@@ -163,7 +162,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                         let tagView = UIImageView(image: UIImage(named: "drop"))
                         tagView.addSubview(thumbnailView)
                         
-                        var annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
+                        let annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
                         
                         annotationView.addSubview(tagView)
                         tagView.frame = CGRect(origin: CGPointZero , size: tagView.frame.size)
@@ -253,24 +252,9 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
     func mapView(mapView: MGLMapView, didSelectAnnotation annotation: MGLAnnotation) {
         print("seelected")
         selectedParseId = annotation.title!!
-        performSegueWithIdentifier("moveToViewSong", sender: nil)
+        performSegueWithIdentifier("moveToViewSong", sender: self)
     }
     
-    func maskRoundedImage(image: UIImage, radius: Float) -> UIImage {
-        let imageView: UIImageView = UIImageView(image: image)
-        var layer: CALayer = CALayer()
-        layer = imageView.layer
-        
-        layer.masksToBounds = true
-        layer.cornerRadius = CGFloat(radius)
-        
-        UIGraphicsBeginImageContext(imageView.bounds.size)
-        layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        let roundedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return roundedImage
-    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "moveToSearch"
