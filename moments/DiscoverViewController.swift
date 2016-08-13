@@ -208,9 +208,6 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                             // make it rounded
                             thumbnail = maskRoundedImage(thumbnail!, radius: Float((thumbnail?.size.height)!/2))
                             
-                            
-                            
-                            
                             //size of images
                             let imageSize:CGFloat = 60
                             let borderWidth:CGFloat = 0
@@ -263,10 +260,6 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         performSegueWithIdentifier("moveToViewSong", sender: nil)
     }
     
-    
-    
-
-    
     func maskRoundedImage(image: UIImage, radius: Float) -> UIImage {
         let imageView: UIImageView = UIImageView(image: image)
         var layer: CALayer = CALayer()
@@ -300,32 +293,8 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                     for momentTag in momentTags {
                         
                         if momentTag.objectId == selectedParseId {
-
-                            //spotify URI
-                            var spotifyUrl = momentTag["spotifyUrl"] as? String
-                            if (spotifyUrl == nil){
-                                spotifyUrl = "0EFEkt29P7Icr7dO4vN6yk"
-                            }
                             
-                            var spotifySong = Song(artist: "Test", name: "Test", link: spotifyUrl!)
-                            
-                            SPTTrack.trackWithURI(NSURL(string: "spotify:track:"+spotifyUrl!), session: nil, callback: { (error, data) in
-                                
-                                if let track = data as? SPTTrack{
-                                    print(track)
-                                    print(track.artists.first)
-                                    print(track.name)
-                                    
-                                    let artist =  "\((track.artists.first as! SPTPartialArtist).name)"
-                                    let name = track.name
-                                    spotifySong = Song(artist: artist, name: name, link: spotifyUrl!)
-                                    
-                                    print("spotifySong: \(spotifySong)")
-                                    
-                                    //destinationVC.spotifySong = spotifySong
-                                    destinationVC.momentTag = momentTag
-                                }
-                            })
+                            destinationVC.momentTag = momentTag
 
                         }
                         
