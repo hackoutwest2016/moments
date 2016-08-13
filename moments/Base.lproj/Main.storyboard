@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -65,7 +65,7 @@
                     <connections>
                         <outlet property="addButton" destination="shO-fF-nwe" id="S8h-pW-aGC"/>
                         <segue destination="XZZ-w0-HkV" kind="presentation" identifier="moveToSearch" id="iBn-NY-Pvf"/>
-                        <segue destination="ibI-tQ-O8l" kind="show" identifier="moveToViewSong" id="GMe-F1-zIv"/>
+                        <segue destination="ibI-tQ-O8l" kind="presentation" identifier="moveToViewSong" id="GMe-F1-zIv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="khZ-aR-GUR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -112,7 +112,7 @@
         <!--Song View Controller-->
         <scene sceneID="8dT-RN-iA2">
             <objects>
-                <viewController id="ibI-tQ-O8l" customClass="SongViewController" customModule="moments" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SongViewController" id="ibI-tQ-O8l" customClass="SongViewController" customModule="moments" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="c0Y-Lw-PV6"/>
                         <viewControllerLayoutGuide type="bottom" id="VdD-Fg-JGJ"/>
@@ -128,15 +128,15 @@
                                         <rect key="frame" x="0.0" y="0.0" width="580" height="420"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Capture this moment!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7f6-t7-5ls">
-                                        <rect key="frame" x="167" y="183" width="266" height="56"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Capture this moment!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7f6-t7-5ls">
+                                        <rect key="frame" x="157" y="182" width="266" height="56"/>
                                         <fontDescription key="fontDescription" name="Pacifico" family="Pacifico" pointSize="30"/>
                                         <color key="textColor" red="1" green="0.90588235294117647" blue="0.38431372549019605" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tap &amp; hold to film" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOI-am-cgF">
-                                        <rect key="frame" x="232" y="240" width="117" height="18"/>
-                                        <fontDescription key="fontDescription" name="KozGoPr6N-Regular" family="Kozuka Gothic Pr6N" pointSize="15"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap &amp; hold to film" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOI-am-cgF">
+                                        <rect key="frame" x="230" y="239" width="121" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.96862745098039216" green="0.25882352941176467" blue="0.6588235294117647" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -268,7 +268,7 @@
                                     <action selector="sliderChange:" destination="ibI-tQ-O8l" eventType="valueChanged" id="Yxw-1q-cNf"/>
                                 </connections>
                             </slider>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Heart" translatesAutoresizingMaskIntoConstraints="NO" id="Jhi-U8-oIU">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart" translatesAutoresizingMaskIntoConstraints="NO" id="Jhi-U8-oIU">
                                 <rect key="frame" x="520" y="43" width="28" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="28" id="84J-NB-yII"/>
@@ -391,18 +391,18 @@
                                         <rect key="frame" x="0.0" y="28" width="600" height="59"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lxe-1V-8FY" id="eeM-tv-L1x">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="58.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="58"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Unv-Vc-HUm">
-                                                    <rect key="frame" x="15" y="9" width="39" height="24"/>
+                                                    <rect key="frame" x="15" y="8" width="39" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Detail" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Yar-WA-boc">
-                                                    <rect key="frame" x="15" y="33" width="39.5" height="18"/>
+                                                    <rect key="frame" x="15" y="32" width="40" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -430,8 +430,8 @@
                                     <segue destination="dLX-fO-pFR" kind="unwind" identifier="unwindSegue2" unwindAction="backButton:" id="8M4-0y-TEo"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tag this place!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mdW-4j-jYk">
-                                <rect key="frame" x="224" y="7" width="152" height="47"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tag this place!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mdW-4j-jYk">
+                                <rect key="frame" x="220" y="7" width="161" height="30"/>
                                 <fontDescription key="fontDescription" name="Pacifico" family="Pacifico" pointSize="25"/>
                                 <color key="textColor" red="1" green="0.90588235294117647" blue="0.38431372549019605" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -485,15 +485,15 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Heart" width="1709" height="1600"/>
-        <image name="back" width="366" height="208"/>
-        <image name="button-redo" width="250" height="250"/>
-        <image name="button-save" width="250" height="250"/>
+        <image name="back" width="32" height="19"/>
+        <image name="button-redo" width="120" height="120"/>
+        <image name="button-save" width="120" height="120"/>
+        <image name="heart" width="28" height="28"/>
         <image name="moments84" width="192" height="253"/>
         <image name="plus" width="100" height="100"/>
         <image name="plustransparent" width="70" height="70"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="GMe-F1-zIv"/>
+        <segue reference="Qvx-DK-6eo"/>
     </inferredMetricsTieBreakers>
 </document>

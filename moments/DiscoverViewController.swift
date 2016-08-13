@@ -24,6 +24,8 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
     
     let locationManager = CLLocationManager()
     
+    var annotationViews = [String: CustomAnnotationView]() //objectId -> CustomAnnotationView
+    
     @IBAction func addButtonTapped(sender: UIButton) {
         
         //fakeAnnotation()
@@ -134,8 +136,6 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         }
     }
     
-    var annotationImages = [String: CustomAnnotationView]() //objectId -> CustomAnnotationView
-    
     func prepareAnnotation(momentTag: PFObject) {
         if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
             
@@ -149,11 +149,10 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                         
                         var thumbnail = UIImage(data:imageData!, scale: 2.0)
                         // make it rounded
-                        thumbnail = self.maskRoundedImage(thumbnail!, radius: Float((thumbnail?.size.height)!/2))
+                        thumbnail = ImageCropper.cropToCircle(thumbnail!, radius: Float((thumbnail?.size.height)!/2))
                         
                         //size of images
                         let imageSize:CGFloat = 60
-                        let borderWidth:CGFloat = 0
                         
                         let thumbnailView  = UIImageView(image: thumbnail)
                         thumbnailView.frame = CGRectMake(5, 5, imageSize, imageSize)
@@ -163,7 +162,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                         let tagView = UIImageView(image: UIImage(named: "drop"))
                         tagView.addSubview(thumbnailView)
                         
-                        var annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
+                        let annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
                         
                         annotationView.addSubview(tagView)
                         tagView.frame = CGRect(origin: CGPointZero , size: tagView.frame.size)
@@ -172,7 +171,7 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                         annotationView.transform = CGAffineTransformMakeTranslation(0 - tagView.frame.width/2, 0 - tagView.frame.height)
                         tagView.transform = CGAffineTransformMakeScale(0.1, 0.1)
                         
-                        self.annotationImages[momentTag.objectId!] = annotationView
+                        self.annotationViews[momentTag.objectId!] = annotationView
                         
                         return tagView
                     }, then: { result in
@@ -183,7 +182,9 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                             self.mapView.addAnnotation(annotation)
                             
                             if let tagView = result as? UIView {
-                                UIView.animateWithDuration(0.5, delay: 0,usingSpringWithDamping: 0.1, initialSpringVelocity: 4, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+                                //TODO: Different animation if not initial
+                                //0.5, delay: 0,usingSpringWithDamping: 0.1, initialSpringVelocity: 4
+                                UIView.animateWithDuration(0.3, delay: 0,usingSpringWithDamping: 0.9, initialSpringVelocity: 0.3, options: UIViewAnimationOptions.CurveEaseOut, animations: {
                                     tagView.transform = CGAffineTransformMakeScale(1, 1)
                                     }, completion: nil)
                             }
@@ -223,22 +224,22 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         guard annotation is MGLPointAnnotation else {
             return nil
         }
+        // the annotation.title was previously set to be the objectId of moment tag object
+        let objectId = annotation.title!!
         
-        // Use the point annotation’s longitude value (as a string) as the reuse identifier for its view.
-        let reuseIdentifier = "\(annotation.coordinate.longitude)"
+        // Use the point annotation’s title as the reuse identifier for its view.
+        let reuseIdentifier = objectId
         
         // For better performance, always try to reuse existing annotations.
         var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseIdentifier)
         
-        // the annotation.title was previously set to be the objectId of moment tag object
-        let objectId = annotation.title!
         
         //Find corresponding moment tag
         if let momentTagIndex = momentTags.indexOf({$0.objectId == objectId}) {
             let momentTag = momentTags[momentTagIndex]
             
             if annotationView == nil {
-                annotationView = self.annotationImages[momentTag.objectId!]
+                annotationView = self.annotationViews[momentTag.objectId!]
             }
         }
         
@@ -253,24 +254,22 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
     func mapView(mapView: MGLMapView, didSelectAnnotation annotation: MGLAnnotation) {
         print("seelected")
         selectedParseId = annotation.title!!
-        performSegueWithIdentifier("moveToViewSong", sender: nil)
+        
+        if let tagView = annotationViews[selectedParseId]?.subviews.first {
+            
+            //tagView.transform = CGAffineTransformMakeScale(0.8, 0.8)
+            
+            //tagView.transform = CGAffineTransformMakeScale(1.1, 1.1)
+            /*UIView.animateWithDuration(1.0, delay: 0,usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.CurveEaseOut, .BeginFromCurrentState, .AllowUserInteraction], animations: {
+                tagView.transform = CGAffineTransformMakeScale(3, 3)
+                }, completion: { success in
+                    tagView.transform = CGAffineTransformMakeScale(1.0, 1.0)
+            })*/
+        }
+        
+        performSegueWithIdentifier("moveToViewSong", sender: self)
     }
     
-    func maskRoundedImage(image: UIImage, radius: Float) -> UIImage {
-        let imageView: UIImageView = UIImageView(image: image)
-        var layer: CALayer = CALayer()
-        layer = imageView.layer
-        
-        layer.masksToBounds = true
-        layer.cornerRadius = CGFloat(radius)
-        
-        UIGraphicsBeginImageContext(imageView.bounds.size)
-        layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        let roundedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return roundedImage
-    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "moveToSearch"
@@ -324,6 +323,8 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
 
 
 class CustomAnnotationView: MGLAnnotationView {
+    var restoreTransformDelay = 0.0
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -335,6 +336,38 @@ class CustomAnnotationView: MGLAnnotationView {
         //        layer.borderWidth = 3
         //        layer.borderColor = Palette.purple.CGColor
     }
+    
+    override func setSelected(selected: Bool, animated: Bool) {
+        print("set selected")
+        restoreTransformDelay = 2
+    }
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        print("touches began")
+        if let tagView = self.subviews.first {
+            //tagView.transform = CGAffineTransformMakeScale(1.1, 1.1)
+            UIView.animateWithDuration(0.5, delay: 0,usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.CurveEaseOut, .BeginFromCurrentState, .AllowUserInteraction], animations: {
+                tagView.transform = CGAffineTransformMakeScale(1.1, 1.1)
+                }, completion: nil)
+        }
+        restoreTransformDelay = 0
+    }
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        print("touches ended")
+        /*if let tagView = self.subviews.first {
+            tagView.transform = CGAffineTransformMakeScale(1.0, 1.0)
+        }*/
+    }
+    
+    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+        print("touches cancelled")
+        if let tagView = self.subviews.first {
+            UIView.animateWithDuration(0.5, delay: restoreTransformDelay,usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.CurveEaseOut, .BeginFromCurrentState, .AllowUserInteraction], animations: {
+                tagView.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                }, completion: nil)
+        }
+    }
+    
     
 //    override func setSelected(selected: Bool, animated: Bool) {
 //        super.setSelected(selected, animated: animated)

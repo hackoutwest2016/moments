@@ -208,7 +208,6 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         colorDurations = [(0,MomentsConfig.colors.randomItem())]
         loadingView.hidden = false
         
-        //TODO: Spinning wheel
         self.initCamera(.Back)
     }
     
