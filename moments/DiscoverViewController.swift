@@ -125,14 +125,70 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                     self.momentTags += newMomentTags
                     
                     for momentTag in newMomentTags {
+                        
+                        self.prepareAnnotation(momentTag)
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    var annotationImages = [String: CustomAnnotationView]() //objectId -> CustomAnnotationView
+    
+    func prepareAnnotation(momentTag: PFObject) {
+        if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
+            
+            thumbnailFile.getDataInBackgroundWithBlock {
+                (imageData: NSData?, error: NSError?) -> Void in
+                if error != nil {
+                    print("Error in downloading thumbnail")
+                } else {
+                    inBackground(withData: nil, run: { data in
+                        let reuseIdentifier = momentTag.objectId
+                        
+                        var thumbnail = UIImage(data:imageData!, scale: 2.0)
+                        // make it rounded
+                        thumbnail = self.maskRoundedImage(thumbnail!, radius: Float((thumbnail?.size.height)!/2))
+                        
+                        //size of images
+                        let imageSize:CGFloat = 60
+                        let borderWidth:CGFloat = 0
+                        
+                        let thumbnailView  = UIImageView(image: thumbnail)
+                        thumbnailView.frame = CGRectMake(5, 5, imageSize, imageSize)
+                        
+                        //style
+                        thumbnailView.layer.cornerRadius = thumbnailView.frame.width / 2
+                        let tagView = UIImageView(image: UIImage(named: "drop"))
+                        tagView.addSubview(thumbnailView)
+                        
+                        var annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
+                        
+                        annotationView.addSubview(tagView)
+                        tagView.frame = CGRect(origin: CGPointZero , size: tagView.frame.size)
+                        annotationView.frame = tagView.frame
+                        
+                        annotationView.transform = CGAffineTransformMakeTranslation(0 - tagView.frame.width/2, 0 - tagView.frame.height)
+                        tagView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+                        
+                        self.annotationImages[momentTag.objectId!] = annotationView
+                        
+                        return tagView
+                    }, then: { result in
                         if let position = momentTag["position"] as? PFGeoPoint {
                             let annotation = MGLPointAnnotation()
                             annotation.coordinate = CLLocationCoordinate2DMake(position.latitude, position.longitude)
                             annotation.title = momentTag.objectId!
-                            
                             self.mapView.addAnnotation(annotation)
+                            
+                            if let tagView = result as? UIView {
+                                UIView.animateWithDuration(0.5, delay: 0,usingSpringWithDamping: 0.1, initialSpringVelocity: 4, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+                                    tagView.transform = CGAffineTransformMakeScale(1, 1)
+                                    }, completion: nil)
+                            }
                         }
-                    }
+                    })
                 }
             }
         }
@@ -167,20 +223,6 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         guard annotation is MGLPointAnnotation else {
             return nil
         }
-        //new lines
-        
-        
-        
-//<<<<<<< HEAD
-//        var fallbackImage = mapView.dequeueReusableAnnotationImageWithIdentifier("fallback")
-//        if fallbackImage == nil {
-//            var image = UIImage(named: "slider-thumb-invisible")!
-//            image = resizeImage(image)
-//            image = image.imageWithAlignmentRectInsets(UIEdgeInsetsMake(0, 0, image.size.height/2, 0))
-//            fallbackImage = MGLAnnotationImage(image: image, reuseIdentifier: "fallback")
-//        }
-//=======
-//>>>>>>> discoverViewImageView
         
         // Use the point annotation’s longitude value (as a string) as the reuse identifier for its view.
         let reuseIdentifier = "\(annotation.coordinate.longitude)"
@@ -192,57 +234,11 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
         let objectId = annotation.title!
         
         //Find corresponding moment tag
-        
-        //Find the index
         if let momentTagIndex = momentTags.indexOf({$0.objectId == objectId}) {
             let momentTag = momentTags[momentTagIndex]
             
-            
-            // If there’s no reusable annotation view available, initialize a new one.
             if annotationView == nil {
-                
-                if let thumbnailFile = momentTag["thumbnail"] as? PFFile {
-                    if thumbnailFile.dataAvailable {
-                        if let data = try? thumbnailFile.getData() {
-                            var thumbnail = UIImage(data:data, scale: 2.0)
-                            // make it rounded
-                            thumbnail = maskRoundedImage(thumbnail!, radius: Float((thumbnail?.size.height)!/2))
-                            
-                            //size of images
-                            let imageSize:CGFloat = 60
-                            let borderWidth:CGFloat = 0
-                            
-                            let thumbnailView  = UIImageView(image: thumbnail)
-                            thumbnailView.frame = CGRectMake(5, 5, imageSize, imageSize)
-
-                            //style
-                            thumbnailView.layer.cornerRadius = thumbnailView.frame.width / 2
-                            let tagView = UIImageView(image: UIImage(named: "drop"))
-                            tagView.addSubview(thumbnailView)
-                            
-                            annotationView = CustomAnnotationView(reuseIdentifier: reuseIdentifier)
-                            
-                            annotationView?.addSubview(tagView)
-                            tagView.frame = CGRect(origin: CGPointZero , size: tagView.frame.size)
-                            annotationView!.frame = tagView.frame
-                            
-                            annotationView?.transform = CGAffineTransformMakeTranslation(0 - tagView.frame.width/2, 0 - tagView.frame.height)
-                            tagView.transform = CGAffineTransformMakeScale(0.1, 0.1)
-                            
-                            UIView.animateWithDuration(0.5, delay: 0,usingSpringWithDamping: 0.1, initialSpringVelocity: 4, options: UIViewAnimationOptions.CurveEaseOut, animations: {
-                                tagView.transform = CGAffineTransformMakeScale(1, 1)
-                                }, completion: nil)
-  
-                        }
-                    } else {
-                        thumbnailFile.getDataInBackgroundWithBlock {
-                            (imageData: NSData?, error: NSError?) -> Void in
-                            print("Downloaded thumbnail, should reset thumbnails")
-                            mapView.removeAnnotation(annotation)
-                            mapView.addAnnotation(annotation)
-                        }
-                    }
-                }
+                annotationView = self.annotationImages[momentTag.objectId!]
             }
         }
         
