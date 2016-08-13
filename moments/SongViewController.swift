@@ -33,7 +33,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     @IBOutlet weak var mediaView: UIView!
     @IBOutlet weak var loadingView: UIView!
     
-     private var spotifySong: Song? {
+    private var spotifySong: Song? {
         didSet {
             artistLabel?.text = spotifySong?.artist
             songLabel?.text = spotifySong?.name
@@ -94,7 +94,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                     (videoData: NSData?, error: NSError?) -> Void in
                                     if error == nil {
                                         if let videoData = videoData {
-                                            {
+                                            runInBackground({ 
                                                 let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
                                                 let destinationUrl = documentsUrl.URLByAppendingPathComponent(userVideoFile.name)
                                                 
@@ -104,9 +104,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                                 } else {
                                                     print("error saving file")
                                                 }
-                                                } ~> {
-                                                    
-                                            }
+                                            }, delay: 0, then: nil)
                                         }
                                     }
                                 }
@@ -277,31 +275,31 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
         if downloadedVideos == videosToDownload {
             //print(localVideoUrls)
             //print("Download done")
-                
-                //TODO: Add timeline boxes
-                //timelineView
-                //timelineView.subviews
-            {
+            
+            //TODO: Add timeline boxes
+            //timelineView
+            //timelineView.subviews
+            runInBackground({ 
                 let stitchedVideo = StitchedVideo(videoUrls: self.localVideoUrls)
                 //let test = AVPlayerItem(URL: localVideoUrls[0])
                 
                 self.videoPlayer = AVPlayer(playerItem: stitchedVideo.PlayerItem)
                 self.videoPlayer?.actionAtItemEnd = .None
                 self.videoDuration = Float(self.videoPlayer!.currentItem!.duration.seconds)
-                } ~> {
-                    self.mediaView.layoutIfNeeded()
-                    self.videoPlayerLayer = AVPlayerLayer(player: self.videoPlayer)
-                    self.videoPlayerLayer!.frame = CGRect(x:-120,y:0,width: self.mediaView.bounds.width+120,height: self.mediaView.bounds.height)
-                    self.videoPlayerLayer!.videoGravity = AVLayerVideoGravityResize
-                    //videoPlayerLayer!.needsDisplayOnBoundsChange = true
-                    
-                    self.mediaView.layer.insertSublayer(self.videoPlayerLayer!, atIndex: 0)
-                    
-                    self.videoReady = true
-                    self.videoAvailable = true
-                    
-                    self.playIfReady()
-            }
+            }, delay: 0, then: {
+                self.mediaView.layoutIfNeeded()
+                self.videoPlayerLayer = AVPlayerLayer(player: self.videoPlayer)
+                self.videoPlayerLayer!.frame = CGRect(x:-120,y:0,width: self.mediaView.bounds.width+120,height: self.mediaView.bounds.height)
+                self.videoPlayerLayer!.videoGravity = AVLayerVideoGravityResize
+                //videoPlayerLayer!.needsDisplayOnBoundsChange = true
+                
+                self.mediaView.layer.insertSublayer(self.videoPlayerLayer!, atIndex: 0)
+                
+                self.videoReady = true
+                self.videoAvailable = true
+                
+                self.playIfReady()
+            })
         }
     }
     
@@ -434,7 +432,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     private var recordedVideoUrl: NSURL?
     func initCamera(position: AVCaptureDevicePosition)
     {
-        {
+        runInBackground({
             if self.cameraLayer == nil {
                 var myDevice: AVCaptureDevice?
                 let devices = AVCaptureDevice.devices()
@@ -498,16 +496,18 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                 self.session?.startRunning()
                 
             }
-            } ~> {
-                // Video Screen
-                self.mediaView.layoutIfNeeded()
-                self.cameraLayer = AVCaptureVideoPreviewLayer(session: self.session)
-                self.cameraLayer?.frame = self.mediaView.bounds
-                self.cameraLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-                self.mediaView.layer.insertSublayer(self.cameraLayer!, atIndex: 0)
-                self.cameraReady = true
-                self.playIfReady()
-        }
+        }, delay: 0,
+        then: {
+            // Video Screen
+            self.mediaView.layoutIfNeeded()
+            self.cameraLayer = AVCaptureVideoPreviewLayer(session: self.session)
+            self.cameraLayer?.frame = self.mediaView.bounds
+            self.cameraLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+            self.mediaView.layer.insertSublayer(self.cameraLayer!, atIndex: 0)
+            self.cameraReady = true
+            self.playIfReady()
+        })
+        
     }
     
     @IBAction func takeVideo(sender: UILongPressGestureRecognizer) {

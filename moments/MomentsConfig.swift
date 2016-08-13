@@ -47,6 +47,18 @@ class Song {
     }
 }
 
+func runInBackground(run: (() -> Void)? = nil, delay: Double = 0.0,  then: (() -> Void)? = nil) {
+    dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+        if(run != nil){ run!(); }
+        
+        let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)))
+        dispatch_after(popTime, dispatch_get_main_queue()) {
+            if(then != nil){ then!(); }
+        }
+    }
+}
+
+/*
 infix operator ~> {}
 
 private let queue = dispatch_queue_create("serial-worker", DISPATCH_QUEUE_SERIAL)
@@ -62,3 +74,4 @@ func ~> <R> (
         })
     }
 }
+ */
