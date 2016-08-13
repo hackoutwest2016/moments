@@ -104,6 +104,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
                                                 } else {
                                                     print("error saving file")
                                                 }
+                                                return nil
                                             }, then: nil)
                                         }
                                     }
