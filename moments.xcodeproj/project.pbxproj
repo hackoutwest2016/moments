@@ -241,7 +241,7 @@
 				TargetAttributes = {
 					27313B031D59CAEE0059B5DF = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 8F732M5KXK;
+						DevelopmentTeam = 54653AF2XS;
 					};
 					27313B1A1D59CAEE0059B5DF = {
 						CreatedOnToolsVersion = 7.3;
@@ -538,7 +538,7 @@
 				);
 				INFOPLIST_FILE = moments/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.simphax.moments;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shit.moments;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Moments-Bridging-Header.h";
@@ -558,7 +558,7 @@
 				);
 				INFOPLIST_FILE = moments/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.simphax.moments;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shit.moments;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Moments-Bridging-Header.h";

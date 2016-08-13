@@ -33,7 +33,7 @@ class SongViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, A
     @IBOutlet weak var mediaView: UIView!
     @IBOutlet weak var loadingView: UIView!
     
-    private var spotifySong: Song? {
+     private var spotifySong: Song? {
         didSet {
             artistLabel?.text = spotifySong?.artist
             songLabel?.text = spotifySong?.name
