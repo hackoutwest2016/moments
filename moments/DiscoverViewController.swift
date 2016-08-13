@@ -229,12 +229,12 @@ class DiscoverViewController: UIViewController, MGLMapViewDelegate {
                             annotationView?.transform = CGAffineTransformMakeTranslation(0 - tagView.frame.width/2, 0 - tagView.frame.height)
                             tagView.transform = CGAffineTransformMakeScale(0.1, 0.1)
                             
-                            UIView.animateWithDuration(0.3, delay: 0,usingSpringWithDamping: 0.9, initialSpringVelocity: 0.3, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+                            UIView.animateWithDuration(0.5, delay: 0,usingSpringWithDamping: 0.1, initialSpringVelocity: 4, options: UIViewAnimationOptions.CurveEaseOut, animations: {
                                 tagView.transform = CGAffineTransformMakeScale(1, 1)
                                 }, completion: nil)
   
                         }
-                    }else {
+                    } else {
                         thumbnailFile.getDataInBackgroundWithBlock {
                             (imageData: NSData?, error: NSError?) -> Void in
                             print("Downloaded thumbnail, should reset thumbnails")
