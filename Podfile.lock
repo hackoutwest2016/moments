@@ -1,0 +1,21 @@
+PODS:
+  - Bolts/Tasks (1.8.4)
+  - Mapbox-iOS-SDK (3.3.4)
+  - Parse (1.14.2):
+    - Bolts/Tasks (~> 1.8)
+  - Spotify-iOS-SDK (0.17.0)
+
+DEPENDENCIES:
+  - Mapbox-iOS-SDK (~> 3.3.4)
+  - Parse
+  - Spotify-iOS-SDK (~> 0.17.0)
+
+SPEC CHECKSUMS:
+  Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
+  Mapbox-iOS-SDK: b22da0d9703fcfb0a8b592b6a7f6a21264fe44b0
+  Parse: 4335d65f40cb3d43190d723144bbe1afb9c38230
+  Spotify-iOS-SDK: 9703e35df012ef12a37736feaa5ee1ee3fcd12f8
+
+PODFILE CHECKSUM: 4e38bea6c2fac2a6408334ce970d5fcc761891d8
+
+COCOAPODS: 1.0.1
